@@ -11,27 +11,27 @@ int f[10 * CAMERA_H];//考察连通域联通性
 
 //每个白条子属性
 typedef struct {
-    uint8_t   left;//左边界
-    uint8_t   right;//右边界
+    uint8   left;//左边界
+    uint8   right;//右边界
     int   connect_num;//连通标记（号）
 }range;
 
 //每行的所有白条子
 typedef struct {
-    uint8_t   num;//每行白条数量
+    uint8   num;//每行白条数量
     range   area[white_num_MAX];//该行各白条区域
 }all_range;
 
 //属于赛道的每个白条子属性
 typedef struct {
-    uint8_t   left;//左边界
-    uint8_t   right;//右边界
-    uint8_t   width;//宽度
+    uint8   left;//左边界
+    uint8   right;//右边界
+    uint8   width;//宽度
 }road_range;
 
 //每行属于赛道的每个白条子
 typedef struct {
-    uint8_t   white_num;
+    uint8   white_num;
     road_range   connected[white_num_MAX];
 }road;
 typedef struct edge_point {
@@ -40,24 +40,24 @@ typedef struct edge_point {
 } Point;
 all_range white_range[CAMERA_H];//所有白条子
 road my_road[CAMERA_H];//赛道
-uint8_t IMG[CAMERA_H][CAMERA_W];//二值化后图像数组
-uint8_t left_line[CAMERA_H], right_line[CAMERA_H];//赛道的左右边界
-uint8_t mid_line[CAMERA_H];
+uint8 IMG[CAMERA_H][CAMERA_W];//二值化后图像数组
+uint8 left_line[CAMERA_H], right_line[CAMERA_H];//赛道的左右边界
+uint8 mid_line[CAMERA_H];
 int all_connect_num = 0;//所有白条子数
-uint8_t top_road;//赛道最高处所在行数
+uint8 top_road;//赛道最高处所在行数
 float threshold = 220;//阈值
-uint8_t j_continue[CAMERA_H];//第一条连通路径
+uint8 j_continue[CAMERA_H];//第一条连通路径
 
 
-uint8_t Left_begin = 0;
-uint8_t Right_begin = 0;
-uint8_t Left_end = 0;
-uint8_t Right_end = 0;
+uint8 Left_begin = 0;
+uint8 Right_begin = 0;
+uint8 Left_end = 0;
+uint8 Right_end = 0;
 
-uint8_t Left_widge = 0;
-uint8_t Right_widge = 0;
-uint8_t Left_flag = 0;
-uint8_t Right_flag = 0;
+uint8 Left_widge = 0;
+uint8 Right_widge = 0;
+uint8 Left_flag = 0;
+uint8 Right_flag = 0;
 int start_line_x = 119;
 
 int flagtext = 0;
@@ -77,16 +77,16 @@ int img_stop = 100;
 
 int protect_sw = 1;
 
-double process_curvity(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2, uint8_t x3, uint8_t y3)
+double process_curvity(uint8 x1, uint8 x2, uint8 y1, uint8 y2, uint8 x3, uint8 y3)
 {
     double k;
     int S_of_ABC = ((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)) / 2;
     //面积的符号表示方向
-    uint8_t q1 = (uint8_t)((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+    uint8 q1 = (uint8)((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     double AB = sqrt(q1);
-    q1 = (uint8_t)((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2));
+    q1 = (uint8)((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2));
     double BC = sqrt(q1);
-    q1 = (uint8_t)((x3 - x1) * (x3 - x1) + (y3 - y1) * (y3 - y1));
+    q1 = (uint8)((x3 - x1) * (x3 - x1) + (y3 - y1) * (y3 - y1));
     double AC = sqrt(q1);
     if (AB * BC * AC == 0)
     {
@@ -104,8 +104,8 @@ double process_curvity(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2, uint8_t x
 ///////////////////////////////////////////
 void THRE()
 {
-    uint8_t* map;
-    uint8_t* my_map;
+    uint8* map;
+    uint8* my_map;
     map = fullBuffer;
     for (int i = 0; i < 120; i++)
     {
@@ -129,7 +129,7 @@ void THRE()
 ///////////////////////////////////////////
 void head_clear(void)
 {
-//    uint8_t* my_map;
+//    uint8* my_map;
 //    for (int i = 119; i >= 84; i--)
 //    {
 //        my_map = &IMG[i][0];
@@ -138,7 +138,7 @@ void head_clear(void)
 //            *(my_map+j) = 255;
 //        }
 //    }
-    uint8_t* my_map;
+    uint8* my_map;
         for (int i = 119; i >= 75; i--)
         {
             my_map = &IMG[i][0];
@@ -170,12 +170,12 @@ int find_f(int node)//返回的是父节点
 ///////////////////////////////////////////
 void search_white_range()
 {
-    uint8_t i, j;
+    uint8 i, j;
     int istart = NEAR_LINE;//处理起始行
     int iend = FAR_LINE;//处理终止行
     int tnum = 0;//当前行白条数
     all_connect_num = 0;//白条编号初始化
-    uint8_t* map = NULL;
+    uint8* map = NULL;
     for (i = istart; i >= iend; i--)
     {
         map = &IMG[i][LEFT_SIDE];//指针行走加快访问速度
@@ -263,8 +263,8 @@ void find_all_connect()
 ///////////////////////////////////////////
 void find_road()
 {
-    uint8_t istart = NEAR_LINE;
-    uint8_t iend = FAR_LINE;
+    uint8 istart = NEAR_LINE;
+    uint8 iend = FAR_LINE;
     top_road = NEAR_LINE;//赛道最高处所在行数，先初始化话为最低处
     int road_f = -1;//赛道所在连通域父节点编号，先初始化为-1，以判断是否找到赛道
     int while_range_num = 0, roud_while_range_num = 0;
@@ -319,15 +319,15 @@ void find_road()
 //输出：白条标号
 //备注：认为下一行与本行赛道重叠部分对多的白条为选定赛道
 ///////////////////////////////////////////
-uint8_t find_continue(uint8_t i_start, uint8_t j_start)
+uint8 find_continue(uint8 i_start, uint8 j_start)
 {
-    uint8_t j_return;
-    uint8_t j;
-    uint8_t width_max = 0;
-    uint8_t width_new = 0;
-    uint8_t left = 0;
-    uint8_t right = 0;
-    uint8_t dright, dleft, uright, uleft;
+    uint8 j_return;
+    uint8 j;
+    uint8 width_max = 0;
+    uint8 width_new = 0;
+    uint8 left = 0;
+    uint8 right = 0;
+    uint8 dright, dleft, uright, uleft;
     j_return = MISS;//如果没找到，输出255
     if (j_start > my_road[i_start].white_num)
         return MISS;
@@ -372,14 +372,14 @@ uint8_t find_continue(uint8_t i_start, uint8_t j_start)
 ///////////////////////////////////////////
 void ordinary_two_line(void)
 {
-    uint8_t i;
-    uint8_t j;
+    uint8 i;
+    uint8 j;
 
-    uint8_t a, b,c;
+    uint8 a, b,c;
 
-    uint8_t i_start;
-    uint8_t i_end;
-    uint8_t j_start = MISS;
+    uint8 i_start;
+    uint8 i_end;
+    uint8 j_start = MISS;
     int width_max;
     i_start = NEAR_LINE;
     i_end = FAR_LINE;
@@ -600,7 +600,7 @@ void Cross(void) {
 void Start_line(void)
 {
 //    Beep_Open();
-    uint8_t* my_map;
+    uint8* my_map;
     my_map = &IMG[start_line_x - 5][0];
     start_line_line = start_line_x;
     for (int j = 187; j > 0; j--)
@@ -632,15 +632,15 @@ void Start_line(void)
 }
 ////////////////////////////////////////////
 //功能：数组初始化
-//输入：uint8_t* ptr 数组首地址, uint8_t num初始化的值, uint8_t size数组大小
+//输入：uint8* ptr 数组首地址, uint8 num初始化的值, uint8 size数组大小
 //输出：
 //备注：因为k66库中认为memset函数不安全，所以无法使用；因此需要自己写一个my_memset
 ///////////////////////////////////////////
-void my_memset(uint8_t* ptr, uint8_t num, uint8_t size)
+void my_memset(uint8* ptr, uint8 num, uint8 size)
 {
-    uint8_t* p = ptr;
-    uint8_t my_num = num;
-    uint8_t Size = size;
+    uint8* p = ptr;
+    uint8 my_num = num;
+    uint8 Size = size;
     for (int i = 0; i < Size; i++, p++)
     {
         *p = my_num;

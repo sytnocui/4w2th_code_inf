@@ -9,6 +9,7 @@
 #define SOURCE_IMAGE_HPP_
 
 #include "everything.hpp"
+#include "math.h"
 
 #define MISS 255
 #define CAMERA_H  120
@@ -48,28 +49,28 @@ extern float k_mid;
 
 extern int protect_sw;
 
-double process_curvity(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2, uint8_t x3, uint8_t y3);
+double process_curvity(uint8 x1, uint8 x2, uint8 y1, uint8 y2, uint8 x3, uint8 y3);
 void head_clear(void);
 void THRE(void);
 int find_f(int a);
 void search_white_range();
 void find_all_connect();
 void find_road();
-uint8_t find_continue(uint8_t i_start, uint8_t j_start);
+uint8 find_continue(uint8 i_start, uint8 j_start);
 void ordinary_two_line(void);
 void image_main();
 void get_mid_line(void);
 void Start_line(void);
 void Cross(void);
 void k_mid_calculate();//Ð±ÂÊ¼ÆËã
-extern uint8_t mid_line[CAMERA_H];
+extern uint8 mid_line[CAMERA_H];
 extern float threshold;
 extern int all_connect_num;
-extern uint8_t top_road;
+extern uint8 top_road;
 
 extern float k_str;
 
-void my_memset(uint8_t* ptr, uint8_t num, uint8_t size);
+void my_memset(uint8* ptr, uint8 num, uint8 size);
 
 void image_flag_clear(void);
 

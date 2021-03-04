@@ -76,9 +76,6 @@ void Menu_CursorEnter(int flag);//进入光标所指对象
 void Menu_IntDataAdjust(void);//整数改值函数
 void Menu_FloatDataAdjust(void);//浮点数改值函数
 
-void Menu_DataRead(void);//读取数据
-void Menu_DataSave(void);//保存数据
-
 void Menu_Calculate_Objnum(void);//计算总共的项数
 void Menu_Calculate_num(void);//计算各个项的序号
 void Menu_Calculate_ny(int flag);//计算各个项的纵坐标  0-初始化，1-上滚，-1-下滚
@@ -95,10 +92,6 @@ void KEY_Check_Left(void);
 void KEY_Check_Down(void);
 
 void KEY_Clear(void);
-
-void DISP_SSD1306_Printf_F6x8(uint8_t x,uint8_t y,const char* fmt, ...);
-
-void DISP_SSD1306_Printf_F8x16(uint8_t x,uint8_t y,const char* fmt, ...);
 
 void f91mgj(void);//凑数用的
 

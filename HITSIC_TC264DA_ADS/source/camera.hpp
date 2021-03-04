@@ -15,6 +15,4 @@ void Image_Upload_Gray(void);
 
 
 
-
-
 #endif /* SOURCE_CAMERA_HPP_ */

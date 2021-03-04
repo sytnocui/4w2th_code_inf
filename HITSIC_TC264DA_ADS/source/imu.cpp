@@ -8,8 +8,6 @@
  */
 #include "imu.hpp"
 
-inv::i2cInterface_t imu_i2c(nullptr, IMU_INV_I2cRxBlocking, IMU_INV_I2cTxBlocking);
-inv::icm20602_t imu_6050(imu_i2c);
 
 
 /**

@@ -1,4 +1,4 @@
-#include "old_menu.hpp"
+#include "menu.hpp"
 
 //int cursor_y = 1;//光标y坐标
 int objnum =0;//项数
@@ -39,7 +39,7 @@ void Menu_Welcome(void)
     Menu_Calculate_num();//计算各个项的序号
     Menu_Calculate_ny(0);//计算各个项的纵坐标  0-初始化，1-上滚，-1-下滚
 
-    DISP_SSD1306_Fill(0);
+    SmartCar_OLED_Fill(0x00);
 
     Menu_ShowFolder();//打印所在文件夹
     Menu_ShowObject();//打印菜单
@@ -58,14 +58,14 @@ void Menu_ShowObject(void)//打印菜单
         {
             if(obj[i].ny>=1 && obj[i].ny<8)
             {
-                DISP_SSD1306_Print_F6x8(10,obj[i].ny,obj[i].name);
+                SmartCar_OLED_P6x8Str(10,obj[i].ny,obj[i].name);
                 if(obj[i].type == my_variType)
                 {
-                    DISP_SSD1306_Printf_F6x8(80,obj[i].ny,"%3d",*(obj[i].pa));
+                    SmartCar_OLED_Printf6x8(80,obj[i].ny,"%3d",*(obj[i].pa));
                 }
                 else if(obj[i].type == my_varfType)
                 {
-                    DISP_SSD1306_Printf_F6x8(80,obj[i].ny,"%7.3f",*(obj[i].pb));
+                    SmartCar_OLED_Printf6x8(80,obj[i].ny,"%7.3f",*(obj[i].pb));
                 }
                 else if(obj[i].type == my_menuType)
                 {
@@ -81,27 +81,27 @@ void Menu_ShowObject(void)//打印菜单
 }
 void Menu_ShowFolder(void)//打印所在文件夹
 {
-    DISP_SSD1306_Print_F6x8(0,0,pobj->folder);//打印所在文件夹名
+    SmartCar_OLED_P6x8Str(0,0,pobj->folder);//打印所在文件夹名
 }
 void Menu_ShowCursor(void)//打印光标
 {
     int i;
     for(i=1;i<8;i++) //清理之前的光标位置
     {
-        DISP_SSD1306_Print_F6x8(0,i," ");
+        SmartCar_OLED_P6x8Str(0,i," ");
     }
-    DISP_SSD1306_Print_F6x8(0,pobj->ny,">");
+    SmartCar_OLED_P6x8Str(0,pobj->ny,">");
 }
 void Menu_ShowState(void)//打印状态栏
 {
-    DISP_SSD1306_Printf_F6x8(90,0,"%2d/%2d",pobj->num,objnum);
+    SmartCar_OLED_Printf6x8(90,0,"%2d/%2d",pobj->num,objnum);
 }
 void Menu_ShowUnder(int index)//打印调数时底座标
 {
     int under_pos=0;
     under_pos=50+(2-index)*6;//计算位置
-    DISP_SSD1306_Print_F6x8(20,6,"          ");
-    DISP_SSD1306_Print_F6x8(under_pos,6,"^");
+    SmartCar_OLED_P6x8Str(20,6,"          ");
+    SmartCar_OLED_P6x8Str(under_pos,6,"^");
 }
 
 void Menu_In(void)//进入
@@ -164,13 +164,13 @@ void Menu_CursorMove(int flag)
     if(pobj->ny<1)//如果到边界了就滚屏幕
     {
         Menu_Calculate_ny(1);
-        DISP_SSD1306_Fill(0);
+        SmartCar_OLED_Fill(0x00);
         Menu_ShowObject();//打印菜单
     }
     else if(pobj->ny>7)
     {
         Menu_Calculate_ny(-1);
-        DISP_SSD1306_Fill(0);
+        SmartCar_OLED_Fill(0x00);
         Menu_ShowObject();//打印菜单
 
     }
@@ -203,7 +203,7 @@ void Menu_KeyCheck_Cursor(void)//五项按键检测
     {
        if(key_gnd != key_state)
        {
-           SDK_DelayAtLeastUs(KEY_REMOVE_JITTER*1000,CLOCK_GetFreq(kCLOCK_CoreSysClk));
+           Delay_ms(STM0,KEY_REMOVE_JITTER);
            if(key_up == key_state)
            {
                KEY_Clear();//清空按键检验
@@ -249,12 +249,12 @@ void Menu_IntDataAdjust(void)//整数改值总函数
     int flag=0;
     temp = *(pobj->pa);
 
-    DISP_SSD1306_Fill(0);
-    DISP_SSD1306_Printf_F6x8(0,0,"---%s---",pobj->name);
-    DISP_SSD1306_Print_F6x8(0,1,"integer adjust:");
-    DISP_SSD1306_Printf_F6x8(20,3,"past:%3d",*(pobj->pa));
-    DISP_SSD1306_Printf_F6x8(20,4,"save:%3d",*(pobj->pa));
-    DISP_SSD1306_Printf_F6x8(20,5,"now :%3d",*(pobj->pa));
+    SmartCar_OLED_Fill(0x00);
+    SmartCar_OLED_Printf6x8(0,0,"---%s---",pobj->name);
+    SmartCar_OLED_P6x8Str(0,1,"integer adjust:");
+    SmartCar_OLED_Printf6x8(20,3,"past:%3d",*(pobj->pa));
+    SmartCar_OLED_Printf6x8(20,4,"save:%3d",*(pobj->pa));
+    SmartCar_OLED_Printf6x8(20,5,"now :%3d",*(pobj->pa));
     Menu_ShowUnder(index);
     while(1)
     {
@@ -262,7 +262,7 @@ void Menu_IntDataAdjust(void)//整数改值总函数
         figure=0;
         if(key_gnd != key_state)
         {
-            SDK_DelayAtLeastUs(KEY_REMOVE_JITTER*1000,CLOCK_GetFreq(kCLOCK_CoreSysClk));
+            Delay_ms(STM0,KEY_REMOVE_JITTER);
            if(key_up == key_state)
            {
                KEY_Clear();//清空按键检验
@@ -300,15 +300,15 @@ void Menu_IntDataAdjust(void)//整数改值总函数
                KEY_Clear();//清空按键检验
                if(*(pobj->pa) == temp)
                {
-                   DISP_SSD1306_Print_F6x8(40,7,"Adjusted OK!");
-                   SDK_DelayAtLeastUs(500*1000,CLOCK_GetFreq(kCLOCK_CoreSysClk));
+                   SmartCar_OLED_P6x8Str(40,7,"Adjusted OK!");
+                   Delay_ms(STM0,500);
                    return;
                }
                else if(*(pobj->pa) != temp)
                {
                    *(pobj->pa) = temp;
-                   DISP_SSD1306_Print_F6x8(20,4,"             ");
-                   DISP_SSD1306_Printf_F6x8(20,4,"save:%3d",*(pobj->pa));
+                   SmartCar_OLED_P6x8Str(20,4,"             ");
+                   SmartCar_OLED_Printf6x8(20,4,"save:%3d",*(pobj->pa));
                }
            }
         }
@@ -317,7 +317,7 @@ void Menu_IntDataAdjust(void)//整数改值总函数
         if(flag==1)
         {
             temp=temp+figure*pow(10,index);
-            DISP_SSD1306_Printf_F6x8(20,5,"now :%3d",temp);
+            SmartCar_OLED_Printf6x8(20,5,"now :%3d",temp);
         }
         else if(flag==2)
         {
@@ -348,12 +348,12 @@ void Menu_FloatDataAdjust(void)//浮点数改值总函数
     int flag=0;
     temp = *(pobj->pb);
 
-    DISP_SSD1306_Fill(0);
-    DISP_SSD1306_Printf_F6x8(0,0,"---%s---",pobj->name);
-    DISP_SSD1306_Print_F6x8(0,1,"integer adjust:");
-    DISP_SSD1306_Printf_F6x8(20,3,"past:%7.3f",*(pobj->pb));
-    DISP_SSD1306_Printf_F6x8(20,4,"save:%7.3f",*(pobj->pb));
-    DISP_SSD1306_Printf_F6x8(20,5,"now :%7.3f",*(pobj->pb));
+    SmartCar_OLED_Fill(0x00);//清屏
+    SmartCar_OLED_Printf6x8(0,0,"---%s---",pobj->name);
+    SmartCar_OLED_P6x8Str(0,1,"integer adjust:");
+    SmartCar_OLED_Printf6x8(20,3,"past:%7.3f",*(pobj->pb));
+    SmartCar_OLED_Printf6x8(20,4,"save:%7.3f",*(pobj->pb));
+    SmartCar_OLED_Printf6x8(20,5,"now :%7.3f",*(pobj->pb));
     Menu_ShowUnder(index);
     while(1)
     {
@@ -361,7 +361,7 @@ void Menu_FloatDataAdjust(void)//浮点数改值总函数
         figure=0;
         if(key_gnd != key_state)
         {
-            SDK_DelayAtLeastUs(KEY_REMOVE_JITTER*1000,CLOCK_GetFreq(kCLOCK_CoreSysClk));
+            Delay_ms(STM0,KEY_REMOVE_JITTER);
            if(key_state == key_up)
            {
                KEY_Clear();//清空按键检验
@@ -399,15 +399,15 @@ void Menu_FloatDataAdjust(void)//浮点数改值总函数
                KEY_Clear();//清空按键检验
                if(*(pobj->pb)==temp)
                {
-                   DISP_SSD1306_Print_F6x8(40,7,"Adjusted OK!");
-                   SDK_DelayAtLeastUs(500*1000,CLOCK_GetFreq(kCLOCK_CoreSysClk));
+                   SmartCar_OLED_P6x8Str(40,7,"Adjusted OK!");
+                   Delay_ms(STM0,500);
                    return;
                }
                else if(*(pobj->pb) != temp)
                {
                    *(pobj->pb) = temp;
-                   DISP_SSD1306_Print_F6x8(20,4,"             ");
-                   DISP_SSD1306_Printf_F6x8(20,4,"save:%7.3f",*(pobj->pb));
+                   SmartCar_OLED_P6x8Str(20,4,"             ");
+                   SmartCar_OLED_Printf6x8(20,4,"save:%7.3f",*(pobj->pb));
                }
            }
         }
@@ -416,7 +416,7 @@ void Menu_FloatDataAdjust(void)//浮点数改值总函数
         if(flag==1)
         {
             temp=temp+figure*pow(10,index);
-            DISP_SSD1306_Printf_F6x8(20,5,"now :%7.3f",temp);
+            SmartCar_OLED_Printf6x8(20,5,"now :%7.3f",temp);
         }
         else if(flag==2)
         {
@@ -495,84 +495,15 @@ void Menu_Calculate_ny(int flag)//计算各个项的纵坐标   0-初始化，1-上滚，-1-下滚
     }
 }
 
-void Menu_DataRead(void)//读取数据
-{
-    int flag,i=0;
-    flag=0;
-
-    uint8_t *buff = (uint8_t*)malloc(sizeof(uint8_t)*4096);
-    float DATA[4][20]={0};
-    uint8_t Error;
-    Error = FLASH_SectorRead(0,buff);
-    if(Error==0)
-    {
-        Menu_Tip_Delay("DataRead");
-    }
-    memcpy(DATA,&buff[0],4*20*sizeof(float));
-
-    for(i=0;obj[i].name[0]!=0;i++)//把数据转移到obj里
-    {
-        if(obj[i].type == my_variType)
-        {
-            *(obj[i].pa) = DATA[flag][i];
-        }
-        else if(obj[i].type == my_varfType)
-        {
-            *(obj[i].pb) = DATA[flag][i];
-        }
-        else if(obj[i].type == my_menuType)
-        {
-            ;//不管
-        }
-    }
-    free(buff);
-}
-void Menu_DataSave(void)//保存数据
-{
-    int flag,i=0;
-    flag=0;
-
-    uint8_t *buff = (uint8_t*)malloc(sizeof(uint8_t)*4096);
-    float DATA[4][20];
-    uint8_t Error;
-
-    for(i=0;obj[i].name[0]!=0;i++)//把数据从obj里转移到DATA里
-    {
-        if(obj[i].type==0)
-        {
-            DATA[flag][i] = *(obj[i].pa);
-        }
-        else if(obj[i].type==1)
-        {
-            DATA[flag][i] = *(obj[i].pb);
-        }
-        else if(obj[i].type==2)
-        {
-            ;//不管
-        }
-    }
-    memcpy(&buff[0],DATA,4*20*sizeof(float));
-    Error = FLASH_SectorWrite(0,buff);
-
-    if(Error==0)
-    {
-        Menu_Tip_Delay("DataSave");
-    }
-    free(buff);
-
-    DISP_SSD1306_Print_F6x8(40,7,"Flash written!");
-    SDK_DelayAtLeastUs(1000*1000,CLOCK_GetFreq(kCLOCK_CoreSysClk));
-
-}
 void Menu_Tip(char* str)//左上角提醒
 {
-    DISP_SSD1306_Print_F6x8(0,0,str);
+    SmartCar_OLED_P6x8Str(0,0,str);
 }
 //TODO:设置提示信息缓存区
 void Menu_Tip_Delay(char* str)//左上角提醒
 {
-    DISP_SSD1306_Print_F6x8(0,0,str);
-    SDK_DelayAtLeastUs(1000*1000,CLOCK_GetFreq(kCLOCK_CoreSysClk));
+    SmartCar_OLED_P6x8Str(0,0,str);
+    Delay_ms(STM0,1000);
 }
 
 void KEY_Check_Right(void)
@@ -598,24 +529,6 @@ void KEY_Check_Down(void)
 void KEY_Clear(void)
 {
     key_state = key_gnd;
-}
-
-void DISP_SSD1306_Printf_F6x8(uint8_t x,uint8_t y,const char* fmt, ...)
-{
-  va_list args;
-  va_start(args, fmt);
-  static char* buf = new char[64];
-  vsnprintf(buf, 64, fmt, args);
-  DISP_SSD1306_Print_F6x8(x, y, buf);
-}
-
-void DISP_SSD1306_Printf_F8x16(uint8_t x,uint8_t y,const char* fmt, ...)
-{
-  va_list args;
-  va_start(args, fmt);
-  static char* buf = new char[64];
-  vsnprintf(buf, 64, fmt, args);
-  DISP_SSD1306_Print_F8x16(x, y, buf);
 }
 
 void Boma_init(void)
