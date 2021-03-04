@@ -9,7 +9,6 @@
 #define SOURCE_IMAGE_HPP_
 
 #include "everything.hpp"
-#include "math.h"
 
 #define MISS 255
 #define CAMERA_H  120
@@ -32,9 +31,9 @@
 ///////////////////////////
 
 
-extern uint8_t IMG[CAMERA_H][CAMERA_W];
-extern uint8_t image_Buffer_0[CAMERA_H][CAMERA_W];
-extern uint8_t* fullBuffer;
+extern uint8 IMG[CAMERA_H][CAMERA_W];
+extern uint8 image_Buffer_0[CAMERA_H][CAMERA_W];
+extern uint8* fullBuffer;
 extern int start_line_line;
 extern int start_line_x;
 

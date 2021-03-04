@@ -6,6 +6,7 @@
  */
 
 #include "image.hpp"
+#include "math.h"
 
 int f[10 * CAMERA_H];//考察连通域联通性
 

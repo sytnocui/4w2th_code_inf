@@ -12,8 +12,8 @@ void LV_Sample()                             // ad采集函数
     for(uint8 i=0;i<SampleTimes;i++)
     {
         /*获取采样初值*/
-        LV_Temp[0][i]=SCADC_Sample(ADC0,0,channels[0]);
-        LV_Temp[2][i]=SCADC_Sample(ADC0,0,channels[2]);
+        LV_Temp[0][i]=ADC_Get(ADC_0, ADC0_CH0_A0, ADC_12BIT);
+        LV_Temp[2][i]=ADC_Get(ADC_0, ADC0_CH1_A1, ADC_12BIT);
     }
 }
 
