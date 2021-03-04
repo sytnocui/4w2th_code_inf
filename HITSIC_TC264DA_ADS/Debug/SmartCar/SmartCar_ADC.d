@@ -26,6 +26,10 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
 SmartCar_ADC.o :	../SmartCar/SmartCar_ADC.c
 ../SmartCar/SmartCar_ADC.c :
 SmartCar_ADC.o :	../SmartCar/SmartCar_ADC.h

@@ -26,6 +26,10 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
 SmartCar_Oled.o :	../SmartCar/SmartCar_Oled.c
 ../SmartCar/SmartCar_Oled.c :
 SmartCar_Oled.o :	../SmartCar/SmartCar_Oled.h

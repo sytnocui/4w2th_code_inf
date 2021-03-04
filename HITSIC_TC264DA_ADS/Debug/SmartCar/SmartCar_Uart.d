@@ -26,6 +26,10 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
 SmartCar_Uart.o :	../SmartCar/SmartCar_Uart.c
 ../SmartCar/SmartCar_Uart.c :
 SmartCar_Uart.o :	../SmartCar/SmartCar_Uart.h

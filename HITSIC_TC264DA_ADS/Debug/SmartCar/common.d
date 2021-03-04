@@ -26,6 +26,10 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
 common.o :	../SmartCar/common.c
 ../SmartCar/common.c :
 common.o :	../SmartCar/common.h

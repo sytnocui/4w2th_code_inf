@@ -26,6 +26,10 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
 SmartCar_MT9V034.o :	../SmartCar/SmartCar_MT9V034.c
 ../SmartCar/SmartCar_MT9V034.c :
 SmartCar_MT9V034.o :	../SmartCar/SmartCar_MT9V034.h

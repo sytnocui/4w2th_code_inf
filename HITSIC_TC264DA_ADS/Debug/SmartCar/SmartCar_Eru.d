@@ -26,6 +26,10 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
 SmartCar_Eru.o :	../SmartCar/SmartCar_Eru.c
 ../SmartCar/SmartCar_Eru.c :
 SmartCar_Eru.o :	../SmartCar/SmartCar_Eru.h

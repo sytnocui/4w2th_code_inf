@@ -18,6 +18,10 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
 basic_ctrl.o :	../source/basic_ctrl.cpp
 ../source/basic_ctrl.cpp :
 basic_ctrl.o :	"C:/Users/10798/Desktop/4w2th_inf/4w2th_code_inf/HITSIC_TC264DA_ADS/source/basic_ctrl.hpp"

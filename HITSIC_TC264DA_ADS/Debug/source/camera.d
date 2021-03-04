@@ -18,6 +18,10 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
 camera.o :	../source/camera.cpp
 ../source/camera.cpp :
 camera.o :	../source/camera.hpp

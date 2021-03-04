@@ -18,6 +18,10 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
 image.o :	../source/image.cpp
 ../source/image.cpp :
 image.o :	../source/image.hpp
