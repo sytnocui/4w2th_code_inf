@@ -69,7 +69,7 @@ void ctrl_init(void)
     var_init();
 }
 
-
+//TODO:float-->uint32,换通道
 void motor_ctrl(void)
 {
     Encoder_Update();//更新编码器返回值，计算实际速度
@@ -78,41 +78,42 @@ void motor_ctrl(void)
     /*输出状态判断：是否启动 与 正反转*/
     if(motor_output >= 0)//后轮正转
     {
-        SCFTM_PWM_ChangeHiRes(motor_FTM,forward_chnl,20000U,motor_output);
-        SCFTM_PWM_ChangeHiRes(motor_FTM,backward_chnl,20000U,0.0);
+        SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_0_TOUT0_P02_0_OUT,motor_output);
+        SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_0_TOUT0_P02_0_OUT,0);
     }
     else if(motor_output < 0)//后轮反转
     {
-        SCFTM_PWM_ChangeHiRes(motor_FTM,forward_chnl,20000U,0.0);
-        SCFTM_PWM_ChangeHiRes(motor_FTM,backward_chnl,20000U,(-motor_output));
+        SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_0_TOUT0_P02_0_OUT,0);
+        SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_0_TOUT0_P02_0_OUT,(-motor_output));
     }
 }
 
 //TODO:探讨能不能从定时器移到回调函数里
+//TODO:float-->uint32,换通道
 void servo_ctrl(void)
 {
     /*特殊状态，不需要计算，赋值之后直接跳出*/
     if(stop == car_state)//停车
     {
-        SCFTM_PWM_ChangeHiRes(servo_FTM,servo_chnl,50U,SERVO_MID);
+        SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_0_TOUT0_P02_0_OUT,(uint32)SERVO_MID);
         return;
     }
     if(garage == car_state)//出入库
     {
         if(car_direction)
         {
-            SCFTM_PWM_ChangeHiRes(servo_FTM,servo_chnl,50U,servo_garage_left);
+            SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_0_TOUT0_P02_0_OUT,(uint32)servo_garage_left);
         }
         else
         {
-            SCFTM_PWM_ChangeHiRes(servo_FTM,servo_chnl,50U,servo_garage_right);
+            SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_0_TOUT0_P02_0_OUT,(uint32)servo_garage_right);
         }
         return;
     }
 
     /*正式计算*/
     servo_pid_calculate();
-    SCFTM_PWM_ChangeHiRes(servo_FTM,servo_chnl,50U,servo_output);
+    SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_0_TOUT0_P02_0_OUT,(uint32)servo_output);
 }
 
 void servo_pid_calculate(void)

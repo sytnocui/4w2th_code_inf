@@ -10,12 +10,6 @@
 
 #include "everything.hpp"
 
-#define motor_FTM FTM0       //电机
-#define servo_FTM FTM3      //舵机
-
-#define forward_chnl        kFTM_Chnl_1       //后轮向前
-#define backward_chnl       kFTM_Chnl_0      //后轮向后
-#define servo_chnl          kFTM_Chnl_7     //舵机
 
 #define SERVO_RIGHT     8.9
 #define SERVO_LEFT      6.3
