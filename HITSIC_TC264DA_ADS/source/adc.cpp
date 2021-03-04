@@ -1,7 +1,6 @@
 #include "adc.hpp"
 
 uint32 LV_Temp[ChannelTimes][SampleTimes];
-const uint32 channels[ChannelTimes] = {16, 23, 17, 18, 10, 11, 12, 13};
 float LV[ChannelTimes];
 float AD[ChannelTimes];
 float em_error;

@@ -81,12 +81,6 @@ void Menu_KeyCheck_Cursor(void);//五项按键检测
 void Menu_Tip(char* str);//打印提示信息函数
 void Menu_Tip_Delay(char* str);//打印提示信息+延时
 
-void KEY_Check_Right(void);
-void KEY_Check_Enter(void);
-void KEY_Check_Up(void);
-void KEY_Check_Left(void);
-void KEY_Check_Down(void);
-
 void KEY_Clear(void);
 
 void f91mgj(void);//凑数用的

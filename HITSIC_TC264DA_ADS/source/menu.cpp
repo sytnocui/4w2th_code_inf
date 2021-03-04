@@ -505,26 +505,7 @@ void Menu_Tip_Delay(char* str)//◊Û…œΩ«Ã·–—
     Delay_ms(STM0,1000);
 }
 
-void KEY_Check_Right(void)
-{
-    key_state = key_right;
-}
-void KEY_Check_Enter(void)
-{
-    key_state = key_enter;
-}
-void KEY_Check_Up(void)
-{
-    key_state = key_up;
-}
-void KEY_Check_Left(void)
-{
-    key_state = key_left;
-}
-void KEY_Check_Down(void)
-{
-    key_state = key_down;
-}
+
 void KEY_Clear(void)
 {
     key_state = key_gnd;
