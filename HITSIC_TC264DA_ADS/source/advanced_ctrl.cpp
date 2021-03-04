@@ -133,7 +133,7 @@ void OutTract_Protect(void)//出赛道保护
 }
 
 /*--------------------------history相关函数-------------------------------*/
-bool History_Check(int type)
+uint8 History_Check(int type)
 {
     if(history_done[type] < history_todo[type])
     {

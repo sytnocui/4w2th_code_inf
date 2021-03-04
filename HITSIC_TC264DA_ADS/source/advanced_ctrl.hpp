@@ -40,7 +40,7 @@ void Garage_Quit(void);
 void OutTract_Protect(void);
 
 /*HISTORYœ‡πÿ*/
-bool History_check(int type);
+uint8 History_check(int type);
 void History_Update(int type);
 
 extern int history_done[];

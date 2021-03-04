@@ -36,6 +36,7 @@
 #include "SmartCar_MT9V034.h"
 #include "SmartCar_Systick.h"
 #include "common.h"
+#include "everything.hpp"
 
 
 #pragma section all "cpu0_dsram"
@@ -57,18 +58,45 @@ int core0_main(void)
     IfxCpu_waitEvent(&g_cpuSyncEvent, 1);
     
     IfxCpu_enableInterrupts();
-    //初始化外设
+
+    /*初始化单片机功能*/
+    //PWM初始化
+    SmartCar_Gtm_Pwm_Init(&IfxGtm_ATOM2_7_TOUT64_P20_8_OUT,50,0);
+    //串口初始化
+    SmartCar_Uart_Init(IfxAsclin0_TX_P14_0_OUT,IfxAsclin0_RXA_P14_1_IN,921600,0);
+    //外部中断初始化
+    Eru_Init(CH0_P15_4,RISING);
+    Eru_Init(CH4_P15_5,FALLING);
+    //GPIO初始化
+    GPIO_Init(P20,9,PUSHPULL,0);
+    GPIO_Init(P20,8,PUSHPULL,1);//TODO:啥意思
+    GPIO_Init(P21,4,PUSHPULL,0);
+    GPIO_Init(P21,5,PUSHPULL,0);//注：按键和拨码无上下拉，不需要初始化
+    //定时中断初始化
+    Pit_Init_ms(CCU6_0,PIT_CH0,1000);
+    Pit_Init_ms(CCU6_0,PIT_CH1,5000);
+    Pit_Init_ms(CCU6_1,PIT_CH0,2000);
+    Pit_Init_ms(CCU6_1,PIT_CH1,3000);//TODO:把控制环的都写在这吧
+    //ADC初始化
+    ADC_Init(ADC_1,ADC1_CH4_A20);
+
+    /*初始化外设*/
+    //总钻风初始化
+    SmartCar_MT9V034_Init();
+    //OLED初始化
     SmartCar_Oled_Config_Init();
     SmartCar_Oled_Init();
-    SmartCar_Uart_Init(IfxAsclin0_TX_P14_0_OUT,IfxAsclin0_RXA_P14_1_IN,921600,0);
 
-    float var[10]={
-                (float)10};//在这里设置你想让WIFI发送的变量
 
     SmartCar_OLED_P6x8Str(0,0,"sytnocui");
     while(TRUE)
     {
-        SmartCar_VarUpload(var,10);
+        while(!mt9v034_finish_flag){};
+        SmartCar_Show_IMG((uint8*)mt9v034_image,120,188);
+        mt9v034_finish_flag = 0;
+
+
+        //SmartCar_VarUpload(var,10);//todo:封装自己的wifi传图函数
     }
 }
 
