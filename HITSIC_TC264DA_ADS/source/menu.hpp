@@ -12,6 +12,7 @@
 
 #include "everything.hpp"
 
+
 typedef enum {
     key_gnd,
     key_right,
@@ -51,11 +52,6 @@ typedef struct position{
     int mode;//模式，1-光标选项，2-光标调数
     char folder[20];//光标所在文件夹
 }POS;//光标所在位置
-
-
-
-void Boma_init(void);//初始化拨码开关
-void KEY_init(void);//初始化五项按键
 
 
 

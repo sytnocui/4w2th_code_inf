@@ -8,7 +8,7 @@
  */
 #include "imu.hpp"
 
-
+mpu_t mpu6050;
 
 /**
  * @brief   IMU传感器原始数据
@@ -26,27 +26,16 @@ float imu_gyro_drift = 0;
 void imu_init(void)
 {
     /** 初始化IMU */
-       if (true != imu_6050.Detect())
-       {
-           PRINTF("IMU Detection Fail\n");
-           while(1);
-       }
-       if (0U != imu_6050.Init())
-       {
-           PRINTF("IMU Initialization Fail\n");
-           while(1);
-       }
-       if (0U != imu_6050.SelfTest()) ///> 自检时保持静止，否则会直接失败
-       {
-           PRINTF("IMU Self Test Fail\n");
-           while(1);
-       }
+    if (0U != SmartCar_MPU_Init2(mpu6050))
+    {
+        while(1);
+    }
+    SmartCar_MPU_SelfCheck(); ///> 自检时保持静止，否则会直接失败
 }
 
 void imu_update(void)
 {
-    imu_6050.ReadSensorBlocking();///<读参
-    imu_6050.Convert(imu_accl, imu_accl+1, imu_accl+2, imu_gyro, imu_gyro+1, imu_gyro+2);
+    SmartCar_MPU_Getgyro2(mpu6050);
     imu_gyro_z = imu_gyro[2]-imu_gyro_drift;
     imu_angle_z += imu_gyro_z * 0.005;
 }

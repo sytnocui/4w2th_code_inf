@@ -1,4 +1,5 @@
 #include "menu.hpp"
+#include "string.h"
 
 //int cursor_y = 1;//¹â±êy×ø±ê
 int objnum =0;//ÏîÊý
@@ -9,15 +10,13 @@ OBJ obj[]={ {"state",my_variType,&car_state,NULL,"[MAIN]",0,0,ReadOnly_Flag},//Ê
             {"[MOTOR]",my_menuType,NULL,NULL,"[MAIN]",0,0,Ordinary_Flag},   /*µç»ú²ÎÊý*/
             {"[IMAGE]",my_menuType,NULL,NULL,"[MAIN]",0,0,Ordinary_Flag},   /*Í¼Ïñ²ÎÊý*/
 
-            {"s_kpStr",my_varfType,NULL,&servo_kpStr,"[SETVO]",0,0,Ordinary_Flag},
-            {"s_kdStr",my_varfType,NULL,&servo_kdStr,"[SETVO]",0,0,Ordinary_Flag},
-            {"s_kpTurn",my_varfType,NULL,&servo_kpTurn,"[SETVO]",0,0,Ordinary_Flag},
-            {"s_kdTurn",my_varfType,NULL,&servo_kdTurn,"[SETVO]",0,0,Ordinary_Flag},
+            {"s_kpStr",my_varfType,NULL,&servo_kp,"[SETVO]",0,0,Ordinary_Flag},
+            {"s_kdStr",my_varfType,NULL,&servo_kd,"[SETVO]",0,0,Ordinary_Flag},
 
             {"speed_str",my_varfType,NULL,&speed_dream_str,"[MOTOR]",0,0,Ordinary_Flag},
             {"speed_turn",my_varfType,NULL,&speed_dream_turn,"[MOTOR]",0,0,Ordinary_Flag},
-            {"m_ki",my_varfType,NULL,&motor_speed_ki,"[MOTOR]",0,0,Ordinary_Flag},
-            {"m_kp",my_varfType,NULL,&motor_speed_kp,"[MOTOR]",0,0,Ordinary_Flag},
+            {"m_ki",my_varfType,NULL,&motor_ki,"[MOTOR]",0,0,Ordinary_Flag},
+            {"m_kp",my_varfType,NULL,&motor_kp,"[MOTOR]",0,0,Ordinary_Flag},
 
             {"true",my_varfType,NULL,&threshold,"[IMAGE]",0,0,Ordinary_Flag},//TODO:°ÑãÐÖµ¸Ä³ÉÕûÊý
             {"forward",my_variType,&prospect,NULL,"[IMAGE]",0,0,Ordinary_Flag},
@@ -118,7 +117,7 @@ void Menu_In(void)//½øÈë
     }
     else if(pobj->type == my_menuType)
     {
-        strncpy(cursor_pos.folder,pobj->name,10);
+        strcpy(cursor_pos.folder,pobj->name);
         int i;
         for(i=0;obj[i].name[0]!=0;i++)
         {
@@ -138,7 +137,7 @@ void Menu_Out(void)//ÍË³ö
 {
     if(strcmp(cursor_pos.folder,"[MAIN]")!=0)
     {
-        strncpy(cursor_pos.folder,"[MAIN]",10);
+        strcpy(cursor_pos.folder,"[MAIN]");
         pobj=&obj[0];
     }
     else if(strcmp(cursor_pos.folder,"[MAIN]") == 0)
@@ -529,31 +528,6 @@ void KEY_Check_Down(void)
 void KEY_Clear(void)
 {
     key_state = key_gnd;
-}
-
-void Boma_init(void)
-{
-    PORT_SetPinInterruptConfig(PORTA, 9U, kPORT_InterruptFallingEdge);
-    extInt_t::insert(PORTA, 9U, f91mgj);
-    PORT_SetPinInterruptConfig(PORTA, 11U, kPORT_InterruptFallingEdge);
-    extInt_t::insert(PORTA, 11U,f91mgj);
-    PORT_SetPinInterruptConfig(PORTA, 13U, kPORT_InterruptFallingEdge);
-    extInt_t::insert(PORTA, 13U,f91mgj);
-    PORT_SetPinInterruptConfig(PORTA, 15U, kPORT_InterruptFallingEdge);
-    extInt_t::insert(PORTA, 15U,f91mgj);
-}
-void KEY_init(void)
-{
-    PORT_SetPinInterruptConfig(PORTE, 9U, kPORT_InterruptFallingEdge);
-    extInt_t::insert(PORTE, 9U,KEY_Check_Left);
-    PORT_SetPinInterruptConfig(PORTE, 10U, kPORT_InterruptFallingEdge);
-    extInt_t::insert(PORTE, 10U,KEY_Check_Enter);
-    PORT_SetPinInterruptConfig(PORTE, 7U, kPORT_InterruptFallingEdge);
-    extInt_t::insert(PORTE, 7U,KEY_Check_Down);
-    PORT_SetPinInterruptConfig(PORTE, 8U, kPORT_InterruptFallingEdge);
-    extInt_t::insert(PORTE, 8U,KEY_Check_Right);
-    PORT_SetPinInterruptConfig(PORTE, 11U, kPORT_InterruptFallingEdge);
-    extInt_t::insert(PORTE, 11U,KEY_Check_Up);
 }
 
 

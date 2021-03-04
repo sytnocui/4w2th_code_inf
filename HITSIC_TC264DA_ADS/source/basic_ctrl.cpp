@@ -60,10 +60,10 @@ void var_init(void)
 
 void ctrl_init(void)
 {
-    pitMgr_t::insert(5U, 0U, motor_ctrl, pitMgr_t::enable);
-    pitMgr_t::insert(20U, 1U, servo_ctrl, pitMgr_t::enable);
-    pitMgr_t::insert(1000U, 7U, startline_ctrl, pitMgr_t::enable); //斑马线
-    //    pitMgr_t::insert(20U, 3U, ADC_Upgrade, pitMgr_t::enable);
+    Pit_Init_ms(CCU6_0, PIT_CH0, 5);//motor_ctrl
+    Pit_Init_ms(CCU6_0, PIT_CH0, 20);//servo_ctrl
+    Pit_Init_ms(CCU6_0, PIT_CH0, 1000);//startline_ctrl
+    //    Pit_Init_ms(20U, 3U, ADC_Upgrade, pitMgr_t::enable);
 
     /*初始化赋值*/
     var_init();
