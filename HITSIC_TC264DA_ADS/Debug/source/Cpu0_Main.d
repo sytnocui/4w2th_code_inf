@@ -2,34 +2,6 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
-################################################################################
-# Automatically-generated file. Do not edit!
-################################################################################
-
-################################################################################
-# Automatically-generated file. Do not edit!
-################################################################################
-
-################################################################################
-# Automatically-generated file. Do not edit!
-################################################################################
-
-################################################################################
-# Automatically-generated file. Do not edit!
-################################################################################
-
-################################################################################
-# Automatically-generated file. Do not edit!
-################################################################################
-
-################################################################################
-# Automatically-generated file. Do not edit!
-################################################################################
-
-################################################################################
-# Automatically-generated file. Do not edit!
-################################################################################
-
 Cpu0_Main.o :	../source/Cpu0_Main.c
 ../source/Cpu0_Main.c :
 Cpu0_Main.o :	../Configurations/Ifx_Cfg.h
@@ -82,6 +54,24 @@ Cpu0_Main.o :	../Libraries/Service/CpuGeneric/SysSe/Bsp/Bsp.h
 ../Libraries/Service/CpuGeneric/SysSe/Bsp/Bsp.h :
 Cpu0_Main.o :	../SmartCar/SmartCar_Systick.h
 ../SmartCar/SmartCar_Systick.h :
+Cpu0_Main.o :	../SmartCar/common.h
+../SmartCar/common.h :
+Cpu0_Main.o :	../SmartCar/SmartCar_GPIO.h
+../SmartCar/SmartCar_GPIO.h :
+Cpu0_Main.o :	../SmartCar/SmartCar_PIT.h
+../SmartCar/SmartCar_PIT.h :
+Cpu0_Main.o :	../SmartCar/common.h
+../SmartCar/common.h :
+Cpu0_Main.o :	../Libraries/Service/CpuGeneric/_Utilities/Ifx_Assert.h
+../Libraries/Service/CpuGeneric/_Utilities/Ifx_Assert.h :
+Cpu0_Main.o :	../Libraries/Service/CpuGeneric/If/Ccu6If/Timer.h
+../Libraries/Service/CpuGeneric/If/Ccu6If/Timer.h :
+Cpu0_Main.o :	../Libraries/Service/CpuGeneric/SysSe/Bsp/Bsp.h
+../Libraries/Service/CpuGeneric/SysSe/Bsp/Bsp.h :
+Cpu0_Main.o :	../SmartCar/SmartCar_ADC.h
+../SmartCar/SmartCar_ADC.h :
+Cpu0_Main.o :	../Libraries/Service/CpuGeneric/_Utilities/Ifx_Assert.h
+../Libraries/Service/CpuGeneric/_Utilities/Ifx_Assert.h :
 Cpu0_Main.o :	../SmartCar/common.h
 ../SmartCar/common.h :
 Cpu0_Main.o :	../SmartCar/common.h

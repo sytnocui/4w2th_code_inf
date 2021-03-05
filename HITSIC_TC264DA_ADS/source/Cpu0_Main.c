@@ -24,10 +24,12 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  *********************************************************************************************************************/
+
 #include "Ifx_Types.h"
 #include "IfxCpu.h"
 #include <ifxCpu_Irq.h>
 #include "IfxScuWdt.h"
+
 #include "SmartCar_Uart.h"
 #include "SmartCar_Upload.h"
 #include "SmartCar_Oled.h"
@@ -35,9 +37,10 @@
 #include "SmartCar_MPU.h"
 #include "SmartCar_MT9V034.h"
 #include "SmartCar_Systick.h"
+#include "SmartCar_GPIO.h"
+#include "SmartCar_PIT.h"
+#include "SmartCar_ADC.h"
 #include "common.h"
-#include "everything.hpp"
-
 
 #pragma section all "cpu0_dsram"
 //IfxCpu_syncEvent g_cpuSyncEvent;
@@ -79,6 +82,7 @@ int core0_main(void)
     Pit_Init_ms(CCU6_1,PIT_CH1,3000);//TODO:把控制环的都写在这吧
     //ADC初始化
     ADC_Init(ADC_1,ADC1_CH4_A20);
+    ADC_Init(ADC_1,ADC1_CH5_A21);
 
     /*初始化外设*/
     //总钻风初始化
@@ -87,8 +91,6 @@ int core0_main(void)
     SmartCar_Oled_Config_Init();
     SmartCar_Oled_Init();
 
-
-    SmartCar_OLED_P6x8Str(0,0,"sytnocui");
     while(TRUE)
     {
         while(!mt9v034_finish_flag){};

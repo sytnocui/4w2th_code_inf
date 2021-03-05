@@ -19,6 +19,7 @@
 
 
 #include "SmartCar_FONT.h"
+#include "stdio.h"
 
 const uint8 font_6x8[][6] =
 {

@@ -21,6 +21,7 @@
 #include "SmartCar_Upload.h"
 #include "stdarg.h"
 #include "stdlib.h"
+#include "stdio.h"
 
 void SmartCar_Uart_Upload(uint8* txData, Ifx_SizeT count)
 {

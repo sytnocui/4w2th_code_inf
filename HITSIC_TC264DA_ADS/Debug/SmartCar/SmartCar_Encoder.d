@@ -6,30 +6,6 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
-################################################################################
-# Automatically-generated file. Do not edit!
-################################################################################
-
-################################################################################
-# Automatically-generated file. Do not edit!
-################################################################################
-
-################################################################################
-# Automatically-generated file. Do not edit!
-################################################################################
-
-################################################################################
-# Automatically-generated file. Do not edit!
-################################################################################
-
-################################################################################
-# Automatically-generated file. Do not edit!
-################################################################################
-
-################################################################################
-# Automatically-generated file. Do not edit!
-################################################################################
-
 SmartCar_Encoder.o :	../SmartCar/SmartCar_Encoder.c
 ../SmartCar/SmartCar_Encoder.c :
 SmartCar_Encoder.o :	../SmartCar/SmartCar_Encoder.h
@@ -44,3 +20,9 @@ SmartCar_Encoder.o :	../Libraries/Service/CpuGeneric/StdIf/IfxStdIf_DPipe.h
 ../Libraries/Service/CpuGeneric/StdIf/IfxStdIf_DPipe.h :
 SmartCar_Encoder.o :	../Libraries/Service/CpuGeneric/_Utilities/Ifx_Assert.h
 ../Libraries/Service/CpuGeneric/_Utilities/Ifx_Assert.h :
+SmartCar_Encoder.o :	../SmartCar/common.h
+../SmartCar/common.h :
+SmartCar_Encoder.o :	../source/Cpu0_Main.h
+../source/Cpu0_Main.h :
+SmartCar_Encoder.o :	../Libraries/Service/CpuGeneric/SysSe/Bsp/Bsp.h
+../Libraries/Service/CpuGeneric/SysSe/Bsp/Bsp.h :
