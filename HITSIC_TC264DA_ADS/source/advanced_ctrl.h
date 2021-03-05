@@ -10,6 +10,10 @@
 
 #include "common.h"
 #include "basic_ctrl.h"
+#include "SmartCar_Pwm.h"
+#include "SmartCar_Encoder.h"
+#include "SmartCar_Systick.h"
+#include "image.h"
 
 typedef enum{
     straight,

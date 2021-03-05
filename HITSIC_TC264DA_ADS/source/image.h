@@ -30,6 +30,36 @@
 #define purple 6
 ///////////////////////////
 
+//每个白条子属性
+typedef struct {
+    uint8   left;//左边界
+    uint8   right;//右边界
+    int   connect_num;//连通标记（号）
+}range;
+
+//每行的所有白条子
+typedef struct {
+    uint8   num;//每行白条数量
+    range   area[white_num_MAX];//该行各白条区域
+}all_range;
+
+//属于赛道的每个白条子属性
+typedef struct {
+    uint8   left;//左边界
+    uint8   right;//右边界
+    uint8   width;//宽度
+}road_range;
+
+//每行属于赛道的每个白条子
+typedef struct {
+    uint8   white_num;
+    road_range   connected[white_num_MAX];
+}road;
+typedef struct edge_point {
+    int x;
+    int y;
+} Point;
+
 
 extern uint8 IMG[CAMERA_H][CAMERA_W];
 extern uint8 image_Buffer_0[CAMERA_H][CAMERA_W];

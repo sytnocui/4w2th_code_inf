@@ -66,7 +66,7 @@ int core0_main(void)
     //PWM初始化
     SmartCar_Gtm_Pwm_Init(&IfxGtm_ATOM2_7_TOUT64_P20_8_OUT,50,0);
     //串口初始化
-    SmartCar_Uart_Init(IfxAsclin0_TX_P14_0_OUT,IfxAsclin0_RXA_P14_1_IN,921600,0);
+    SmartCar_Uart_Init(IfxAsclin0_TX_P14_0_OUT,IfxAsclin0_RXA_P14_1_IN,1152000,0);
     //外部中断初始化
     Eru_Init(CH0_P15_4,RISING);
     Eru_Init(CH4_P15_5,FALLING);
@@ -90,17 +90,24 @@ int core0_main(void)
     //OLED初始化
     SmartCar_Oled_Config_Init();
     SmartCar_Oled_Init();
+    //mpu初始化
+    this_mpu = &my_mpu;
+    SmartCar_Uart_Init(IfxAsclin0_TX_P14_0_OUT,IfxAsclin0_RXA_P14_1_IN,115200,0);
+    SmartCar_MPU_Set_DefaultConfig(this_mpu);
+    SmartCar_MPU_Init2(this_mpu);
+
 
     IfxCpu_enableInterrupts();
 
     while(TRUE)
     {
-        Menu_Welcome();
+        //Menu_Welcome();
 
         while(!mt9v034_finish_flag){};
-        SmartCar_Show_IMG((uint8*)mt9v034_image,120,188);
+//        SmartCar_Show_IMG((uint8*)mt9v034_image,120,188);
         mt9v034_finish_flag = 0;
 
+        SmartCar_ImgUpload((uint8*)mt9v034_image,120,188);
 
         //SmartCar_VarUpload(var,10);//todo:封装自己的wifi传图函数
     }

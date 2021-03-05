@@ -19,9 +19,7 @@
 #include "adc.h"
 #include "advanced_ctrl.h"
 #include "basic_ctrl.h"
-#include "camera.h"
 #include "image.h"
-#include "imu.h"
 
 
 

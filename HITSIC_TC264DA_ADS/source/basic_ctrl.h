@@ -9,6 +9,13 @@
 #define SOURCE_BASIC_CTRL_H_
 
 #include "common.h"
+#include "SmartCar_Pwm.h"
+#include "SmartCar_Encoder.h"
+#include "SmartCar_MPU.h"
+#include "advanced_ctrl.h"
+#include "image.h"
+
+#include "Cpu0_Main.h"
 
 #define SERVO_RIGHT     8.9
 #define SERVO_LEFT      6.3
@@ -43,7 +50,9 @@ extern int img_var;
 extern int stop_line;
 extern int startline_time;
 
-
+extern mpu_t my_mpu;
+extern mpu_t* this_mpu;
+extern float imu_angle_z;
 
 void ctrl_init(void);//控制初始化
 void var_init(void);//数值初始化
@@ -55,6 +64,9 @@ void motor_pid_calculate(void);//电机pid计算
 
 void Encoder_Update(void);//更新编码器的值
 void Encoder_Distance_Clear(void);
+
+void imu_clear(void);
+void imu_update(void);
 
 
 

@@ -9,6 +9,7 @@
 #define SOURCE_ADC_H_
 
 #include "common.h"
+#include "SmartCar_ADC.h"
 
 #define SampleTimes 25
 #define ChannelTimes 8
