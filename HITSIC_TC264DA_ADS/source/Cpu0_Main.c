@@ -42,6 +42,8 @@
 #include "SmartCar_ADC.h"
 #include "common.h"
 
+#include "menu.h"
+
 #pragma section all "cpu0_dsram"
 //IfxCpu_syncEvent g_cpuSyncEvent;
 
@@ -60,8 +62,6 @@ int core0_main(void)
     IfxCpu_emitEvent(&g_cpuSyncEvent);
     IfxCpu_waitEvent(&g_cpuSyncEvent, 1);
     
-    IfxCpu_enableInterrupts();
-
     /*初始化单片机功能*/
     //PWM初始化
     SmartCar_Gtm_Pwm_Init(&IfxGtm_ATOM2_7_TOUT64_P20_8_OUT,50,0);
@@ -91,8 +91,12 @@ int core0_main(void)
     SmartCar_Oled_Config_Init();
     SmartCar_Oled_Init();
 
+    IfxCpu_enableInterrupts();
+
     while(TRUE)
     {
+        Menu_Welcome();
+
         while(!mt9v034_finish_flag){};
         SmartCar_Show_IMG((uint8*)mt9v034_image,120,188);
         mt9v034_finish_flag = 0;

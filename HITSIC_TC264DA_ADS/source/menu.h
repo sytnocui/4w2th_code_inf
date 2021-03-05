@@ -13,6 +13,7 @@
 #include "common.h"
 
 #include "SmartCar_Oled.h"
+#include "SmartCar_Systick.h"
 #include "SmartCar_Isr.h"
 
 #include "adc.h"

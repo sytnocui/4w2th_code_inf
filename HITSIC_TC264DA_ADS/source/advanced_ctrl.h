@@ -9,6 +9,7 @@
 #define SOURCE_ADVANCED_CTRL_H_
 
 #include "common.h"
+#include "basic_ctrl.h"
 
 typedef enum{
     straight,
