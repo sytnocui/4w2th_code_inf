@@ -17,9 +17,9 @@
 
 #include "Cpu0_Main.h"
 
-#define SERVO_RIGHT     8.9
-#define SERVO_LEFT      6.3
-#define SERVO_MID       7.49
+#define SERVO_RIGHT     890
+#define SERVO_LEFT      630
+#define SERVO_MID       749
 
 /*电机PID参数*/
 extern float motor_kp ;    //速度环p
@@ -53,6 +53,8 @@ extern int startline_time;
 extern mpu_t my_mpu;
 extern mpu_t* this_mpu;
 extern float imu_angle_z;
+extern float imu_gyro[3];
+extern float imu_gyro[3];
 
 void ctrl_init(void);//控制初始化
 void var_init(void);//数值初始化

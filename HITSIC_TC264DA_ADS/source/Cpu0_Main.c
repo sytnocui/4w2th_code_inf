@@ -64,52 +64,106 @@ int core0_main(void)
     
     /*初始化单片机功能*/
     //PWM初始化
-    SmartCar_Gtm_Pwm_Init(&IfxGtm_ATOM2_7_TOUT64_P20_8_OUT,50,0);
+    SmartCar_Gtm_Pwm_Init(&IfxGtm_ATOM1_1_TOUT31_P33_9_OUT,50,0);
     //串口初始化
-    SmartCar_Uart_Init(IfxAsclin0_TX_P14_0_OUT,IfxAsclin0_RXA_P14_1_IN,1152000,0);
+//    SmartCar_Uart_Init(IfxAsclin0_TX_P14_0_OUT,IfxAsclin0_RXA_P14_1_IN,1152000,0);
     //外部中断初始化
     Eru_Init(CH0_P15_4,RISING);
     Eru_Init(CH4_P15_5,FALLING);
     //GPIO初始化
     GPIO_Init(P20,9,PUSHPULL,0);
-    GPIO_Init(P20,8,PUSHPULL,1);//TODO:啥意思
+    GPIO_Init(P20,8,PUSHPULL,0);
     GPIO_Init(P21,4,PUSHPULL,0);
-    GPIO_Init(P21,5,PUSHPULL,0);//注：按键和拨码无上下拉，不需要初始化
+    GPIO_Init(P21,5,PUSHPULL,0);
+
+    GPIO_Init(P22,0,PULLUP,0);
+    GPIO_Init(P22,1,PULLUP,0);
+    GPIO_Init(P22,2,PULLUP,0);
+    GPIO_Init(P22,3,PULLUP,0);
+    GPIO_Init(P33,12,PULLUP,0);//boma
+    GPIO_Init(P33,13,PULLUP,0);
     //定时中断初始化
     Pit_Init_ms(CCU6_0,PIT_CH0,1000);
     Pit_Init_ms(CCU6_0,PIT_CH1,5000);
     Pit_Init_ms(CCU6_1,PIT_CH0,2000);
     Pit_Init_ms(CCU6_1,PIT_CH1,3000);//TODO:把控制环的都写在这吧
     //ADC初始化
-    ADC_Init(ADC_1,ADC1_CH4_A20);
-    ADC_Init(ADC_1,ADC1_CH5_A21);
+//    ADC_Init(ADC_1,ADC1_CH4_A20);
+//    ADC_Init(ADC_1,ADC1_CH5_A21);
 
     /*初始化外设*/
     //总钻风初始化
-    SmartCar_MT9V034_Init();
+//    SmartCar_MT9V034_Init();
     //OLED初始化
     SmartCar_Oled_Config_Init();
     SmartCar_Oled_Init();
     //mpu初始化
-    this_mpu = &my_mpu;
-    SmartCar_Uart_Init(IfxAsclin0_TX_P14_0_OUT,IfxAsclin0_RXA_P14_1_IN,115200,0);
-    SmartCar_MPU_Set_DefaultConfig(this_mpu);
-    SmartCar_MPU_Init2(this_mpu);
+//    this_mpu = &my_mpu;
+//    SmartCar_Uart_Init(IfxAsclin0_TX_P14_0_OUT,IfxAsclin0_RXA_P14_1_IN,115200,0);
+//    SmartCar_MPU_Set_DefaultConfig(this_mpu);
+//    SmartCar_MPU_Init2(this_mpu);
+//    SmartCar_GyroOffset(this_mpu);
 
 
     IfxCpu_enableInterrupts();
 
+    mid_line[prospect]=0;
     while(TRUE)
     {
+        servo_ctrl();
+        Delay_ms(STM0,100);
+        mid_line[prospect]++;
+
+//        imu_update();
+//        SmartCar_OLED_Printf6x8(0, 0,"%f",imu_gyro[0]);
+//        SmartCar_OLED_Printf6x8(1, 1,"%f",imu_gyro[1]);
+//        SmartCar_OLED_Printf6x8(2, 2,"%f",imu_gyro[2]);
+//        Delay_ms(STM0,100);
+
+//        if(!GPIO_Read(P22,0)
+//        ||!GPIO_Read(P22,1)
+//        ||!GPIO_Read(P22,2)
+//        ||!GPIO_Read(P22,3))
+//        {
+//            if(!GPIO_Read(P22,0))
+//            {
+//                GPIO_Toggle(P20,9);
+//            }
+//            else if(!GPIO_Read(P22,1))
+//            {
+//                GPIO_Toggle(P20,9);
+//            }
+//            else if(!GPIO_Read(P22,2))
+//            {
+//                GPIO_Toggle(P20,9);
+//            }
+//            else if(!GPIO_Read(P22,3))
+//            {
+//                GPIO_Toggle(P20,9);
+//            }
+//            Delay_ms(STM0,100);
+//        }
+
+//        if(GPIO_Read(P33,12))
+//        {
+//            SmartCar_OLED_Fill(0x00);
+//            SmartCar_OLED_Printf6x8(0, 0,"0");
+//        }
+//        else
+//        {
+//            SmartCar_OLED_Fill(0x00);
+//            SmartCar_OLED_Printf6x8(5, 5,"1");
+//        }
+
         //Menu_Welcome();
 
-        while(!mt9v034_finish_flag){};
-//        SmartCar_Show_IMG((uint8*)mt9v034_image,120,188);
-        mt9v034_finish_flag = 0;
+//        while(!mt9v034_finish_flag){};
+////        SmartCar_Show_IMG((uint8*)mt9v034_image,120,188);
+//        mt9v034_finish_flag = 0;
 
-        SmartCar_ImgUpload((uint8*)mt9v034_image,120,188);
+//        SmartCar_ImgUpload((uint8*)mt9v034_image,120,188);//传图函数
 
-        //SmartCar_VarUpload(var,10);//todo:封装自己的wifi传图函数
+//        SmartCar_VarUpload(var,10);//TODO:封装自己的wifi传图函数
     }
 }
 

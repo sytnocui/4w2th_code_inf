@@ -57,8 +57,8 @@ void var_init(void)
     speed_dream_str = 1;
     speed_dream_turn = 1;
 
-    servo_garage_left = 6.6;
-    servo_garage_right = 8.5;
+    servo_garage_left = 660;
+    servo_garage_right = 850;
 
     car_state = stop;
 }
@@ -143,10 +143,10 @@ void motor_pid_calculate(void)
     motor_output += motor_ki*motor_err + motor_kp* (motor_err-motor_err_pre);    //计算输出
 
     /*电机限幅*/
-    if(motor_output >= 99)
-        motor_output = 99;
-    else if(motor_output <= -99)
-        motor_output = -99;
+    if(motor_output >= 9900)
+        motor_output = 9900;
+    else if(motor_output <= -9900)
+        motor_output = -9900;
 }
 
 void Encoder_Update(void)

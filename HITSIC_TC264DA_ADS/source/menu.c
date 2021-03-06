@@ -27,9 +27,7 @@ OBJ obj[]={ {"state",my_variType,&car_state,NULL,"[MAIN]",0,0,ReadOnly_Flag},// 
 
 
 OBJ *pobj=&obj[0];
-
 POS cursor_pos={0,"[MAIN]"};
-
 KEY_STATE key_state=key_gnd;
 
 
@@ -45,9 +43,6 @@ void Menu_Welcome(void)
     Menu_ShowObject();//¥Ú”°≤Àµ•
     Menu_ShowCursor();//¥Ú”°π‚±Í
     Menu_ShowState();//¥Ú”°◊¥Ã¨¿∏
-
-    Menu_KeyCheck_Cursor();
-    KEY_Clear();
 }
 void Menu_ShowObject(void)//¥Ú”°≤Àµ•
 {
