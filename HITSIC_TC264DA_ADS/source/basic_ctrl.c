@@ -6,9 +6,9 @@
 float motor_kp = 0.0;    //速度环p
 float motor_ki = 0.0;    //速度环i
 float motor_kd = 0.0;    //速度环d
-float motor_err = 0;
-float motor_err_pre = 0;
-float motor_output = 0;
+uint32 motor_err = 0;
+uint32 motor_err_pre = 0;
+uint32 motor_output = 0;
 
 /*期望速度*/
 float speed_dream = 0;
@@ -33,10 +33,10 @@ float imu_gyro[3] = {0.0f, 0.0f, 0.0f};
 float servo_kp = 0.0;      //位置环p
 float servo_ki = 0.0;      //位置环i
 float servo_kd = 0.0;      //位置环d
-float servo_err = 0;
-float servo_err_pre = 0;
-float servo_pid_output = 0;
-float servo_output = SERVO_MID;
+uint32 servo_err = 0;
+uint32 servo_err_pre = 0;
+uint32 servo_pid_output = 0;
+uint32 servo_output = SERVO_MID;
 
 
 int stop_line = 100;
@@ -47,8 +47,8 @@ int startline_time =0;
 
 void var_init(void)
 {
-    servo_kp = 0.25;
-    servo_kd = 0.5;
+    servo_kp = 2.5;
+    servo_kd = 5;
 
     motor_kp = 20;
     motor_ki = 10;
@@ -83,13 +83,13 @@ void motor_ctrl(void)
     /*输出状态判断：是否启动 与 正反转*/
     if(motor_output >= 0)//后轮正转
     {
-        SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_0_TOUT0_P02_0_OUT,motor_output);
-        SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_0_TOUT0_P02_0_OUT,0);
+        SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_6_TOUT6_P02_6_OUT,motor_output);
+        SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_7_TOUT7_P02_7_OUT,0);
     }
     else if(motor_output < 0)//后轮反转
     {
-        SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_0_TOUT0_P02_0_OUT,0);
-        SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_0_TOUT0_P02_0_OUT,(-motor_output));
+        SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_6_TOUT6_P02_6_OUT,0);
+        SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_7_TOUT7_P02_7_OUT,(-motor_output));
     }
 }
 
@@ -100,31 +100,31 @@ void servo_ctrl(void)
     /*特殊状态，不需要计算，赋值之后直接跳出*/
     if(stop == car_state)//停车
     {
-        SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_0_TOUT0_P02_0_OUT,(uint32)SERVO_MID);
+        SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM1_1_TOUT31_P33_9_OUT,SERVO_MID);
         return;
     }
     if(garage == car_state)//出入库
     {
         if(car_direction)
         {
-            SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_0_TOUT0_P02_0_OUT,(uint32)servo_garage_left);
+            SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM1_1_TOUT31_P33_9_OUT,servo_garage_left);
         }
         else
         {
-            SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_0_TOUT0_P02_0_OUT,(uint32)servo_garage_right);
+            SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM1_1_TOUT31_P33_9_OUT,servo_garage_right);
         }
         return;
     }
 
     /*正式计算*/
     servo_pid_calculate();
-    SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_0_TOUT0_P02_0_OUT,(uint32)servo_output);
+    SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM1_1_TOUT31_P33_9_OUT,servo_output);
 }
 
 void servo_pid_calculate(void)
 {
     img_var = mid_line[prospect];//前瞻处中线位置
-    servo_err = (float)(img_var-94)/10;
+    servo_err = img_var-94;
     servo_pid_output = servo_kp * servo_err + servo_kd * (servo_err - servo_err_pre);
     servo_output = SERVO_MID + servo_pid_output;
     servo_err_pre = servo_err;

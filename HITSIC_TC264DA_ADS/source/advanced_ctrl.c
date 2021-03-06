@@ -13,8 +13,8 @@ int car_state_pre = stop;
 int car_direction = 0;
 int car_branch_direction = 0;
 
-float servo_garage_left= SERVO_MID ;
-float servo_garage_right= SERVO_MID ;
+uint32 servo_garage_left= SERVO_MID ;
+uint32 servo_garage_right= SERVO_MID ;
 
 int history_done[stop+1] = {0};
 int history_todo[stop+1] = {0};

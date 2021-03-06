@@ -64,7 +64,9 @@ int core0_main(void)
     
     /*初始化单片机功能*/
     //PWM初始化
-    SmartCar_Gtm_Pwm_Init(&IfxGtm_ATOM1_1_TOUT31_P33_9_OUT,50,0);
+    SmartCar_Gtm_Pwm_Init(&IfxGtm_ATOM1_1_TOUT31_P33_9_OUT,50,SERVO_MID);
+    SmartCar_Gtm_Pwm_Init(&IfxGtm_ATOM0_6_TOUT6_P02_6_OUT,200,0);
+    SmartCar_Gtm_Pwm_Init(&IfxGtm_ATOM0_7_TOUT7_P02_7_OUT,200,0);
     //串口初始化
 //    SmartCar_Uart_Init(IfxAsclin0_TX_P14_0_OUT,IfxAsclin0_RXA_P14_1_IN,1152000,0);
     //外部中断初始化
@@ -112,7 +114,19 @@ int core0_main(void)
     {
         servo_ctrl();
         Delay_ms(STM0,100);
-        mid_line[prospect]++;
+
+
+        motor_output=2000;
+        if(motor_output >= 0)//后轮正转
+        {
+            SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_6_TOUT6_P02_6_OUT,motor_output);
+            SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_7_TOUT7_P02_7_OUT,0);
+        }
+        else if(motor_output < 0)//后轮反转
+        {
+            SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_6_TOUT6_P02_6_OUT,0);
+            SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM0_7_TOUT7_P02_7_OUT,(-motor_output));
+        }
 
 //        imu_update();
 //        SmartCar_OLED_Printf6x8(0, 0,"%f",imu_gyro[0]);

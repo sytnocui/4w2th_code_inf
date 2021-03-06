@@ -33,8 +33,8 @@ extern int car_state;
 extern int car_state_pre;
 extern int car_direction;
 
-extern float servo_garage_left;
-extern float servo_garage_right;
+extern uint32 servo_garage_left;
+extern uint32 servo_garage_right;
 
 void startline_ctrl(void);//斑马线延时停车
 void State_Update(void);//状态机更新
