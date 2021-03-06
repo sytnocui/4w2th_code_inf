@@ -78,7 +78,7 @@ void THRE()
 {
     uint8* map;
     uint8* my_map;
-//    map = fullBuffer;
+    map = mt9v034_image;
     for (int i = 0; i < 120; i++)
     {
         my_map = &IMG[i][0];

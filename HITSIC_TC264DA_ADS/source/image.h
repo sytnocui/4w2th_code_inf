@@ -10,6 +10,8 @@
 
 #include "common.h"
 
+#include "SmartCar_MT9V034.h"
+
 #define MISS 255
 #define CAMERA_H  120
 #define CAMERA_W  188

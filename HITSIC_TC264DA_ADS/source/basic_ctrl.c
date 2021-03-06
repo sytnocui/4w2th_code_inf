@@ -29,6 +29,9 @@ float imu_angle_z = 0;
 float imu_accl[3] = {0.0f, 0.0f, 0.0f};
 float imu_gyro[3] = {0.0f, 0.0f, 0.0f};
 
+int16 icm_gyro_x,icm_gyro_y,icm_gyro_z;
+int16 icm_acc_x,icm_acc_y,icm_acc_z;
+
 /*舵机PID参数*/
 float servo_kp = 0.0;      //位置环p
 float servo_ki = 0.0;      //位置环i
@@ -151,10 +154,10 @@ void motor_pid_calculate(void)
 
 void Encoder_Update(void)
 {
-    enco_get = -SmartCar_Encoder_Get(GPT12_T2);
+    enco_get = SmartCar_Encoder_Get(GPT12_T5);
     enco_distance += enco_get * 0.000167;       //*0.6 / 3592.4
     speed_actual = enco_get * 0.0334;   //*0.6 / 3592.4 / 0.005   *0.6 / 3592.4为编码器与距离的比例，/0.005为dt，
-    SmartCar_Encoder_Clear(GPT12_T2);
+    SmartCar_Encoder_Clear(GPT12_T5);
     //TODO:
 }
 
@@ -162,6 +165,8 @@ void Encoder_Distance_Clear(void)
 {
     enco_distance = 0;
 }
+
+
 
 void imu_clear(void)
 {

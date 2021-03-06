@@ -21,9 +21,12 @@ int history_todo[stop+1] = {0};
 
 void my_start(void)
 {
+    SmartCar_OLED_Printf6x8(0, 0,"ready");
+
     Delay_ms(STM0, 1000);
     startline_time = 0;//Í£³µ¼ÆÊ±
-    Garage_Quit();
+//    Garage_Quit();
+    car_state = straight;
 }
 
 void Ctrl_Update()

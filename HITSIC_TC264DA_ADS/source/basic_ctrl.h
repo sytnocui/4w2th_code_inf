@@ -56,6 +56,9 @@ extern float imu_angle_z;
 extern float imu_gyro[3];
 extern float imu_gyro[3];
 
+extern int16 icm_gyro_x,icm_gyro_y,icm_gyro_z;
+extern int16 icm_acc_x,icm_acc_y,icm_acc_z;
+
 void ctrl_init(void);//控制初始化
 void var_init(void);//数值初始化
 void motor_ctrl(void);//电机控制
