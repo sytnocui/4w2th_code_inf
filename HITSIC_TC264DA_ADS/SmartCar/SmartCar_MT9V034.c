@@ -26,6 +26,8 @@
 #include "SmartCar_Upload.h"
 #include "SmartCar_Oled.h"
 
+#include "image.h"
+
 IFX_ALIGN(4) uint8 mt9v034_image[MT9V034_H][MT9V034_W];//ËÄ×Ö½Ú¶ÔÆë
 uint8 image_size_half[MT9V034_H / 2][MT9V034_W / 2];
 
@@ -254,5 +256,5 @@ void MT9V034_DMA(void)
 void SmartCar_Show_IMG(uint8* image, uint16 ro, uint16 co)
 {
     image_size_half_forOLED((uint8*)image, (uint8*)image_size_half, ro, co);
-    dis_bmp(ro / 2, co / 2, (uint8*)image_size_half, 100);
+    dis_bmp(ro / 2, co / 2, (uint8*)image_size_half, threshold);
 }

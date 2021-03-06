@@ -58,7 +58,8 @@ void Ctrl_Update()
     }
     else if(zebra == car_state)
     {
-        Garage_Enter();
+//        Garage_Enter();
+        car_state = stop;
     }
 }
 

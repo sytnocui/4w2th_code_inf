@@ -22,6 +22,8 @@
 #include "SmartCar_Oled.h"
 #include "stdio.h"
 
+
+
 IfxQspi_SpiMaster oled_spi;
 IfxQspi_SpiMaster_Channel oled_spiChannel;
 #define SPI_BUFFER_SIZE 8       //缓存数据大小

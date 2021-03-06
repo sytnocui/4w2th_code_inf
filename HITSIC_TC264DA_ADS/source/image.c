@@ -17,7 +17,7 @@ uint8 left_line[CAMERA_H], right_line[CAMERA_H];//赛道的左右边界
 uint8 mid_line[CAMERA_H];
 int all_connect_num = 0;//所有白条子数
 uint8 top_road;//赛道最高处所在行数
-float threshold = 220;//阈值
+float threshold = 175;//阈值
 uint8 j_continue[CAMERA_H];//第一条连通路径
 
 

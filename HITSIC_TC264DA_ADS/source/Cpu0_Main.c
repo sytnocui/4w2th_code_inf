@@ -62,26 +62,6 @@ int core0_main(void)
     IfxCpu_emitEvent(&g_cpuSyncEvent);
     IfxCpu_waitEvent(&g_cpuSyncEvent, 1);
 
-    //ADC初始化
-//    ADC_Init(ADC_1,ADC1_CH4_A20);
-//    ADC_Init(ADC_1,ADC1_CH5_A21);
-
-    /*初始化外设*/
-    //总钻风初始化
-    SmartCar_MT9V034_Init();
-    //OLED初始化
-    SmartCar_Oled_Config_Init();
-    SmartCar_Oled_Init();
-    //mpu初始化
-//    this_mpu = &my_mpu;
-//    SmartCar_Uart_Init(IfxAsclin0_TX_P14_0_OUT,IfxAsclin0_RXA_P14_1_IN,115200,0);
-//    SmartCar_MPU_Set_DefaultConfig(this_mpu);
-//    SmartCar_MPU_Init2(this_mpu);
-//    SmartCar_GyroOffset(this_mpu);
-
-    //编码器初始化
-    SmartCar_Encoder_Init(GPT12_T5 , IfxGpt120_T5INB_P10_3_IN , IfxGpt120_T5EUDB_P10_1_IN);
-
     /*初始化单片机功能*/
     //PWM初始化
     SmartCar_Gtm_Pwm_Init(&IfxGtm_ATOM1_1_TOUT31_P33_9_OUT,50,SERVO_MID);
@@ -102,7 +82,7 @@ int core0_main(void)
     GPIO_Init(P22,1,PULLUP,0);
     GPIO_Init(P22,2,PULLUP,0);
     GPIO_Init(P22,3,PULLUP,0);
-    GPIO_Init(P33,12,PULLUP,0);//boma
+    GPIO_Init(P33,12,PULLUP,0);
     GPIO_Init(P33,13,PULLUP,0);
     //定时中断初始化
     Pit_Init_ms(CCU6_0,PIT_CH0,5);
@@ -110,25 +90,59 @@ int core0_main(void)
     Pit_Init_ms(CCU6_1,PIT_CH0,1000);
     Pit_Init_ms(CCU6_1,PIT_CH1,3000);//TODO:把控制环的都写在这吧
 
+    //ADC初始化
+//    ADC_Init(ADC_1,ADC1_CH4_A20);
+//    ADC_Init(ADC_1,ADC1_CH5_A21);
+
+    /*初始化外设*/
+    //OLED初始化
+    SmartCar_Oled_Init();
+    //总钻风初始化
+    SmartCar_OLED_Fill(0);
+    SmartCar_OLED_Printf6x8(0, 0,"do");
+    SmartCar_MT9V034_Init();
+    SmartCar_OLED_Printf6x8(2, 2,"over");
+    //mpu初始化
+//    this_mpu = &my_mpu;
+//    SmartCar_Uart_Init(IfxAsclin0_TX_P14_0_OUT,IfxAsclin0_RXA_P14_1_IN,115200,0);
+//    SmartCar_MPU_Set_DefaultConfig(this_mpu);
+//    SmartCar_MPU_Init2(this_mpu);
+//    SmartCar_GyroOffset(this_mpu);
+
+    //编码器初始化
+    SmartCar_Encoder_Init(GPT12_T5 , IfxGpt120_T5INB_P10_3_IN , IfxGpt120_T5EUDB_P10_1_IN);
 
     IfxCpu_enableInterrupts();
 
+    //my初始化
+    ctrl_init();
+
     while(TRUE)
     {
-
 //        imu_update();
-//        SmartCar_OLED_Printf6x8(0, 0,"%f",imu_gyro[0]);
-//        SmartCar_OLED_Printf6x8(1, 1,"%f",imu_gyro[1]);
-
+//        SmartCar_OLED_Printf6x8(0, 0,"%d",enco_get);
+//        SmartCar_OLED_Printf6x8(1, 1,"%f",enco_distance);
+//        SmartCar_OLED_Printf6x8(0, 2,"%f",speed_actual);
+//        SmartCar_OLED_Printf6x8(1, 3,"%f",motor_output);
+//        Delay_ms(STM0,100);
 
 //        SmartCar_OLED_Printf6x8(2, 2,"%d",startline_time);
 //        Delay_ms(STM0,100);
 
         while(!mt9v034_finish_flag){};
-        SmartCar_Show_IMG((uint8*)mt9v034_image,120,188);
         mt9v034_finish_flag = 0;
-        image_main();
-        State_Update();
+
+        if(!GPIO_Read(P33,12))
+        {
+            SmartCar_Show_IMG((uint8*)mt9v034_image,120,188);
+        }
+        else
+        {
+            image_main();
+            State_Update();
+            Ctrl_Update();
+        }
+
 
         if(!GPIO_Read(P22,0)
         ||!GPIO_Read(P22,1)
@@ -154,11 +168,7 @@ int core0_main(void)
             Delay_ms(STM0,100);
         }
 
-//        if(GPIO_Read(P33,12))
-//        {
-//            SmartCar_OLED_Fill(0x00);
-//            SmartCar_OLED_Printf6x8(0, 0,"0");
-//        }
+
 //        else
 //        {
 //            SmartCar_OLED_Fill(0x00);

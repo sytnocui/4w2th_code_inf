@@ -25,17 +25,17 @@
 extern float motor_kp ;    //速度环p
 extern float motor_ki ;    //速度环i
 extern float motor_kd ;    //速度环d
-extern uint32 motor_err;
-extern uint32 motor_err_pre;
-extern uint32 motor_output;
+extern float motor_err;
+extern float motor_err_pre;
+extern float motor_output;
 
 /*舵机PID参数*/
 extern float servo_kp ;    //内环p
 extern float servo_ki;     //内环i
 extern float servo_kd ;    //内环d
-extern uint32 servo_err ;
-extern uint32 servo_output ;
-extern uint32 servo_pid_output;
+extern float servo_err ;
+extern float servo_output ;
+extern float servo_pid_output;
 
 extern float speed_actual;
 extern float speed_dream;
