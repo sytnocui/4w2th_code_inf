@@ -152,7 +152,6 @@ void Encoder_Update(void)
     enco_distance += enco_get * 0.000167;       //*0.6 / 3592.4
     speed_actual = enco_get * 0.0334;   //*0.6 / 3592.4 / 0.005   *0.6 / 3592.4为编码器与距离的比例，/0.005为dt，
     SmartCar_Encoder_Clear(GPT12_T5);
-    //TODO:
 }
 
 void Encoder_Distance_Clear(void)

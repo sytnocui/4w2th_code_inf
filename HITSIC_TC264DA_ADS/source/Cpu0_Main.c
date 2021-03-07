@@ -98,10 +98,7 @@ int core0_main(void)
     //OLED初始化
     SmartCar_Oled_Init();
     //总钻风初始化
-    SmartCar_OLED_Fill(0);
-    SmartCar_OLED_Printf6x8(0, 0,"do");
     SmartCar_MT9V034_Init();
-    SmartCar_OLED_Printf6x8(2, 2,"over");
     //mpu初始化
 //    this_mpu = &my_mpu;
 //    SmartCar_Uart_Init(IfxAsclin0_TX_P14_0_OUT,IfxAsclin0_RXA_P14_1_IN,115200,0);
@@ -119,30 +116,13 @@ int core0_main(void)
 
     while(TRUE)
     {
-//        imu_update();
-//        SmartCar_OLED_Printf6x8(0, 0,"%d",enco_get);
-//        SmartCar_OLED_Printf6x8(1, 1,"%f",enco_distance);
-//        SmartCar_OLED_Printf6x8(0, 2,"%f",speed_actual);
-//        SmartCar_OLED_Printf6x8(1, 3,"%f",motor_output);
-//        Delay_ms(STM0,100);
-
-//        SmartCar_OLED_Printf6x8(2, 2,"%d",startline_time);
-//        Delay_ms(STM0,100);
 
         while(!mt9v034_finish_flag){};
         mt9v034_finish_flag = 0;
 
-        if(!GPIO_Read(P33,12))
-        {
-            SmartCar_Show_IMG((uint8*)mt9v034_image,120,188);
-        }
-        else
-        {
-            image_main();
-            State_Update();
-            Ctrl_Update();
-        }
-
+        image_main();
+        State_Update();
+        Ctrl_Update();
 
         if(!GPIO_Read(P22,0)
         ||!GPIO_Read(P22,1)
@@ -155,24 +135,20 @@ int core0_main(void)
             }
             else if(!GPIO_Read(P22,1))
             {
-                GPIO_Toggle(P20,9);
+                SmartCar_Show_IMG((uint8*)mt9v034_image,120,188);
             }
             else if(!GPIO_Read(P22,2))
             {
-                GPIO_Toggle(P20,9);
+                threshold+=10;
             }
             else if(!GPIO_Read(P22,3))
             {
-                GPIO_Toggle(P20,9);
+                threshold-=10;
             }
             Delay_ms(STM0,100);
         }
 
-        //Menu_Welcome();
-
 //        SmartCar_ImgUpload((uint8*)mt9v034_image,120,188);//传图函数
-
-//        SmartCar_VarUpload(var,10);//TODO:封装自己的wifi传图函数
     }
 }
 
@@ -182,6 +158,7 @@ IFX_INTERRUPT(cc60_pit_ch0_isr, 0, CCU6_0_CH0_ISR_PRIORITY)//电机控制
     enableInterrupts();//开启中断嵌套
     PIT_CLEAR_FLAG(CCU6_0, PIT_CH0);
     motor_ctrl();
+//    imu_updte();
 
 }
 
@@ -194,11 +171,10 @@ IFX_INTERRUPT(cc60_pit_ch1_isr, 0, CCU6_0_CH1_ISR_PRIORITY)//舵机控制
 
 }
 
-IFX_INTERRUPT(cc61_pit_ch0_isr, 0, CCU6_1_CH0_ISR_PRIORITY)//斑马线控制
+IFX_INTERRUPT(cc61_pit_ch0_isr, 0, CCU6_1_CH0_ISR_PRIORITY)
 {
     enableInterrupts();//开启中断嵌套
     PIT_CLEAR_FLAG(CCU6_1, PIT_CH0);
-    startline_ctrl();
 
 }
 
