@@ -12,13 +12,13 @@ int f[10 * CAMERA_H];//考察连通域联通性
 
 all_range white_range[CAMERA_H];//所有白条子
 road my_road[CAMERA_H];//赛道
-uint8 IMG[CAMERA_H][CAMERA_W] ={0};//二值化后图像数组
-uint8 left_line[CAMERA_H], right_line[CAMERA_H];//赛道的左右边界
-uint8 mid_line[CAMERA_H];
+uint8 IMG[CAMERA_H][CAMERA_W];//二值化后图像数组
+uint8 left_line[CAMERA_H], right_line[CAMERA_H] ={0};//赛道的左右边界
+uint8 mid_line[CAMERA_H] ={0};
 int all_connect_num = 0;//所有白条子数
-uint8 top_road;//赛道最高处所在行数
+uint8 top_road = 0;//赛道最高处所在行数
 float threshold = 100;//阈值
-uint8 j_continue[CAMERA_H];//第一条连通路径
+uint8 j_continue[CAMERA_H] ={0};//第一条连通路径
 
 
 uint8 Left_begin = 0;
@@ -78,7 +78,7 @@ void THRE()
 {
     uint8* map;
     uint8* my_map;
-    map = mt9v034_image;
+    map = (uint8*)mt9v034_image;
     for (int i = 0; i < 120; i++)
     {
         my_map = &IMG[i][0];
@@ -285,7 +285,6 @@ void find_road()
 uint8 find_continue(uint8 i_start, uint8 j_start)
 {
     uint8 j_return;
-    uint8 j;
     uint8 width_max = 0;
     uint8 width_new = 0;
     uint8 left = 0;
@@ -295,7 +294,7 @@ uint8 find_continue(uint8 i_start, uint8 j_start)
     if (j_start > my_road[i_start].white_num)
         return MISS;
     //选一个重叠最大的
-    for (j = 1; j <= my_road[i_start - 1].white_num; j++)
+    for (uint8 j = 1; j <= my_road[i_start - 1].white_num; j++)
     {
         dleft = my_road[i_start].connected[j_start].left;
         dright = my_road[i_start].connected[j_start].right;
@@ -335,21 +334,14 @@ uint8 find_continue(uint8 i_start, uint8 j_start)
 ///////////////////////////////////////////
 void ordinary_two_line(void)
 {
-    uint8 i;
-    uint8 j;
-
-    uint8 a, b,c;
-
-    uint8 i_start;
-    uint8 i_end;
+    uint8 a,b,c = 0;
+    uint8 i_start = NEAR_LINE;
+    uint8 i_end = FAR_LINE;
     uint8 j_start = MISS;
-    int width_max;
-    i_start = NEAR_LINE;
-    i_end = FAR_LINE;
-    width_max = 0;
+    uint8 width_max =0;
 
     /*寻找第一行最宽*/
-    for (j = 1; j <= my_road[i_start].white_num; j++)
+    for (uint8 j = 1; j <= my_road[i_start].white_num; j++)
     {
         if (my_road[i_start].connected[j].width > width_max)
         {
@@ -360,7 +352,7 @@ void ordinary_two_line(void)
     j_continue[i_start] = j_start;
 
     /*寻找重叠最大*/
-    for (i = i_start; i > i_end; i--)
+    for (uint8 i = i_start; i > i_end; i--)
     {
         if (j_continue[i] > my_road[i].white_num)
         {
@@ -370,7 +362,6 @@ void ordinary_two_line(void)
         {
             j_continue[i - 1] = find_continue(i, j_continue[i]);
         }
-
     }
     my_memset(left_line, MISS, CAMERA_H);
     my_memset(right_line, MISS, CAMERA_H);
@@ -380,17 +371,9 @@ void ordinary_two_line(void)
     flag = 0;
     flagtext = 0;
     start_line_x = 0;
-
-    /*出十字*/
-    /*if ((my_road[i_start - 5].connected[j_continue[i_start - 5]].width > 150) && (my_road[i_start - 8].connected[j_continue[i_start - 8]].width > 150))
-    {
-        Cross_out();
-    }*/
-
-    double k0;
-    //todo:解决绝对值函数没法用问题
+    double k0 = 0;
     /*主循环*/
-    for (i = i_start; i > i_end; i--)
+    for (uint8 i = i_start; i > i_end; i--)
     {
         /*十字所用变量*/
         double k_left = (my_road[i].connected[j_continue[i]].left - my_road[i - 2].connected[j_continue[i - 2]].left) / 2.0;
@@ -653,7 +636,7 @@ void image_main(void)
     ordinary_two_line();
     get_mid_line();
     /*斜率计算*/
-    k_mid_calculate();
+//    k_mid_calculate();
 
     /*使计算中线为黑色*/
     for (int i = NEAR_LINE; i >= FAR_LINE; i--)

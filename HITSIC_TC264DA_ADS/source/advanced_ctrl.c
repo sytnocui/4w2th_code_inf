@@ -92,14 +92,15 @@ void State_Update(void)
         car_state=zebra;
         startline_flag = FALSE;
     }
-    else if(k_mid > k_str && k_mid<2.5)
-    {
-        car_state=rightTurn;
-    }
-    else if(k_mid <-k_str && k_mid>-2.5)
-    {
-        car_state=leftTurn;
-    }
+//    else if(k_mid > k_str && k_mid<2.5)
+//    {
+//        car_state=rightTurn;
+//    }
+//    else if(k_mid <-k_str && k_mid>-2.5)
+//    {
+//        car_state=leftTurn;
+//    }
+    //todo:Ìí¼Ó×óÓÒ×ªÍäµÄ×´Ì¬»ú
     else if(k_mid >-k_str && k_mid < k_str)
     {
         car_state=straight;
