@@ -45,7 +45,10 @@ int core0_main(void)
     //OLED初始化
     SmartCar_Oled_Init();
     //总钻风初始化
+    SmartCar_OLED_Fill(0);
+    SmartCar_OLED_Printf6x8(0, 0,"do");
     SmartCar_MT9V034_Init();
+    SmartCar_OLED_Printf6x8(2, 2,"over");
     //mpu初始化
 //    SmartCar_MPU_Set_DefaultConfig(this_mpu);
 //    SmartCar_MPU_Init2(this_mpu);
@@ -62,8 +65,8 @@ int core0_main(void)
     //串口初始化
 //    SmartCar_Uart_Init(IfxAsclin0_TX_P14_0_OUT,IfxAsclin0_RXA_P14_1_IN,1152000,0);
     //外部中断初始化
-    Eru_Init(CH0_P15_4,RISING);
-    Eru_Init(CH4_P15_5,FALLING);
+//    Eru_Init(CH0_P15_4,RISING);
+//    Eru_Init(CH4_P15_5,FALLING);
     //GPIO初始化
     GPIO_Init(P20,9,PUSHPULL,1);
     GPIO_Init(P20,8,PUSHPULL,1);
@@ -74,8 +77,8 @@ int core0_main(void)
     GPIO_Init(P22,1,PULLUP,0);
     GPIO_Init(P22,2,PULLUP,0);
     GPIO_Init(P22,3,PULLUP,0);
-    GPIO_Init(P33,12,PULLUP,0);
-    GPIO_Init(P33,13,PULLUP,0);
+//    GPIO_Init(P33,12,PULLUP,0);
+//    GPIO_Init(P33,13,PULLUP,0);
     //定时中断初始化
     Pit_Init_ms(CCU6_0,PIT_CH0,5);
     Pit_Init_ms(CCU6_0,PIT_CH1,20);
@@ -93,6 +96,7 @@ int core0_main(void)
 
     while(TRUE)
     {
+        SmartCar_OLED_Printf6x8(96,0,"%.0f",threshold);
         //摄像头回调
         callback_temp();//阻塞
         //按键检测
@@ -106,6 +110,7 @@ int core0_main(void)
 
 void callback_temp(void)
 {
+    if(stop == car_state) return;
     while(!mt9v034_finish_flag){};
     mt9v034_finish_flag = 0;
     image_main();
@@ -192,7 +197,8 @@ IFX_INTERRUPT(cc60_pit_ch1_isr, 0, CCU6_0_CH1_ISR_PRIORITY)//舵机控制
     enableInterrupts();//开启中断嵌套
     PIT_CLEAR_FLAG(CCU6_0, PIT_CH1);
     servo_ctrl();
-    SmartCar_Show_IMG((uint8*)mt9v034_image,96,0);
+    GPIO_Set(P20,9,1);
+
 
 }
 
