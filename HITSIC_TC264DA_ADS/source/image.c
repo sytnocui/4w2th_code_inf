@@ -12,12 +12,12 @@ int f[10 * CAMERA_H];//考察连通域联通性
 
 all_range white_range[CAMERA_H];//所有白条子
 road my_road[CAMERA_H];//赛道
-uint8 IMG[CAMERA_H][CAMERA_W];//二值化后图像数组
+uint8 IMG[CAMERA_H][CAMERA_W] ={0};//二值化后图像数组
 uint8 left_line[CAMERA_H], right_line[CAMERA_H];//赛道的左右边界
 uint8 mid_line[CAMERA_H];
 int all_connect_num = 0;//所有白条子数
 uint8 top_road;//赛道最高处所在行数
-float threshold = 175;//阈值
+float threshold = 100;//阈值
 uint8 j_continue[CAMERA_H];//第一条连通路径
 
 
@@ -101,24 +101,15 @@ void THRE()
 ///////////////////////////////////////////
 void head_clear(void)
 {
-//    uint8* my_map;
-//    for (int i = 119; i >= 84; i--)
-//    {
-//        my_map = &IMG[i][0];
-//        for (int j = 40; j <= 135; j++)
-//        {
-//            *(my_map+j) = 255;
-//        }
-//    }
     uint8* my_map;
-        for (int i = 119; i >= 75; i--)
+    for (int i = 119; i >= 100; i--)
+    {
+        my_map = &IMG[i][0];
+        for (int j = 0; j <= 187; j++)
         {
-            my_map = &IMG[i][0];
-            for (int j = 45+0.6*(119-i); j <= 130-0.6*(77-i); j++)
-            {
-                *(my_map+j) = 255;
-            }
+            *(my_map+j) = 255;
         }
+    }
 }
 
 ////////////////////////////////////////////
@@ -654,7 +645,7 @@ void image_main(void)
 {
     image_flag_clear();
     THRE();
-//    head_clear();
+    head_clear();
     search_white_range();
     find_all_connect();
     find_road();

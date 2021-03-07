@@ -21,7 +21,7 @@ int history_todo[stop+1] = {0};
 
 void my_start(void)
 {
-    SmartCar_OLED_Printf6x8(0, 0,"ready");
+    SmartCar_OLED_Printf6x8(0, 2,"ready");
     Delay_ms(STM0, 1000);
     startline_time = 0;//停车计时
 //    Garage_Quit();
@@ -30,7 +30,8 @@ void my_start(void)
 
 void my_stop(void)
 {
-    SmartCar_OLED_Printf6x8(0, 0,"stop");
+    SmartCar_OLED_Printf6x8(0, 2,"stop ");
+    Delay_ms(STM0,1000);//消抖
     car_state = stop;
 }
 

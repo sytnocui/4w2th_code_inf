@@ -24,6 +24,7 @@ void wifi_upload(void);
 void img_upload(void);
 void key_temp(void);
 void callback_temp(void);
+void oled_show_img(void);
 
 
 int core0_main(void)
@@ -48,7 +49,7 @@ int core0_main(void)
     SmartCar_OLED_Fill(0);
     SmartCar_OLED_Printf6x8(0, 0,"do");
     SmartCar_MT9V034_Init();
-    SmartCar_OLED_Printf6x8(2, 2,"over");
+    SmartCar_OLED_Printf6x8(0, 1,"over");
     //mpu初始化
 //    SmartCar_MPU_Set_DefaultConfig(this_mpu);
 //    SmartCar_MPU_Init2(this_mpu);
@@ -101,6 +102,8 @@ int core0_main(void)
         callback_temp();//阻塞
         //按键检测
         key_temp();
+        //oled显示图像
+        oled_show_img();
         //wifi传数据
 //        wifi_upload();
         //传图
@@ -110,9 +113,14 @@ int core0_main(void)
 
 void callback_temp(void)
 {
-    if(stop == car_state) return;
-    while(!mt9v034_finish_flag){};
+    while(!mt9v034_finish_flag);
     mt9v034_finish_flag = 0;
+
+    if(stop == car_state)
+    {
+        speed_dream = 0;
+        return;
+    }
     image_main();
     State_Update();
     Ctrl_Update();
@@ -137,11 +145,11 @@ void key_temp(void)
                 {
                     my_stop();
                 }
-
             }
             else if(!GPIO_Read(P22,1))
             {
-                SmartCar_Show_IMG((uint8*)IMG,120,188);
+                GPIO_Toggle(P21,5);
+                Delay_ms(STM0,300);
             }
             else if(!GPIO_Read(P22,2))
             {
@@ -158,6 +166,14 @@ void key_temp(void)
             Delay_ms(STM0,20);
         }
 
+    }
+}
+
+void oled_show_img(void)
+{
+    if(!GPIO_Read(P21,5))
+    {
+        SmartCar_Show_IMG((uint8*)mt9v034_image,120,188);
     }
 }
 
@@ -186,6 +202,17 @@ IFX_INTERRUPT(cc60_pit_ch0_isr, 0, CCU6_0_CH0_ISR_PRIORITY)//电机控制
 {
     enableInterrupts();//开启中断嵌套
     PIT_CLEAR_FLAG(CCU6_0, PIT_CH0);
+
+    if(speed_dream == 0)
+    {
+        GPIO_Set(P20,8,0);
+    }
+    else
+    {
+        GPIO_Set(P20,8,1);
+    }
+
+
     motor_ctrl();
 //    imu_updte();
 
@@ -197,8 +224,7 @@ IFX_INTERRUPT(cc60_pit_ch1_isr, 0, CCU6_0_CH1_ISR_PRIORITY)//舵机控制
     enableInterrupts();//开启中断嵌套
     PIT_CLEAR_FLAG(CCU6_0, PIT_CH1);
     servo_ctrl();
-    GPIO_Set(P20,9,1);
-
+    GPIO_Set(P20,9,0);
 
 }
 
