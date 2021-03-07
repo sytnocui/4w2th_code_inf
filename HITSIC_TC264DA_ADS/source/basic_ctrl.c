@@ -24,13 +24,10 @@ float enco_distance = 0;
 
 /*陀螺仪参数*/
 mpu_t my_mpu;
-mpu_t* this_mpu;
+mpu_t* this_mpu = &my_mpu;
 float imu_angle_z = 0;
 float imu_accl[3] = {0.0f, 0.0f, 0.0f};
 float imu_gyro[3] = {0.0f, 0.0f, 0.0f};
-
-int16 icm_gyro_x,icm_gyro_y,icm_gyro_z;
-int16 icm_acc_x,icm_acc_y,icm_acc_z;
 
 /*舵机PID参数*/
 float servo_kp = 0.0;      //位置环p

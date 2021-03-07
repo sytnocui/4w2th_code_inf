@@ -89,7 +89,7 @@ void find_all_connect();
 void find_road();
 uint8 find_continue(uint8 i_start, uint8 j_start);
 void ordinary_two_line(void);
-void image_main();
+void image_main(void);
 void get_mid_line(void);
 void Start_line(void);
 void Cross(void);

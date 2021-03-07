@@ -650,7 +650,7 @@ void k_mid_calculate()
 //Êä³ö£º
 //±¸×¢£º
 ///////////////////////////////////////////
-void image_main()
+void image_main(void)
 {
     image_flag_clear();
     THRE();

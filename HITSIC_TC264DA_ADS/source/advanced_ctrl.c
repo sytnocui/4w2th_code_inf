@@ -29,7 +29,7 @@ void my_start(void)
     car_state = straight;
 }
 
-void Ctrl_Update()
+void Ctrl_Update(void)
 {
     /*Ö±½ÓÌø³ö*/
     if(stop==car_state)

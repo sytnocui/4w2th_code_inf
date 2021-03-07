@@ -47,6 +47,8 @@
 #pragma section all "cpu0_dsram"
 //IfxCpu_syncEvent g_cpuSyncEvent;
 
+void key_temp(void);
+
 int core0_main(void)
 {
     IfxCpu_disableInterrupts();
@@ -62,6 +64,19 @@ int core0_main(void)
     IfxCpu_emitEvent(&g_cpuSyncEvent);
     IfxCpu_waitEvent(&g_cpuSyncEvent, 1);
 
+    /*初始化外设*/
+    //OLED初始化
+    SmartCar_Oled_Init();
+    //总钻风初始化
+    SmartCar_MT9V034_Init();
+    //mpu初始化
+//    SmartCar_MPU_Set_DefaultConfig(this_mpu);
+//    SmartCar_MPU_Init2(this_mpu);
+//    SmartCar_GyroOffset(this_mpu);
+
+    //编码器初始化
+    SmartCar_Encoder_Init(GPT12_T5 , IfxGpt120_T5INB_P10_3_IN , IfxGpt120_T5EUDB_P10_1_IN);
+
     /*初始化单片机功能*/
     //PWM初始化
     SmartCar_Gtm_Pwm_Init(&IfxGtm_ATOM1_1_TOUT31_P33_9_OUT,50,SERVO_MID);
@@ -73,10 +88,10 @@ int core0_main(void)
     Eru_Init(CH0_P15_4,RISING);
     Eru_Init(CH4_P15_5,FALLING);
     //GPIO初始化
-    GPIO_Init(P20,9,PUSHPULL,0);
-    GPIO_Init(P20,8,PUSHPULL,0);
-    GPIO_Init(P21,4,PUSHPULL,0);
-    GPIO_Init(P21,5,PUSHPULL,0);
+    GPIO_Init(P20,9,PUSHPULL,1);
+    GPIO_Init(P20,8,PUSHPULL,1);
+    GPIO_Init(P21,4,PUSHPULL,1);
+    GPIO_Init(P21,5,PUSHPULL,1);
 
     GPIO_Init(P22,0,PULLUP,0);
     GPIO_Init(P22,1,PULLUP,0);
@@ -94,24 +109,9 @@ int core0_main(void)
 //    ADC_Init(ADC_1,ADC1_CH4_A20);
 //    ADC_Init(ADC_1,ADC1_CH5_A21);
 
-    /*初始化外设*/
-    //OLED初始化
-    SmartCar_Oled_Init();
-    //总钻风初始化
-    SmartCar_MT9V034_Init();
-    //mpu初始化
-//    this_mpu = &my_mpu;
-//    SmartCar_Uart_Init(IfxAsclin0_TX_P14_0_OUT,IfxAsclin0_RXA_P14_1_IN,115200,0);
-//    SmartCar_MPU_Set_DefaultConfig(this_mpu);
-//    SmartCar_MPU_Init2(this_mpu);
-//    SmartCar_GyroOffset(this_mpu);
-
-    //编码器初始化
-    SmartCar_Encoder_Init(GPT12_T5 , IfxGpt120_T5INB_P10_3_IN , IfxGpt120_T5EUDB_P10_1_IN);
-
     IfxCpu_enableInterrupts();
 
-    //my初始化
+    //代码初始化
     ctrl_init();
 
     while(TRUE)
@@ -124,33 +124,37 @@ int core0_main(void)
         State_Update();
         Ctrl_Update();
 
-        if(!GPIO_Read(P22,0)
-        ||!GPIO_Read(P22,1)
-        ||!GPIO_Read(P22,2)
-        ||!GPIO_Read(P22,3))
-        {
-            if(!GPIO_Read(P22,0))
-            {
-                my_start();
-            }
-            else if(!GPIO_Read(P22,1))
-            {
-                SmartCar_Show_IMG((uint8*)mt9v034_image,120,188);
-            }
-            else if(!GPIO_Read(P22,2))
-            {
-                threshold+=10;
-            }
-            else if(!GPIO_Read(P22,3))
-            {
-                threshold-=10;
-            }
-            Delay_ms(STM0,100);
-        }
+        key_temp();
+
 
 //        SmartCar_ImgUpload((uint8*)mt9v034_image,120,188);//传图函数
     }
 }
+
+void key_temp(void)
+{
+    if(!GPIO_Read(P22,0)
+    ||!GPIO_Read(P22,1)
+    ||!GPIO_Read(P22,2)
+    ||!GPIO_Read(P22,3))
+    {
+        if(!GPIO_Read(P22,0))
+        {
+            my_start();
+        }
+        else if(!GPIO_Read(P22,2))
+        {
+            threshold++;
+        }
+        else if(!GPIO_Read(P22,3))
+        {
+            threshold--;
+        }
+        Delay_ms(STM0,20);
+    }
+}
+
+
 
 //PIT中断函数  示例
 IFX_INTERRUPT(cc60_pit_ch0_isr, 0, CCU6_0_CH0_ISR_PRIORITY)//电机控制
@@ -168,6 +172,7 @@ IFX_INTERRUPT(cc60_pit_ch1_isr, 0, CCU6_0_CH1_ISR_PRIORITY)//舵机控制
     enableInterrupts();//开启中断嵌套
     PIT_CLEAR_FLAG(CCU6_0, PIT_CH1);
     servo_ctrl();
+    SmartCar_Show_IMG((uint8*)mt9v034_image,96,0);
 
 }
 
