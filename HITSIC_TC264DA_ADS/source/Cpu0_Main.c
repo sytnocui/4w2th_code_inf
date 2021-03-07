@@ -116,10 +116,8 @@ int core0_main(void)
 
     while(TRUE)
     {
-
         while(!mt9v034_finish_flag){};
         mt9v034_finish_flag = 0;
-
         image_main();
         State_Update();
         Ctrl_Update();
@@ -138,20 +136,53 @@ void key_temp(void)
     ||!GPIO_Read(P22,2)
     ||!GPIO_Read(P22,3))
     {
-        if(!GPIO_Read(P22,0))
+        while(1)
         {
-            my_start();
+            if(!GPIO_Read(P22,0))
+            {
+                if(stop == car_state)
+                {
+                    my_start();
+                }
+                else
+                {
+                    my_stop();
+                }
+
+            }
+            else if(!GPIO_Read(P22,1))
+            {
+                SmartCar_Show_IMG(IMG,120,188);
+            }
+            else if(!GPIO_Read(P22,2))
+            {
+                threshold++;
+            }
+            else if(!GPIO_Read(P22,3))
+            {
+                threshold--;
+            }
+            else
+            {
+                return;
+            }
+            Delay_ms(STM0,20);
         }
-        else if(!GPIO_Read(P22,2))
-        {
-            threshold++;
-        }
-        else if(!GPIO_Read(P22,3))
-        {
-            threshold--;
-        }
-        Delay_ms(STM0,20);
+
     }
+}
+
+void wifi_upload(void)
+{
+    //todo:constÄÜÓÃÂð
+    const float wifi_data[16] ={
+        (float)enco_get,
+        (float)speed_dream,
+        (float)speed_actual,
+        (float)motor_output,
+        (float)car_state,
+        (float)car_state_pre};
+    SmartCar_VarUpload(wifi_data, 16);
 }
 
 

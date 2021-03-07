@@ -40,6 +40,7 @@ void startline_ctrl(void);//斑马线延时停车
 void State_Update(void);//状态机更新
 void Ctrl_Update(void);//选择目标速度
 void my_start(void);//发车函数
+void my_stop(void);//停车函数
 void Garage_Enter(void);
 void Garage_Quit(void);
 void OutTract_Protect(void);
