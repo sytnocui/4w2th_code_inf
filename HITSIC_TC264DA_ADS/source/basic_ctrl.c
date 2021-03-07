@@ -52,8 +52,8 @@ void var_init(void)
     servo_kp = 2.5;
     servo_kd = 5;
 
-    motor_kp = 2000;
-    motor_ki = 1000;
+    motor_kp = 1000;
+    motor_ki = 500;
 
     speed_dream = 0;
     speed_dream_str = 1;
@@ -159,8 +159,6 @@ void Encoder_Distance_Clear(void)
 {
     enco_distance = 0;
 }
-
-
 
 void imu_clear(void)
 {

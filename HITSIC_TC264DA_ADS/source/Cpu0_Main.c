@@ -88,7 +88,7 @@ int core0_main(void)
     Pit_Init_ms(CCU6_0,PIT_CH0,5);
     Pit_Init_ms(CCU6_0,PIT_CH1,20);
 //    Pit_Init_ms(CCU6_1,PIT_CH0,1000);
-//    Pit_Init_ms(CCU6_1,PIT_CH1,3000);//TODO:把控制环的都写在这吧
+//    Pit_Init_ms(CCU6_1,PIT_CH1,3000);
 
     //ADC初始化
 //    ADC_Init(ADC_1,ADC1_CH4_A20);
@@ -168,18 +168,7 @@ int core0_main(void)
             Delay_ms(STM0,100);
         }
 
-
-//        else
-//        {
-//            SmartCar_OLED_Fill(0x00);
-//            SmartCar_OLED_Printf6x8(5, 5,"1");
-//        }
-
         //Menu_Welcome();
-
-//        while(!mt9v034_finish_flag){};
-////        SmartCar_Show_IMG((uint8*)mt9v034_image,120,188);
-//        mt9v034_finish_flag = 0;
 
 //        SmartCar_ImgUpload((uint8*)mt9v034_image,120,188);//传图函数
 
