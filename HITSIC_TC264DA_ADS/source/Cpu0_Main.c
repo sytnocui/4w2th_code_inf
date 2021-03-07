@@ -87,8 +87,8 @@ int core0_main(void)
     //定时中断初始化
     Pit_Init_ms(CCU6_0,PIT_CH0,5);
     Pit_Init_ms(CCU6_0,PIT_CH1,20);
-    Pit_Init_ms(CCU6_1,PIT_CH0,1000);
-    Pit_Init_ms(CCU6_1,PIT_CH1,3000);//TODO:把控制环的都写在这吧
+//    Pit_Init_ms(CCU6_1,PIT_CH0,1000);
+//    Pit_Init_ms(CCU6_1,PIT_CH1,3000);//TODO:把控制环的都写在这吧
 
     //ADC初始化
 //    ADC_Init(ADC_1,ADC1_CH4_A20);
