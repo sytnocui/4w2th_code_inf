@@ -417,17 +417,17 @@ void ordinary_two_line(void)
             {
                 start_line_x = i;
 
-                Start_line();
+//                Start_line();
                 startline_flag = TRUE;//斑马线标志位
                 break;
             }
             /*识别十字*/
-            else if (Right_flag == 1 && Left_flag == 1 && i > 45 && i < 105)
-            {
-                Cross();
-                cross_flag= TRUE;//十字标志位
-                break;
-            }
+//            else if (Right_flag == 1 && Left_flag == 1 && i > 45 && i < 105)
+//            {
+//                Cross();
+//                cross_flag= TRUE;//十字标志位
+//                break;
+//            }
             /*if (Right_flag == 1 && Left_flag == 1 && i >= 105) {
                 Cross_out();
                 break;
