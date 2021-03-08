@@ -104,7 +104,7 @@ int core0_main(void)
     while(TRUE)
     {
         SmartCar_OLED_Printf6x8(96,0,"%.0f",threshold);
-        SmartCar_OLED_Printf6x8(30,1,"%.2f",imu_gyro[2]);
+        SmartCar_OLED_Printf6x8(30,1,"%.2f",imu_angle_z);
         //摄像头回调
         callback_temp();//阻塞
         //按键检测

@@ -52,9 +52,12 @@ extern int startline_time;
 
 extern mpu_t my_mpu;
 extern mpu_t* this_mpu;
+extern float imu_dt;
 extern float imu_angle_z;
+extern float imu_angle_drift;
+extern float imu_accl[3];
 extern float imu_gyro[3];
-extern float imu_gyro[3];
+extern float imu_gyro_z;
 
 void ctrl_init(void);//控制初始化
 void var_init(void);//数值初始化
