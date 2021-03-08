@@ -45,15 +45,21 @@ int core0_main(void)
     /*初始化外设*/
     //OLED初始化
     SmartCar_Oled_Init();
+
     //总钻风初始化
     SmartCar_OLED_Fill(0);
     SmartCar_OLED_Printf6x8(0, 0,"do");
     SmartCar_MT9V034_Init();
     SmartCar_OLED_Printf6x8(0, 1,"over");
+
     //mpu初始化
-//    SmartCar_MPU_Set_DefaultConfig(this_mpu);
-//    SmartCar_MPU_Init2(this_mpu);
-//    SmartCar_GyroOffset(this_mpu);
+    SmartCar_MPU_Set_DefaultConfig(this_mpu);
+    SmartCar_OLED_Printf6x8(0, 2,"over");
+    SmartCar_MPU_Init2(this_mpu);
+    SmartCar_OLED_Printf6x8(0, 3,"over");
+    SmartCar_GyroOffset(this_mpu);
+    SmartCar_OLED_Printf6x8(0, 4,"over");
+
 
     //编码器初始化
     SmartCar_Encoder_Init(GPT12_T5 , IfxGpt120_T5INB_P10_3_IN , IfxGpt120_T5EUDB_P10_1_IN);
@@ -98,6 +104,7 @@ int core0_main(void)
     while(TRUE)
     {
         SmartCar_OLED_Printf6x8(96,0,"%.0f",threshold);
+        SmartCar_OLED_Printf6x8(96,1,"%.2f",imu_gyro[2]);
         //摄像头回调
         callback_temp();//阻塞
         //按键检测
@@ -212,9 +219,8 @@ IFX_INTERRUPT(cc60_pit_ch0_isr, 0, CCU6_0_CH0_ISR_PRIORITY)//电机控制
         GPIO_Set(P20,8,1);
     }
 
-
     motor_ctrl();
-//    imu_updte();
+    imu_update();
 
 }
 

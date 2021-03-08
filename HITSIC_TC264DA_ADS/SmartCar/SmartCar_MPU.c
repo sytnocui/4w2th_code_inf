@@ -80,7 +80,7 @@ void SmartCar_MPU_Gettemp1(mpu_t* my_mpu)
 void SmartCar_MPU_PinInit(void)
 {
     //SmartCar_SoftI2c_PinInit();
-    SmartCar_HardwareI2c_Init(IfxI2c0_SCL_P02_5_INOUT, IfxI2c0_SDA_P02_4_INOUT, 400*1000);
+    SmartCar_HardwareI2c_Init(IfxI2c0_SCL_P13_1_INOUT, IfxI2c0_SDA_P13_2_INOUT, 400*1000);
 }
 
 void SmartCar_MPU_Set_DefaultConfig(mpu_t* my_mpu)
