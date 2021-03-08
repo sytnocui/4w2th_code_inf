@@ -25,7 +25,8 @@ void img_upload(void);
 void key_temp(void);
 void callback_temp(void);
 void oled_show_img(void);
-
+void beep_open(void);
+void beep_close(void);
 
 int core0_main(void)
 {
@@ -78,6 +79,8 @@ int core0_main(void)
     GPIO_Init(P21,4,PUSHPULL,1);
     GPIO_Init(P21,5,PUSHPULL,1);
 
+    GPIO_Init(P33,10,PUSHPULL,0);//蜂鸣器
+
     GPIO_Init(P22,0,PULLUP,0);
     GPIO_Init(P22,1,PULLUP,0);
     GPIO_Init(P22,2,PULLUP,0);
@@ -99,9 +102,12 @@ int core0_main(void)
     //代码初始化
     ctrl_init();
 
+
+
     while(TRUE)
     {
         SmartCar_OLED_Printf6x8(96,0,"%.0f",threshold);
+        SmartCar_OLED_Printf6x8(96,1,"%d",car_state);
         //摄像头回调
         callback_temp();//阻塞
         //按键检测
@@ -244,6 +250,15 @@ IFX_INTERRUPT(cc61_pit_ch1_isr, 0, CCU6_1_CH1_ISR_PRIORITY)//目前没用
     enableInterrupts();//开启中断嵌套
     PIT_CLEAR_FLAG(CCU6_1, PIT_CH1);
 
+}
+
+void beep_open(void)
+{
+    GPIO_Set(P33,10,1);
+}
+void beep_close(void)
+{
+    GPIO_Set(P33,10,0);
 }
 
 
