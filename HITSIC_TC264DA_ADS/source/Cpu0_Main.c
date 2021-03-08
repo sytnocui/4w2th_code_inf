@@ -51,7 +51,6 @@ int core0_main(void)
     SmartCar_OLED_Printf6x8(0, 0,"do");
     SmartCar_MT9V034_Init();
     SmartCar_OLED_Printf6x8(0, 1,"over");
-
     //mpu初始化
     SmartCar_MPU_Set_DefaultConfig(this_mpu);
     SmartCar_OLED_Printf6x8(0, 2,"over");
@@ -59,7 +58,6 @@ int core0_main(void)
     SmartCar_OLED_Printf6x8(0, 3,"over");
 //    SmartCar_GyroOffset(this_mpu);
     SmartCar_OLED_Printf6x8(0, 4,"over");
-
 
     //编码器初始化
     SmartCar_Encoder_Init(GPT12_T5 , IfxGpt120_T5INB_P10_3_IN , IfxGpt120_T5EUDB_P10_1_IN);
@@ -104,7 +102,6 @@ int core0_main(void)
     while(TRUE)
     {
         SmartCar_OLED_Printf6x8(96,0,"%.0f",threshold);
-        SmartCar_OLED_Printf6x8(30,1,"%.2f",imu_angle_z);
         //摄像头回调
         callback_temp();//阻塞
         //按键检测
@@ -128,6 +125,7 @@ void callback_temp(void)
         speed_dream = 0;
         return;
     }
+
     image_main();
     State_Update();
     Ctrl_Update();

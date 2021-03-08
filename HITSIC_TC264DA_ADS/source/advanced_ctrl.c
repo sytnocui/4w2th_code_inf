@@ -24,15 +24,16 @@ void my_start(void)
     SmartCar_OLED_Printf6x8(0, 2,"ready");
     Delay_ms(STM0, 1000);
     startline_time = 0;//停车计时
-//    Garage_Quit();
-    car_state = straight;
+    Garage_Quit();
+//    car_state = straight;
 }
 
 void my_stop(void)
 {
     SmartCar_OLED_Printf6x8(0, 2,"stop ");
     Delay_ms(STM0,1000);//消抖
-    car_state = stop;
+    Garage_Enter();
+//    car_state = stop;
 }
 
 void Ctrl_Update(void)
@@ -64,8 +65,8 @@ void Ctrl_Update(void)
     }
     else if(zebra == car_state)
     {
-//        Garage_Enter();
-        car_state = stop;
+        Garage_Enter();
+//        car_state = stop;
     }
 }
 
@@ -117,6 +118,7 @@ void Garage_Enter(void)
     car_state = garage;
 //    Beep_Open();
     imu_clear();
+    speed_dream = speed_dream_turn;//现在状态机更新在while里，必须在这更新目标速度
     while(imu_angle_z < 90 && imu_angle_z>-90);
 //    Beep_Close();
     car_state = stop;
@@ -127,6 +129,7 @@ void Garage_Quit(void)
     car_state = garage;
 //    Beep_Open();
     imu_clear();
+    speed_dream = speed_dream_turn;
     while(imu_angle_z < 80 && imu_angle_z>-80);
 //    Beep_Close();
     car_state = straight;
