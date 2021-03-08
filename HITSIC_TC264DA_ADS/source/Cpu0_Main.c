@@ -57,7 +57,7 @@ int core0_main(void)
     SmartCar_OLED_Printf6x8(0, 2,"over");
     SmartCar_MPU_Init2(this_mpu);
     SmartCar_OLED_Printf6x8(0, 3,"over");
-    SmartCar_GyroOffset(this_mpu);
+//    SmartCar_GyroOffset(this_mpu);
     SmartCar_OLED_Printf6x8(0, 4,"over");
 
 
@@ -104,7 +104,7 @@ int core0_main(void)
     while(TRUE)
     {
         SmartCar_OLED_Printf6x8(96,0,"%.0f",threshold);
-        SmartCar_OLED_Printf6x8(96,1,"%.2f",imu_gyro[2]);
+        SmartCar_OLED_Printf6x8(30,1,"%.2f",imu_gyro[2]);
         //摄像头回调
         callback_temp();//阻塞
         //按键检测
