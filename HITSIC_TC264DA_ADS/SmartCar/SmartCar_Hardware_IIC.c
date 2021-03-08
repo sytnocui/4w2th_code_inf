@@ -16,8 +16,6 @@
     哈尔滨工业大学智能车创新俱乐部专用，请勿泄露
 ***************************************************************************************************************************/
 
-
-
 #include "SmartCar_Hardware_IIC.h"
 
 
@@ -57,7 +55,7 @@ void SmartCar_HardwareI2c_Init(IfxI2c_Scl_InOut scl_pin, IfxI2c_Sda_InOut sda_pi
     IfxI2c_I2c_deviceConfig i2cdevice_config;
     IfxI2c_I2c_initDeviceConfig(&i2cdevice_config, &i2c_handle);
     //configure the device address
-    i2cdevice_config.deviceAddress = 0x68 << 1;
+    i2cdevice_config.deviceAddress = 0x69 << 1;
     IfxI2c_I2c_initDevice(&i2cdev_handle, &i2cdevice_config);
     //end initialize
 }

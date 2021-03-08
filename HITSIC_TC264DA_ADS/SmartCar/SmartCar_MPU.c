@@ -95,7 +95,7 @@ uint8 SmartCar_MPU_Init2(mpu_t* my_mpu)
     SmartCar_MPU_PinInit();
     uint8 who_am_i = 0xff;
     WHO = 0xff;
-    uint8 slave_addr = MPU6050_DEV_ADDR;
+    uint8 slave_addr = ICM20602_DEV_ADDR;
     while(TRUE)
     {
         uint8 time = 50;
