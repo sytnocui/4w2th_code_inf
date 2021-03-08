@@ -102,10 +102,10 @@ void THRE()
 void head_clear(void)
 {
     uint8* my_map;
-    for (int i = 119; i >= 100; i--)
+    for (uint8 i = 119; i >= 100; i--)
     {
         my_map = &IMG[i][0];
-        for (int j = 0; j <= 187; j++)
+        for (uint8 j = 10; j <= 177; j++)
         {
             *(my_map+j) = 255;
         }

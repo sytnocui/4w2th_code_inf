@@ -127,16 +127,17 @@ void Garage_Enter(void)
 void Garage_Quit(void)
 {
     car_state = garage;
-//    Beep_Open();
+    beep_open();
     imu_clear();
     speed_dream = speed_dream_turn;
     while(imu_angle_z < 80 && imu_angle_z>-80);
-//    Beep_Close();
+    beep_close();
     car_state = straight;
 }
 
 void OutTract_Protect(void)//出赛道保护
 {
+//    beep_open();
     if(protect_sw == 1)
     {
         if(mid_line[img_stop] == MISS)

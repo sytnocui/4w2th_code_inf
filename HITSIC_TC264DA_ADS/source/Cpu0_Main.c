@@ -102,8 +102,6 @@ int core0_main(void)
     //代码初始化
     ctrl_init();
 
-
-
     while(TRUE)
     {
         SmartCar_OLED_Printf6x8(96,0,"%.0f",threshold);
@@ -159,6 +157,7 @@ void key_temp(void)
             }
             else if(!GPIO_Read(P22,1))
             {
+                beep_close();
                 GPIO_Toggle(P21,5);
                 Delay_ms(STM0,300);
             }
@@ -205,7 +204,6 @@ void img_upload(void)
 {
     SmartCar_ImgUpload((uint8*)mt9v034_image,120,188);
 }
-
 
 
 //PIT中断函数  示例
