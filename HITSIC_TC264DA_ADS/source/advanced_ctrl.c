@@ -116,22 +116,22 @@ void startline_ctrl(void)
 void Garage_Enter(void)
 {
     car_state = garage;
-//    Beep_Open();
+//    beep_Open();
     imu_clear();
     speed_dream = speed_dream_turn;//现在状态机更新在while里，必须在这更新目标速度
     while(imu_angle_z < 90 && imu_angle_z>-90);
-//    Beep_Close();
+//    beep_Close();
     car_state = stop;
 }
 
 void Garage_Quit(void)
 {
     car_state = garage;
-    beep_open();
+//    beep_open();
     imu_clear();
     speed_dream = speed_dream_turn;
     while(imu_angle_z < 80 && imu_angle_z>-80);
-    beep_close();
+//    beep_close();
     car_state = straight;
 }
 

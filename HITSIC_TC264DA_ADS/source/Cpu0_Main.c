@@ -90,8 +90,8 @@ int core0_main(void)
     //定时中断初始化
     Pit_Init_ms(CCU6_0,PIT_CH0,5);
     Pit_Init_ms(CCU6_0,PIT_CH1,20);
-//    Pit_Init_ms(CCU6_1,PIT_CH0,1000);
-//    Pit_Init_ms(CCU6_1,PIT_CH1,3000);
+    Pit_Init_ms(CCU6_1,PIT_CH0,50);
+    Pit_Init_ms(CCU6_1,PIT_CH1,3000);
 
     //ADC初始化
 //    ADC_Init(ADC_1,ADC1_CH4_A20);
@@ -157,7 +157,6 @@ void key_temp(void)
             }
             else if(!GPIO_Read(P22,1))
             {
-                beep_close();
                 GPIO_Toggle(P21,5);
                 Delay_ms(STM0,300);
             }
@@ -211,18 +210,7 @@ IFX_INTERRUPT(cc60_pit_ch0_isr, 0, CCU6_0_CH0_ISR_PRIORITY)//电机控制
 {
     enableInterrupts();//开启中断嵌套
     PIT_CLEAR_FLAG(CCU6_0, PIT_CH0);
-
-    if(speed_dream == 0)
-    {
-        GPIO_Set(P20,8,0);
-    }
-    else
-    {
-        GPIO_Set(P20,8,1);
-    }
-
     motor_ctrl();
-    imu_update();
 
 }
 
@@ -232,7 +220,6 @@ IFX_INTERRUPT(cc60_pit_ch1_isr, 0, CCU6_0_CH1_ISR_PRIORITY)//舵机控制
     enableInterrupts();//开启中断嵌套
     PIT_CLEAR_FLAG(CCU6_0, PIT_CH1);
     servo_ctrl();
-    GPIO_Set(P20,9,0);
 
 }
 
@@ -240,6 +227,7 @@ IFX_INTERRUPT(cc61_pit_ch0_isr, 0, CCU6_1_CH0_ISR_PRIORITY)
 {
     enableInterrupts();//开启中断嵌套
     PIT_CLEAR_FLAG(CCU6_1, PIT_CH0);
+    imu_update();
 
 }
 

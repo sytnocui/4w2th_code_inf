@@ -25,7 +25,7 @@ float enco_distance = 0;
 /*ÍÓÂÝÒÇ²ÎÊý*/
 mpu_t my_mpu;
 mpu_t* this_mpu = &my_mpu;
-float imu_dt;
+float imu_dt = 0;
 float imu_angle_z = 0;
 float imu_gyro_z = 0;
 float imu_angle_drift = 0;
@@ -64,9 +64,11 @@ void var_init(void)
     servo_garage_right = 850;
 
     imu_angle_drift = 0.535;
-    imu_dt = 0.005;
+    imu_dt = 0.05;
 
     car_state = stop;
+
+    car_direction = 1;
 }
 
 void ctrl_init(void)
