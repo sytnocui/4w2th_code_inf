@@ -79,8 +79,8 @@ void SmartCar_MPU_Gettemp1(mpu_t* my_mpu)
 
 void SmartCar_MPU_PinInit(void)
 {
-    //SmartCar_SoftI2c_PinInit();
-    SmartCar_HardwareI2c_Init(IfxI2c0_SCL_P13_1_INOUT, IfxI2c0_SDA_P13_2_INOUT, 400*1000);
+    SmartCar_SoftI2c_PinInit();
+//    SmartCar_HardwareI2c_Init(IfxI2c0_SCL_P13_1_INOUT, IfxI2c0_SDA_P13_2_INOUT, 400*1000);
 }
 
 void SmartCar_MPU_Set_DefaultConfig(mpu_t* my_mpu)
@@ -255,7 +255,7 @@ void SmartCar_GyroOffset(mpu_t* my_mpu)
     }
     for(int i = 0;i<1000;i++)
     {
-        SmartCar_MPU_Readregs(MPU6050_DEV_ADDR, ACCEL_XOUT_H, data, 6);
+        SmartCar_MPU_Readregs(ICM20602_DEV_ADDR, ACCEL_XOUT_H, data, 6);
         MPU_Delay_Ms(5);
         my_mpu->mpu_rawdata.gyro_x = my_mpu->mpu_config.gyro_inv * (short int)(((short int)data[0]<<8) | data[1]);
         my_mpu->mpu_rawdata.gyro_y = my_mpu->mpu_config.gyro_inv * (short int)(((short int)data[2]<<8) | data[3]);
@@ -272,7 +272,7 @@ void SmartCar_GyroOffset(mpu_t* my_mpu)
 void SmartCar_MPU_Getacc2(mpu_t* my_mpu)
 {
     uint8 data[6];
-    SmartCar_MPU_Readregs(MPU6050_DEV_ADDR, ACCEL_XOUT_H, data, 6);
+    SmartCar_MPU_Readregs(ICM20602_DEV_ADDR, ACCEL_XOUT_H, data, 6);
     my_mpu->mpu_rawdata.acc_x = my_mpu->mpu_config.acc_inv * (short int)(((short int)data[0]<<8) | data[1]) - my_mpu->offset_data.acc_x;
     my_mpu->mpu_rawdata.acc_y = my_mpu->mpu_config.acc_inv * (short int)(((short int)data[2]<<8) | data[3]) - my_mpu->offset_data.acc_y;
     my_mpu->mpu_rawdata.acc_z = my_mpu->mpu_config.acc_inv * (short int)(((short int)data[4]<<8) | data[5]) - my_mpu->offset_data.acc_z;
@@ -281,7 +281,7 @@ void SmartCar_MPU_Getacc2(mpu_t* my_mpu)
 void SmartCar_MPU_Getgyro2(mpu_t* my_mpu)
 {
     uint8 data[6];
-    SmartCar_MPU_Readregs(MPU6050_DEV_ADDR, GYRO_XOUT_H, data, 6);
+    SmartCar_MPU_Readregs(ICM20602_DEV_ADDR, GYRO_XOUT_H, data, 6);
     my_mpu->mpu_rawdata.gyro_x = my_mpu->mpu_config.gyro_inv * (short int)(((short int)data[0]<<8) | data[1]) - my_mpu->offset_data.gyro_x;
     my_mpu->mpu_rawdata.gyro_y = my_mpu->mpu_config.gyro_inv * (short int)(((short int)data[2]<<8) | data[3]) - my_mpu->offset_data.gyro_y;
     my_mpu->mpu_rawdata.gyro_z = my_mpu->mpu_config.gyro_inv * (short int)(((short int)data[4]<<8) | data[5]) - my_mpu->offset_data.gyro_z;
@@ -290,19 +290,19 @@ void SmartCar_MPU_Getgyro2(mpu_t* my_mpu)
 void SmartCar_MPU_Gettemp2(mpu_t* my_mpu)
 {
     uint8 data[2];
-    SmartCar_MPU_Readregs(MPU6050_DEV_ADDR, TEMP_OUT_H, data, 2);
+    SmartCar_MPU_Readregs(ICM20602_DEV_ADDR, TEMP_OUT_H, data, 2);
     my_mpu->temp = (short int)(((short int)data[0]<<8 | data[1]));
 }
 
 void SmartCar_MPU_Writereg(uint8 device_addr, uint8 reg_addr, uint8* data_addr)
 {
-    //SmartCar_SoftI2c_Writereg(device_addr, reg_addr, *data_addr);
-    SmartCar_HardwareI2c_Writereg(reg_addr, data_addr, 1);
+    SmartCar_SoftI2c_Writereg(device_addr, reg_addr, *data_addr);
+//    SmartCar_HardwareI2c_Writereg(reg_addr, data_addr, 1);
 }
 
 void SmartCar_MPU_Readregs(uint8 device_addr, uint8 reg_addr, uint8* data_addr, uint8 data_num)
 {
-    //SmartCar_SoftI2c_Readregs(device_addr, reg_addr, data_addr, data_num);
-    i2cdev_handle.deviceAddress = device_addr << 1;
-    SmartCar_HardwareI2c_Readreg(reg_addr, data_addr,data_num);
+    SmartCar_SoftI2c_Readregs(device_addr, reg_addr, data_addr, data_num);
+//    i2cdev_handle.deviceAddress = device_addr << 1;
+//    SmartCar_HardwareI2c_Readreg(reg_addr, data_addr,data_num);
 }

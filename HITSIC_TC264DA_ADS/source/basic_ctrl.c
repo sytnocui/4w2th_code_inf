@@ -63,7 +63,7 @@ void var_init(void)
     servo_garage_left = 660;
     servo_garage_right = 850;
 
-    imu_angle_drift = 0.535;
+//    imu_angle_drift = 0.535;
     imu_dt = 0.05;
 
     car_state = stop;
