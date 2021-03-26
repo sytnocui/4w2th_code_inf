@@ -48,10 +48,10 @@ int core0_main(void)
     SmartCar_Oled_Init();
 
     //总钻风初始化
-//    SmartCar_OLED_Fill(0);
-//    SmartCar_OLED_Printf6x8(0, 0,"do");
+    SmartCar_OLED_Fill(0);
+    SmartCar_OLED_Printf6x8(0, 0,"do");
     SmartCar_MT9V034_Init();
-//    SmartCar_OLED_Printf6x8(0, 1,"over");
+    SmartCar_OLED_Printf6x8(0, 1,"over");
     //mpu初始化
     SmartCar_MPU_Set_DefaultConfig(this_mpu);
     SmartCar_OLED_Printf6x8(0, 2,"over");
@@ -103,10 +103,6 @@ int core0_main(void)
 
     while(TRUE)
     {
-        //SmartCar_MPU_Getgyro2(this_mpu);
-//        SmartCar_OLED_Printf6x8(30,0,"%f",this_mpu->mpu_rawdata.gyro_x);
-//        SmartCar_OLED_Printf6x8(30,1,"%f",imu_gyro);
-//        SmartCar_OLED_Printf6x8(30,2,"%f",imu_gyro[2]);
         //摄像头回调
         callback_temp();//阻塞
         //按键检测
