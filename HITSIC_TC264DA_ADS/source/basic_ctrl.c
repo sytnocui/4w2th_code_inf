@@ -50,8 +50,8 @@ int startline_time =0;
 
 void var_init(void)
 {
-    servo_kp = 2.5;
-    servo_kd = 5;
+    servo_kp = 3;
+    servo_kd = 6;
 
     motor_kp = 1000;
     motor_ki = 500;
@@ -60,8 +60,10 @@ void var_init(void)
     speed_dream_str = 1;
     speed_dream_turn = 1;
 
-    servo_garage_left = 660;
+    servo_garage_left = 750;
     servo_garage_right = 850;
+
+    motor_output = 0;
 
 //    imu_angle_drift = 0.535;
     imu_dt = 0.05;
@@ -80,9 +82,10 @@ void ctrl_init(void)
 //TODO:float-->uint32,换通道
 void motor_ctrl(void)
 {
-    Encoder_Update();//更新编码器返回值，计算实际速度
-    motor_pid_calculate();//更新电机速度
+//    Encoder_Update();//更新编码器返回值，计算实际速度
+//    motor_pid_calculate();//更新电机速度
 
+    motor_output = 1000 * speed_dream;
     /*输出状态判断：是否启动 与 正反转*/
     if(motor_output >= 0)//后轮正转
     {

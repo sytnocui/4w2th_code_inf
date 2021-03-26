@@ -24,16 +24,16 @@ void my_start(void)
     SmartCar_OLED_Printf6x8(0, 2,"ready");
     Delay_ms(STM0, 1000);
     startline_time = 0;//停车计时
-    Garage_Quit();
-//    car_state = straight;
+//    Garage_Quit();
+    car_state = straight;
 }
 
 void my_stop(void)
 {
     SmartCar_OLED_Printf6x8(0, 2,"stop ");
     Delay_ms(STM0,1000);//消抖
-    Garage_Enter();
-//    car_state = stop;
+//    Garage_Enter();
+    car_state = stop;
 }
 
 void Ctrl_Update(void)

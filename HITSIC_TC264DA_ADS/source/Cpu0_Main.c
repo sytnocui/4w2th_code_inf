@@ -53,14 +53,14 @@ int core0_main(void)
     SmartCar_MT9V034_Init();
     SmartCar_OLED_Printf6x8(0, 1,"over");
     //mpu初始化
-    SmartCar_MPU_Set_DefaultConfig(this_mpu);
-    SmartCar_OLED_Printf6x8(0, 2,"over");
-    SmartCar_MPU_Init2(this_mpu);
-    SmartCar_OLED_Printf6x8(0, 3,"over");
+//    SmartCar_MPU_Set_DefaultConfig(this_mpu);
+//    SmartCar_OLED_Printf6x8(0, 2,"over");
+//    SmartCar_MPU_Init2(this_mpu);
+//    SmartCar_OLED_Printf6x8(0, 3,"over");
 //    SmartCar_GyroOffset(this_mpu);
 
     //编码器初始化
-    SmartCar_Encoder_Init(GPT12_T5 , IfxGpt120_T5INB_P10_3_IN , IfxGpt120_T5EUDB_P10_1_IN);
+//    SmartCar_Encoder_Init(GPT12_T5 , IfxGpt120_T5INB_P10_3_IN , IfxGpt120_T5EUDB_P10_1_IN);
 
     /*初始化单片机功能*/
     //PWM初始化
@@ -89,7 +89,7 @@ int core0_main(void)
     //定时中断初始化
     Pit_Init_ms(CCU6_0,PIT_CH0,5);
     Pit_Init_ms(CCU6_0,PIT_CH1,20);
-    Pit_Init_ms(CCU6_1,PIT_CH0,10);
+//    Pit_Init_ms(CCU6_1,PIT_CH0,10);
     Pit_Init_ms(CCU6_1,PIT_CH1,3000);
 
     //ADC初始化
@@ -103,6 +103,8 @@ int core0_main(void)
 
     while(TRUE)
     {
+        SmartCar_OLED_Printf6x8(100,1,"%.0f",servo_output);
+
         //摄像头回调
         callback_temp();//阻塞
         //按键检测
