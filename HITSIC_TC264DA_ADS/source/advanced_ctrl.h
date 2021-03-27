@@ -16,25 +16,32 @@
 #include "image.h"
 
 typedef enum{
-    straight,
-    rightTurn,
-    leftTurn,
-    cross,//十字
-    roundabout,//环岛
-    ramp,//坡道
-    branch,//三叉
-    zebra,//斑马线
-    unknown,
-    stop,
-    garage,//车库
+    car_straight,
+    car_rightTurn,
+    car_leftTurn,
+    car_cross,//十字
+    car_circle_in,//进环岛
+    car_circle_out,
+    car_ramp,//坡道
+    car_branch,//三叉
+    car_zebra,//斑马线
+    car_unknown,
+    car_stop,
+    car_garage,//车库
 }CAR_STATE;
 
 extern int car_state;
 extern int car_state_pre;
 extern int car_direction;
 
+extern float servo_angle_circle;
+
 extern uint32 servo_garage_left;
 extern uint32 servo_garage_right;
+
+//时间相关
+extern int car_time;
+extern int circle_time;
 
 void startline_ctrl(void);//斑马线延时停车
 void State_Update(void);//状态机更新
