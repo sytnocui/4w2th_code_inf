@@ -183,6 +183,23 @@ void OutTract_Protect(void)//出赛道保护
 //        car_state = stop;
 //    }
 }
+
+void circle_in_ctrl(void)
+{
+    circle_time = 0;
+    beep_open();
+    imu_clear();
+}
+
+void circle_out_ctrl(void)
+{
+    beep_open();
+    imu_clear();
+    while(imu_angle_z < 150 && imu_angle_z>-150);
+    beep_close();
+    car_state = car_straight;
+}
+
 /*--------------------------history相关函数-------------------------------*/
 boolean History_Check(int type)
 {

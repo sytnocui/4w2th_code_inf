@@ -123,7 +123,7 @@ void callback_temp(void)
     while(!mt9v034_finish_flag);
     mt9v034_finish_flag = 0;
 
-    if(stop == car_state)
+    if(car_stop == car_state)
     {
         speed_dream = 0;
         return;
@@ -145,7 +145,7 @@ void key_temp(void)
         {
             if(!GPIO_Read(P22,0))
             {
-                if(stop == car_state)
+                if(car_stop == car_state)
                 {
                     my_start();
                 }

@@ -1,7 +1,7 @@
 /*
  * image.hpp
  *
- *  Created on: 2021年3月3日
+ *  Created on: 2021骞�3鏈�3鏃�
  *      Author: 10798
  */
 
@@ -14,16 +14,16 @@
 
 #define EPS 1e-9
 
-/*ͼ���С�궨��*/
+/*图锟斤拷锟叫★拷甓拷锟�*/
 #define MISS 255
-#define CAMERA_H  120                            //ͼƬ�߶�
-#define CAMERA_W  188                            //ͼƬ���
-#define FAR_LINE 1//ͼ�����ϱ߽�
-#define NEAR_LINE 113//ͼ�����±߽�
-#define LEFT_SIDE 0//ͼ������߽�
-#define RIGHT_SIDE 187//ͼ�����ұ߽�
+#define CAMERA_H  120                            //图片锟竭讹拷
+#define CAMERA_W  188                            //图片锟斤拷锟�
+#define FAR_LINE 1//图锟斤拷锟斤拷锟较边斤拷
+#define NEAR_LINE 113//图锟斤拷锟斤拷锟铰边斤拷
+#define LEFT_SIDE 0//图锟斤拷锟斤拷锟斤拷呓锟�
+#define RIGHT_SIDE 187//图锟斤拷锟斤拷锟揭边斤拷
 #define MISS 255
-#define white_num_MAX 10//ÿ��������������
+#define white_num_MAX 10//每锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
 #define cut_line 27
 #define num_all (120*188)
 
@@ -33,7 +33,7 @@
 #define CHANGED_W 188
 /**/
 /////////////////////////////
-/*��ɫ�궨��*/
+/*锟斤拷色锟疥定锟斤拷*/
 #define black 0
 #define white 1
 #define blue  2
@@ -42,7 +42,7 @@
 #define gray  5
 #define purple 6
 ///////////////////////////
-/*�������ͺ궨��*/
+/*锟斤拷锟斤拷锟斤拷锟酵宏定锟斤拷*/
 #define trident_flag 1
 #define near_cross_flag 2
 #define far_cross_flag 3
@@ -85,7 +85,6 @@ typedef enum
 extern uint8 IMG[CAMERA_H][CAMERA_W];
 extern uint8 image_Buffer_0[CAMERA_H][CAMERA_W];
 extern uint8 img_original[CHANGED_H][CHANGED_W];
-extern uint8* fullBuffer;ַ
 extern int threshold_original;
 extern uint8 last_mid_line[CAMERA_H];
 extern const uint8 left_side[CHANGED_H];
@@ -128,7 +127,7 @@ void find_x_right_left(void);
 uint8 define_my_way(uint8 line);
 //void vague_OSTU(void);
 float define_PROSPECT(uint8 PROSPECT);
-/*���������жϺ���*/
+
 uint8 trident(void);
 //uint8 cross(void);
 uint8 near_circle(void);
@@ -140,7 +139,6 @@ uint8 tell_mid_cross(void);
 uint8 tell_oblique_cross(void);
 uint8 tell_zebra(void);
 
-/*��֪���ͺ�Ĵ�����*/
 void straight_oridinary_two_line(void);
 void trident_ordinary_two_line(void);
 void find_my_road(void);

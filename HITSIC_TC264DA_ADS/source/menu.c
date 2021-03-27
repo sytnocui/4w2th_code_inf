@@ -20,9 +20,6 @@ OBJ obj[]={ {"state",my_variType,&car_state,NULL,"[MAIN]",0,0,ReadOnly_Flag},//Ê
             {"m_kp",my_varfType,NULL,&motor_kp,"[MOTOR]",0,0,Ordinary_Flag},
 
             {"true",my_varfType,NULL,&threshold,"[IMAGE]",0,0,Ordinary_Flag},//TODO:°ÑãÐÖµ¸Ä³ÉÕûÊý
-            {"forward",my_variType,&prospect,NULL,"[IMAGE]",0,0,Ordinary_Flag},
-            {"img_stop",my_variType,&img_stop,NULL,"[IMAGE]",0,0,Ordinary_Flag},//°ßÂíÏßÍ£³µÅÐ¶Ï
-            {"k_str",my_varfType,NULL,&k_str,"[IMAGE]",0,0,Ordinary_Flag},//Ö±µÀÍäµÀÐ±ÂÊÅÐ¶Ï
             {0,0,0,0,0,0,0,0,0,0}};//×îºó¼ì²âµ½Ãû×ÖÎª0¾ÍÍ£
 
 

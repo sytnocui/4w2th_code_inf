@@ -13,6 +13,7 @@
 #include "SmartCar_Pwm.h"
 #include "SmartCar_Encoder.h"
 #include "SmartCar_Systick.h"
+#include "SmartCar_OLED.h"
 #include "image.h"
 
 typedef enum{
@@ -51,6 +52,9 @@ void my_stop(void);//停车函数
 void Garage_Enter(void);
 void Garage_Quit(void);
 void OutTract_Protect(void);
+
+void circle_in_ctrl(void);
+void circle_out_ctrl(void);
 
 /*HISTORY相关*/
 boolean History_check(int type);
