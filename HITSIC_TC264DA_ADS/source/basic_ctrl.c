@@ -68,7 +68,7 @@ void var_init(void)
 //    imu_angle_drift = 0.535;
     imu_dt = 0.05;
 
-    car_state = stop;
+    car_state = car_stop;
 
     car_direction = 1;
 }
@@ -104,12 +104,12 @@ void motor_ctrl(void)
 void servo_ctrl(void)
 {
     /*特殊状态，不需要计算，赋值之后直接跳出*/
-    if(stop == car_state)//停车
+    if(car_stop == car_state)//停车
     {
         SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM1_1_TOUT31_P33_9_OUT,(uint32)SERVO_MID);
         return;
     }
-    if(garage == car_state)//出入库
+    if(car_garage == car_state)//出入库
     {
         if(car_direction)
         {

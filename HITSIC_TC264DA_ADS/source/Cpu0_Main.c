@@ -228,7 +228,6 @@ IFX_INTERRUPT(cc61_pit_ch0_isr, 0, CCU6_1_CH0_ISR_PRIORITY)
     enableInterrupts();//开启中断嵌套
     PIT_CLEAR_FLAG(CCU6_1, PIT_CH0);
     imu_update();
-
 }
 
 IFX_INTERRUPT(cc61_pit_ch1_isr, 0, CCU6_1_CH1_ISR_PRIORITY)//目前没用
@@ -236,7 +235,6 @@ IFX_INTERRUPT(cc61_pit_ch1_isr, 0, CCU6_1_CH1_ISR_PRIORITY)//目前没用
     enableInterrupts();//开启中断嵌套
     PIT_CLEAR_FLAG(CCU6_1, PIT_CH1);
     GPIO_Toggle(P21,4);
-
 }
 
 void beep_open(void)

@@ -34,7 +34,7 @@
 #define LCF_USTACK1_SIZE    2k
 #define LCF_ISTACK1_SIZE    1k
 
-#define LCF_HEAP_SIZE       2k
+#define LCF_HEAP_SIZE       8k
 
 #define LCF_CPU0            0
 #define LCF_CPU1            1
