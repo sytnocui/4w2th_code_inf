@@ -171,3 +171,4 @@ void Dma_Start(IfxDma_ChannelId dma_ch)
 {
     IfxDma_enableChannelTransaction(&MODULE_DMA, dma_ch);
 }
+

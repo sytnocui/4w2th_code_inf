@@ -128,7 +128,7 @@ void callback_temp(void)
         speed_dream = 0;
         return;
     }
-    map();//逆透视
+//    map();//逆透视
     THRE(threshold);//普通二值化
     image_main();
     State_Update();
