@@ -9,7 +9,7 @@
 #define SOURCE_IMAGE_H_
 
 #include "common.h"
-
+#include <stdlib.h>
 #include "SmartCar_MT9V034.h"
 
 #define EPS 1e-9
@@ -85,7 +85,7 @@ typedef enum
 extern uint8 IMG[CAMERA_H][CAMERA_W];
 extern uint8 image_Buffer_0[CAMERA_H][CAMERA_W];
 extern uint8 img_original[CHANGED_H][CHANGED_W];
-extern int threshold_original;
+extern uint8 threshold_original;
 extern uint8 last_mid_line[CAMERA_H];
 extern const uint8 left_side[CHANGED_H];
 extern const uint8 right_side[CHANGED_H];
@@ -106,10 +106,10 @@ extern int threshold;
 
 extern int circle_enter_flag;
 
-extern int img_state;
-extern int img_state_pre;
+extern uint8 img_state;
+extern uint8 img_state_pre;
 
-void head_clear(void);
+//void head_clear(void);
 void THRE(int threshold);
 int find_f(int node);
 void search_white_range();
@@ -157,12 +157,12 @@ void circle_ordinary_two_line(void);
 
 
 //void Cross_out();
-void Start_line(void);
-void Distortion(void);
+//void Start_line(void);
+//void Distortion(void);
 int thre1();
 void map(void);
-float regression(uint8 startline, uint8 endline, int type);
-double process_curvity(uint8 x1, uint8 x2, uint8 y1, uint8 y2, uint8 x3, uint8 y3);
+//float regression(uint8 startline, uint8 endline, int type);
+//double process_curvity(uint8 x1, uint8 x2, uint8 y1, uint8 y2, uint8 x3, uint8 y3);
 /*int find_point(uint8 start_point, uint8 end_point);
 float process_curvity(uint8 x1, uint8 x2, uint8 y1, uint8 y2, uint8 x3, uint8 y3);
 void LeastSquareCalc_Curvent(int startline, int endline, int type);
