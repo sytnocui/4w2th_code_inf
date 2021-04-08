@@ -83,8 +83,7 @@ typedef enum
 /// /////////////////////////////
 
 extern uint8 IMG[CAMERA_H][CAMERA_W];
-extern uint8 image_Buffer_0[CAMERA_H][CAMERA_W];
-extern uint8 img_original[CHANGED_H][CHANGED_W];
+//extern uint8 img_original[CHANGED_H][CHANGED_W];
 extern uint8 threshold_original;
 extern uint8 last_mid_line[CAMERA_H];
 extern const uint8 left_side[CHANGED_H];

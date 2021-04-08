@@ -37,12 +37,6 @@ typedef struct {
     road_range   connected[white_num_MAX];
 }road;
 
-////边界点
-//typedef struct edge_point {
-//    int x;
-//    int y;
-//} Point;
-
 //浮点型中线
 typedef struct mid_float {
     float i;
@@ -71,7 +65,6 @@ uint8 IMG[CAMERA_H][CAMERA_W] = { 0 };//二值化后图像数组
 uint8 left[CAMERA_H], right[CAMERA_H];//所有赛道左边界和右边界
 uint8 left_line[CAMERA_H], right_line[CAMERA_H];//赛道的左右边界
 uint8 left_smooth[CAMERA_H], right_smooth[CAMERA_H];
-//uint8 x_left[CAMERA_H], x_right[CAMERA_H];
 uint8 mid_line[CAMERA_H];
 uint8 last_mid_line[CAMERA_H];
 int all_connect_num = 0;//所有白条子数
@@ -213,7 +206,7 @@ const uint8 j_fix[CHANGED_H][CHANGED_W] = { {255,255,255,255,255,255,255,255,255
 
 uint8 left_change_down = NEAR_LINE, left_change_up = NEAR_LINE, right_change_down = NEAR_LINE, right_change_up = NEAR_LINE;
 
-uint8 img_original[CHANGED_H][CHANGED_W] = {0};
+//uint8 img_original[CHANGED_H][CHANGED_W] = {0};
 uint8 img_dis[CAMERA_H][CAMERA_W] = { 0 };
 uint8 left_line_straight = 0, right_line_straight = 0;
 uint8 left_straight = 0, right_straight = 0;
@@ -232,15 +225,15 @@ uint8 Left_widge = 0;
 uint8 Right_widge = 0;
 uint8 Left_flag = 0;
 uint8 Right_flag = 0;
-int start_line_x = 0;
+//int start_line_x = 0;
 
-int flagtext = 0;
+//int flagtext = 0;
 
 int flag = 0;
 
-int start_line_flag = 0;
+//int start_line_flag = 0;
 
-int start_line_line = 0;
+//int start_line_line = 0;
 
 float img_err = 0;
 
@@ -255,220 +248,7 @@ float k_str = 0;
 uint8 startline_flag = 0;
 
 
-/*消畸变*/
-//void Distortion(void)
-//{
-    //uint8 i, j;
-    //uint8* pdis = NULL;//处理前图像
-    //uint8* sdis = NULL;//处理后图像
-    //int x0, y0, x, y;
-    //uint8 r;
-    //double k1, k2;
-    //k1 = -0.00000;
-    //k2 = -0.00000;        //01.15调参数为k1=-0.000012；k2 = -0.000019
-    //pdis = &image_Buffer_0[0][0];
-    //sdis = &img_dis[0][0];
-    //for (i = 0; i < CAMERA_H; i++)
-    //{
-    //  y = i - CAMERA_H / 2;
-    //  for (j = 0; j < CAMERA_W; j++)
-    //  {
-    //      x = j - CAMERA_W / 2 - 3;
-    //      x0 = round(x * (1 + k1 * x * x + k2 * y * y));
-    //      y0 = round(y * (1 + k1 * x * x + k2 * y * y));
-    //      x0 = x0 + CAMERA_W / 2;
-    //      y0 = y0 + CAMERA_H / 2;
-    //      if (x0 < 0 || x0 > CAMERA_W || y0 < 0 || y0 > CAMERA_H) {
-    //          *(sdis + i * CAMERA_W + j) = 0;
-    //      }
-    //      else {
-    //          *(sdis + i * CAMERA_W + j) = *(pdis + y0 * CAMERA_W + x0);
-    //      }
-    //  }
-    //}
-//}
 
-////////////////////////////////////////////
-//功能：模糊大津法
-//输入：
-//输出：
-//备注：总出错，不用了
-///////////////////////////////////////////
-//void vague_OSTU(void)
-//{
-//    /*基本变量*/
-//    float threshold = 150;//阈值
-//    int histogram[256] = { 0 };//灰度直方图
-//    int N = 120 * 188;
-//    /*模糊变量*/
-//    uint8 L1 = 130, L2 = 150, L3 = 0, L4 = 240;//区域门限初始化
-//    float uA[256] = { 0 }, uB[256] = { 0 }, uC[256] = { 0 };//区域隶属度
-//    float PA = 0, PB = 0, PC = 0;//区域出现概率
-//    float PAA[256] = { 0 }, PBB[256] = { 0 }, PCC[256] = { 0 };//每个区域中，个灰度值出现的概率
-//    float mA = 0, mB = 0, mC = 0;//区域平均灰度
-//    float S = 0; //最大类间方差
-//    float preS = 0;//上一个最大类间方差
-//    int gray_1 = 0, gray_2 = 0;//α区域和β区域最高频率灰度值
-//    uint8 temp_point[256] = { 0 };
-//    uint8 temp_k = 0;
-//    int temp_i = 0;
-//    uint8 break_point = 0;//寻找α区域和β区域最合适分割点的中间变量
-//    uint8 temp_1 = 0, temp_2 = 0;//寻找最高频率灰度值的中间变量
-//
-//    /*模糊OSTU求阈值*/
-//
-//    //1.统计灰度直方图
-//    uint8* map = NULL;
-//    for (int i = 1; i < 120; i++)
-//    {
-//        map = &image_Buffer_0[i][0];
-//        for (int j = 0; j < 188; j++)
-//        {
-//            if ((*map) == 0)
-//            {
-//                (*map) = 1;
-//            }
-//            histogram[(*map)]++;
-//            map++;
-//        }
-//    }
-//    //2.寻找合适的分割点
-//    for (int i = 2; i < 256; i++)
-//    {
-//        if (histogram[i] >= histogram[i - 1]) {
-//            temp_point[i] = temp_point[i - 1] + 1;
-//        }
-//        else {
-//            temp_point[i] = temp_point[i - 1] - 1;
-//        }
-//    }
-//    for (int j = 11; j < 245; j++)
-//    {
-//        if (temp_point[j] <= temp_point[j + 10] && temp_point[j] <= temp_point[j - 10]) {
-//            temp_i = temp_i + j;
-//            temp_k++;
-//            ////printf("i:%d,k:%d\n", temp_i, temp_k);
-//            //////printf("判断\n");
-//        }
-//    }
-//    ////printf("temp_i:%d,temp_k:%d\n", temp_i, temp_k);
-//    break_point = round((float)temp_i / (float)temp_k);
-//    ////printf("break_point:%d\n", break_point);
-//    //3.寻找α区域和β区域最高频率灰度值
-//    for (int i = 1; i <= break_point; i++)
-//    {
-//        if (temp_1 < histogram[i])
-//        {
-//            temp_1 = histogram[i];
-//            gray_1 = i;
-//        }
-//    }
-//    for (int i = break_point; i <= 240; i++)
-//    {
-//        if (temp_2 < histogram[i])
-//        {
-//            temp_2 = histogram[i];
-//            gray_2 = i;
-//        }
-//    }
-//    //4.重新定义区域门限
-//    L1 = gray_1;
-//    L2 = gray_1 + 30;
-//    L4 = gray_2;
-//    ////printf("L1 %d,L2 %d,L4 %d\n", L1, L2, L4);
-//    if (L4 <= L2)
-//    {
-//        L4 = L2 + 20;
-//    }
-//    //5.求A类区域灰度值相关变量
-//    for (int i = 1; i < L2; i++)
-//    {
-//        if (i <= L1)
-//        {
-//            uA[i] = 1;
-//        }
-//        else if (i > L1 && i <= L2)
-//        {
-//            uA[i] = (i / (L1 - L2)) - (L2 / (L1 - L2));
-//        }
-//        PA = PA + uA[i] * histogram[i];//为了方便计算，先不除以N
-//    }
-//    ////printf("1. PA%f\n", PA);
-//    for (int i = 0; i < L2; i++)
-//    {
-//
-//        PAA[i] = uA[i] * histogram[i] / PA;
-//        mA = mA + i * PAA[i];//为了方便计算，先不除以N
-//    }
-//    ////printf("2. PA%f\n", PA);
-//    PA = PA / (float)N;
-//    //6.滑动L3求阈值
-//    for (L3 = L2; L3 <= L4; L3++)
-//    {
-//        mB = 0;
-//        mC = 0;
-//        PB = 0;
-//        PC = 0;
-//        for (int i = L1; i <= L4; i++)
-//        {
-//            if (i >= L1 && i < L2) {
-//                uB[i] = (i / (L2 - L1)) - (L1 / (L2 - L1));
-//            }
-//            else if (i >= L2 && i <= L3) {
-//                uB[i] = 1;
-//            }
-//            else if (i > L3 && i <= L4) {
-//                uB[i] = (i / (L3 - L4)) - (L4 / (L3 - L4));
-//            }
-//            PB = PB + uB[i] * histogram[i];
-//        }
-//        for (int i = L3; i <= 255; i++)
-//        {
-//            if (i < L4 && i >= L3) {
-//                uC[i] = (i / (L4 - L3)) - (L3 / (L4 - L3));
-//            }
-//            else if (i >= L4) {
-//                uC[i] = 1;
-//            }
-//            PC = PC + uC[i] * histogram[i];
-//        }
-//        for (int i = L1; i <= L4;i++)
-//        {
-//            PBB[i] = uB[i] * histogram[i] / PB;//B区域各灰度值出现的概率
-//                mB = mB + i * PBB[i];//B区域的平均灰度
-//        }
-//        for (int i = L3; i <= 255; i++)
-//        {
-//            PCC[i] = uC[i] * histogram[i] / PC;//B区域各灰度值出现的概率
-//            mC = mC + i * PCC[i];//B区域的平均灰度
-//        }
-//        PB = PB / N;
-//        PC = PC / N;
-//        S = abs(PA * PB * PC * (mC - mA) * (mC - mB) * (mB - mA));//最大类间方差
-//        if (S > preS)
-//        {
-//            preS = S;
-//            threshold = (L1 + L2 + L3) / 3;
-//        }
-//    }
-//    ////printf("threshold:%f\n", threshold);
-//    ////printf("PA%f,PB%f,PC%f\n", PA, PB, PC);
-//    /*二值化*/
-//    uint8* my_map = NULL;
-//    for (int i = 0; i < 120; i++)
-//    {
-//        map = &image_Buffer_0[i][0];//image_Buffer_0
-//        my_map = &IMG[i][0];//img_original
-//        for (int j = 0; j < 188; j++)
-//        {
-//            if ((*map) > threshold)
-//                (*my_map) = 255;
-//            else (*my_map) = 0;
-//            map++;
-//            my_map++;
-//        }
-//    }
-//}
 ////////////////////////////////////////////
 //功能：逆透视变换 // 指针优化版
 //输入：
@@ -477,6 +257,7 @@ uint8 startline_flag = 0;
 ///////////////////////////////////////////
 void map(void)
 {
+    uint8 img_original[CHANGED_H][CHANGED_W] = {0};
     uint8 i,j;
     uint8 const *pp = NULL;
     uint8 const *ss = NULL;
@@ -506,6 +287,25 @@ void map(void)
             *(tstr + j) = *(tptr + *(tsstr + j));
         }
     }
+
+   uint8* map;
+   uint8* my_map;
+   map = &img_original[0][0];
+   for (uint8 i = 0; i < 120; i++)
+   {
+       //my_map = &img_dis[i][0];
+       my_map = &IMG[i][0];//img_original
+       for (int j = 0; j < 188; j++)
+       {
+           if ((*map) > threshold)
+               (*my_map) = 255;
+           else (*my_map) = 0;
+           map++;
+           my_map++;
+
+       }
+
+   }   //暂时取消普通二值化，使用分区域的二值化
 }
 
 ////////////////////////////////////////////
@@ -518,181 +318,181 @@ void map(void)
 uint8 W_YZ_2 = 95, N_YZ_2 = 98, LOW_SIDE = 93, YZ_BOT = 30, YZ_TOP = 254,MIDTOP = 98,R_SIDE = 93;//W是左上角，N是底部加上部中间
 uint8 gray_sum[256] = { 0 }, threshold_original = 0, threshold_original_pre = 0, threshold_n, threshold_w, threshold_l, threshold_midtop, threshold_right;
 
-int thre1() // 尝试最大最小合成
-{
-    //大津法
-    //uint8 abandon = 39;
-    float pixepro[256];
-    threshold_original_pre = threshold_original;
-    int i, j;
-    int* t_sum = NULL;
-    uint8 const *left_side_ptr = NULL;
-    uint8 const *right_side_ptr = NULL;
-    int count = 0;
-    float* pixepro_ptr = &pixepro[0];
-
-
-    t_sum = &gray_sum[0];
-
-    //初始化gray_sum[]这个数组     //01.15直接在声明的时候赋值为0
-    /*for (i = 0; i <= 255; i++)
-    {
-        (*t_sum) = 0;
-        t_sum++;
-    }*/
-
-    //给gray_sum[]赋值，代表灰度为a的像素出现的次数
-    uint8* map = NULL;
-
-    for (i = 1; i < 120; i++)
-    {
-        left_side_ptr = &left_side[i];
-        right_side_ptr = &right_side[i];
-        map = &img_original[i][0];
-        for (j = *left_side_ptr; j <= *right_side_ptr; j++)
-        {
-            (*(t_sum + (*map)))++;
-            map++;
-            count++;
-        }
-    }
-
-    //归一化
-    for (i = 0; i <= 255; i++)
-        *(pixepro_ptr+i) = (float)gray_sum[i] / count;
-
-    float u0, u1, w0, w1, u0tmp, u1tmp, deltaTmp, deltamax = 0;
-
-
-
-    w0 = w1 = u0tmp = u1tmp = u0 = u1 = deltaTmp = 0;
-
-    w0 += *(pixepro_ptr + 0);
-    u0tmp += *(pixepro_ptr + 0) * j  ;
-
-    for (j = 1; j <= 255; j++)
-    {
-        w1 += *(pixepro_ptr + j);
-        u1tmp += *(pixepro_ptr + j) * j;
-    }
-    u0 = u0tmp / w0;
-    u1 = u1tmp / w1;
-    deltaTmp = (float)(w0 * w1 * pow((u0 - u1), 2));
-    if (deltaTmp > deltamax)
-    {
-        deltamax = deltaTmp;
-        threshold_original = 0;
-    }
-
-    //i >= 1
-    for (i = 1; i <= 255; i++)
-    {
-        //背景部分
-        w0 += *(pixepro_ptr + i);
-        u0tmp += *(pixepro_ptr + i) * i;
-
-        //前景部分
-        w1 -= *(pixepro_ptr + i);
-        u1tmp -= *(pixepro_ptr + i) * i;
-
-        u0 = u0tmp / w0;
-        u1 = u1tmp / w1;
-        deltaTmp = (float)(w0 * w1 * (u0 - u1) * (u0 - u1));
-        if (deltaTmp > deltamax)
-        {
-            deltamax = deltaTmp;
-            threshold_original = i;
-        }
-    }
-    threshold_original = 1 * threshold_original + 0;
-    //////printf("大津法阈值：%d\n", threshold_original);
-    threshold_n = (int)(threshold_original * (float)N_YZ_2 / 100);
-    threshold_w = (int)(threshold_original * (float)W_YZ_2 / 100);
-    threshold_l = (int)(threshold_original * (float)LOW_SIDE / 100);
-    threshold_midtop = (int)(threshold_original * (float)MIDTOP / 100);
-    threshold_right = (int)(threshold_original * (float)R_SIDE / 100);
-    if (threshold_n > YZ_TOP)   threshold_n = YZ_TOP;
-    if (threshold_n < YZ_BOT)   threshold_n = YZ_BOT;
-    if (threshold_w > YZ_TOP)   threshold_w = YZ_TOP;
-    if (threshold_w < YZ_BOT)   threshold_w = YZ_BOT;
-    //////printf("threshold_n=%d\n", threshold_n);
-    //////printf("threshold_w=%d\n", threshold_w);
-    //////printf("threshold_l=%d\n", threshold_l);
-    //////printf("threshold_original_pre=%d\n", threshold_original_pre);
-    ////printf("\n");
-
-    /*return    threshold_original;*/
-
-    //分区域取阈值
-    map = NULL;
-    uint8* my_map = NULL;
-    for (int i = 0; i < 119; i++)
-    {
-        map = &img_original[i][0];//image_Buffer_0
-        my_map = &IMG[i][0];//img_original
-        left_side_ptr = &left_side[i];
-        right_side_ptr = &right_side[i];
-        for (int j = 0; j <= 187; j++)
-        {
-
-            /*(*my_map)= (*map);*/
-
-            //if (i <= 35 && j <= 40 )//&&  j >= 15 || j <= 172 //左上角右上角  //2月16日取消i <= 35 && (j <= 40 || j >= 148)
-            //{
-            //  if ((*map) > threshold_w)
-            //      (*my_map) = 255;
-            //  else (*my_map) = 0;
-            //}
-            //else if (i > 35 && j <= 40)       //左侧右侧  i > 35 && (j <= 40 || j >= 148)
-            //{
-            //  if ((*map) > threshold_l)
-            //      (*my_map) = 255;
-            //  else (*my_map) = 0;
-            //}
-            //else if(i<=35 && (j > 40 && j < 165))     //上方中间
-            //{
-            //  if ((*map) > threshold_midtop)
-            //      (*my_map) = 255;
-            //  else (*my_map) = 0;
-            //}
-            //else if (i > 90 &&j >= 155)       //youxiajiao
-            //{
-            //  if ((*map) > (threshold_right - (j - 164) * 0.25))
-            //      (*my_map) = 255;
-            //  else (*my_map) = 0;
-            //}
-            //else if ( j >= 165)
-            //{
-            //  if ((*map) > (threshold_right - (j-164) *0.25))
-            //      (*my_map) = 255;
-            //  else (*my_map) = 0;
-            //}
-            //else      //中间
-            //{
-            //  if ((*map) > threshold_n)
-            //      (*my_map) = 255;
-            //  else (*my_map) = 0;
-            //}
-            if ((*map) > threshold_original-15)
-                (*my_map) = 255;
-            else (*my_map) = 0;
-            map++;
-            my_map++;
-
-        }
-    }
-    //////printf("99 99 %d\n", img_original[99][99]);
-    //////printf("%d\n", threshold_original);
-    /*for (i = 1; i < 120; i++)
-    {
-        for (j = 0; j < 188; j++)
-        {
-            IMG[i][left_side[i]] = red;
-            IMG[i][right_side[i]] = red;
-        }
-    }*/
-    return 0;
-}
+//int thre1() // 尝试最大最小合成
+//{
+//    //大津法
+//    //uint8 abandon = 39;
+//    float pixepro[256];
+//    threshold_original_pre = threshold_original;
+//    uint8 i, j;
+//    int* t_sum = NULL;
+//    uint8 const *left_side_ptr = NULL;
+//    uint8 const *right_side_ptr = NULL;
+//    int count = 0;
+//    float* pixepro_ptr = &pixepro[0];
+//
+//
+//    t_sum = &gray_sum[0];
+//
+//    //初始化gray_sum[]这个数组     //01.15直接在声明的时候赋值为0
+//    /*for (i = 0; i <= 255; i++)
+//    {
+//        (*t_sum) = 0;
+//        t_sum++;
+//    }*/
+//
+//    //给gray_sum[]赋值，代表灰度为a的像素出现的次数
+//    uint8* map = NULL;
+//
+//    for (i = 1; i < 120; i++)
+//    {
+//        left_side_ptr = &left_side[i];
+//        right_side_ptr = &right_side[i];
+//        map = &img_original[i][0];
+//        for (j = *left_side_ptr; j <= *right_side_ptr; j++)
+//        {
+//            (*(t_sum + (*map)))++;
+//            map++;
+//            count++;
+//        }
+//    }
+//
+//    //归一化
+//    for (i = 0; i <= 255; i++)
+//        *(pixepro_ptr+i) = (float)gray_sum[i] / count;
+//
+//    float u0, u1, w0, w1, u0tmp, u1tmp, deltaTmp, deltamax = 0;
+//
+//
+//
+//    w0 = w1 = u0tmp = u1tmp = u0 = u1 = deltaTmp = 0;
+//
+//    w0 += *(pixepro_ptr + 0);
+//    u0tmp += *(pixepro_ptr + 0) * j  ;
+//
+//    for (j = 1; j <= 255; j++)
+//    {
+//        w1 += *(pixepro_ptr + j);
+//        u1tmp += *(pixepro_ptr + j) * j;
+//    }
+//    u0 = u0tmp / w0;
+//    u1 = u1tmp / w1;
+//    deltaTmp = (float)(w0 * w1 * pow((u0 - u1), 2));
+//    if (deltaTmp > deltamax)
+//    {
+//        deltamax = deltaTmp;
+//        threshold_original = 0;
+//    }
+//
+//    //i >= 1
+//    for (i = 1; i <= 255; i++)
+//    {
+//        //背景部分
+//        w0 += *(pixepro_ptr + i);
+//        u0tmp += *(pixepro_ptr + i) * i;
+//
+//        //前景部分
+//        w1 -= *(pixepro_ptr + i);
+//        u1tmp -= *(pixepro_ptr + i) * i;
+//
+//        u0 = u0tmp / w0;
+//        u1 = u1tmp / w1;
+//        deltaTmp = (float)(w0 * w1 * (u0 - u1) * (u0 - u1));
+//        if (deltaTmp > deltamax)
+//        {
+//            deltamax = deltaTmp;
+//            threshold_original = i;
+//        }
+//    }
+//    threshold_original = 1 * threshold_original + 0;
+//    //////printf("大津法阈值：%d\n", threshold_original);
+//    threshold_n = (int)(threshold_original * (float)N_YZ_2 / 100);
+//    threshold_w = (int)(threshold_original * (float)W_YZ_2 / 100);
+//    threshold_l = (int)(threshold_original * (float)LOW_SIDE / 100);
+//    threshold_midtop = (int)(threshold_original * (float)MIDTOP / 100);
+//    threshold_right = (int)(threshold_original * (float)R_SIDE / 100);
+//    if (threshold_n > YZ_TOP)   threshold_n = YZ_TOP;
+//    if (threshold_n < YZ_BOT)   threshold_n = YZ_BOT;
+//    if (threshold_w > YZ_TOP)   threshold_w = YZ_TOP;
+//    if (threshold_w < YZ_BOT)   threshold_w = YZ_BOT;
+//    //////printf("threshold_n=%d\n", threshold_n);
+//    //////printf("threshold_w=%d\n", threshold_w);
+//    //////printf("threshold_l=%d\n", threshold_l);
+//    //////printf("threshold_original_pre=%d\n", threshold_original_pre);
+//    ////printf("\n");
+//
+//    /*return    threshold_original;*/
+//
+//    //分区域取阈值
+//    map = NULL;
+//    uint8* my_map = NULL;
+//    for (uint8 i = 0; i < 119; i++)
+//    {
+//        map = &img_original[i][0];//image_Buffer_0
+//        my_map = &IMG[i][0];//img_original
+//        left_side_ptr = &left_side[i];
+//        right_side_ptr = &right_side[i];
+//        for (int j = 0; j <= 187; j++)
+//        {
+//
+//            /*(*my_map)= (*map);*/
+//
+//            //if (i <= 35 && j <= 40 )//&&  j >= 15 || j <= 172 //左上角右上角  //2月16日取消i <= 35 && (j <= 40 || j >= 148)
+//            //{
+//            //  if ((*map) > threshold_w)
+//            //      (*my_map) = 255;
+//            //  else (*my_map) = 0;
+//            //}
+//            //else if (i > 35 && j <= 40)       //左侧右侧  i > 35 && (j <= 40 || j >= 148)
+//            //{
+//            //  if ((*map) > threshold_l)
+//            //      (*my_map) = 255;
+//            //  else (*my_map) = 0;
+//            //}
+//            //else if(i<=35 && (j > 40 && j < 165))     //上方中间
+//            //{
+//            //  if ((*map) > threshold_midtop)
+//            //      (*my_map) = 255;
+//            //  else (*my_map) = 0;
+//            //}
+//            //else if (i > 90 &&j >= 155)       //youxiajiao
+//            //{
+//            //  if ((*map) > (threshold_right - (j - 164) * 0.25))
+//            //      (*my_map) = 255;
+//            //  else (*my_map) = 0;
+//            //}
+//            //else if ( j >= 165)
+//            //{
+//            //  if ((*map) > (threshold_right - (j-164) *0.25))
+//            //      (*my_map) = 255;
+//            //  else (*my_map) = 0;
+//            //}
+//            //else      //中间
+//            //{
+//            //  if ((*map) > threshold_n)
+//            //      (*my_map) = 255;
+//            //  else (*my_map) = 0;
+//            //}
+//            if ((*map) > threshold_original-15)
+//                (*my_map) = 255;
+//            else (*my_map) = 0;
+//            map++;
+//            my_map++;
+//
+//        }
+//    }
+//    //////printf("99 99 %d\n", img_original[99][99]);
+//    //////printf("%d\n", threshold_original);
+//    /*for (i = 1; i < 120; i++)
+//    {
+//        for (j = 0; j < 188; j++)
+//        {
+//            IMG[i][left_side[i]] = red;
+//            IMG[i][right_side[i]] = red;
+//        }
+//    }*/
+//    return 0;
+//}
 
 ////////////////////////////////////////////
 //功能：传统二值化
@@ -707,7 +507,7 @@ void THRE(int threshold)
         uint8* map;
         uint8* my_map;
         map = (uint8*)mt9v034_image;
-        for (int i = 0; i < 120; i++)
+        for (uint8 i = 0; i < 120; i++)
         {
             //my_map = &img_dis[i][0];
             my_map = &IMG[i][0];//img_original
@@ -724,51 +524,6 @@ void THRE(int threshold)
         }   //暂时取消普通二值化，使用分区域的二值化
     }
 }
-
-////////////////////////////////////////////
-////功能：曲率判断
-////输入：三个点的横纵座标
-////输出：float型曲率值
-////备注：
-///////////////////////////////////////////
-//double process_curvity(uint8 x1, uint8 x2, uint8 y1, uint8 y2, uint8 x3, uint8 y3)
-//{
-//    double k;
-//    int S_of_ABC = ((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)) / 2;
-//    //面积的符号表示方向
-//    uint8 q1 = (uint8)((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-//    double AB = sqrt(q1);
-//    q1 = (uint8)((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2));
-//    double BC = sqrt(q1);
-//    q1 = (uint8)((x3 - x1) * (x3 - x1) + (y3 - y1) * (y3 - y1));
-//    double AC = sqrt(q1);
-//    if (AB * BC * AC == 0)
-//    {
-//        k = 0;
-//    }
-//    else
-//        k = 4.0 * (float)S_of_ABC / (AB * BC * AC);
-//    return k;
-//}
-//////////////////////////////////////////////
-////功能：不粗犷的清车头
-////输入：
-////输出：
-////备注：
-/////////////////////////////////////////////
-//void head_clear(void)
-//{
-//    uint8* my_map;
-////    int a = 40;
-//    for (int i = 119; i >=100; i--)
-//    {
-//        my_map = &img_dis[i][0];
-//        for (int j = 14 ; j <= 170; j++)
-//        {
-//            *(my_map + j) = white;
-//        }
-//    }
-//}
 ////////////////////////////////////////////
 //功能：查找父节点
 //输入：节点编号
@@ -823,7 +578,6 @@ void search_white_range()
     }
 }
 
-//提取白像素点线
 
 ////////////////////////////////////////////
 //功能：寻找白条子连通性，将全部联通白条子的节点编号刷成最古老祖先的节点编号
@@ -834,13 +588,13 @@ void search_white_range()
 void find_all_connect()
 {
 
-    for (int i = 1; i <= all_connect_num; i++)
+    for (uint8 i = 1; i <= all_connect_num; i++)
         f[i] = i;
     int u_num, i_u, u_left, u_right;
     int d_num, i_d, d_left, d_right;
     all_range* u_white = NULL;
     all_range* d_white = NULL;
-    for (int i = NEAR_LINE; i > FAR_LINE; i--)
+    for (uint8 i = NEAR_LINE; i > FAR_LINE; i--)
     {
         u_num = white_range[i - 1].num;
         d_num = white_range[i].num;
@@ -868,7 +622,7 @@ void find_all_connect()
             if (d_right == u_right) { i_u++; i_d++; }
         }
     }
-    //////printf("find_f first finish\n");
+
 }
 ////////////////////////////////////////////
 //功能：寻找赛道
@@ -885,16 +639,16 @@ void find_road()
     int while_range_num = 0, roud_while_range_num = 0;
     all_range* twhite_range = NULL;
     road* tmy_road = NULL;
-    for (int i = 1; i <= white_range[istart].num; i++)
+    for (uint8 i = 1; i <= white_range[istart].num; i++)
         if (white_range[istart].area[i].left <= CAMERA_W / 2
             && white_range[istart].area[i].right >= CAMERA_W / 2
             && (white_range[istart].area[i].right - white_range[istart].area[i].left) >= 90)
             road_f = find_f(white_range[istart].area[i].connect_num);
-    //////printf("find_f second finish\n");
+
     if (road_f == -1)
     {
         int widthmax = 0, jselect = 1;
-        for (int i = 1; i <= white_range[istart].num; i++)
+        for (uint8 i = 1; i <= white_range[istart].num; i++)
             if (white_range[istart].area[i].right - white_range[istart].area[i].left > widthmax)
             {
                 widthmax = white_range[istart].area[i].right - white_range[istart].area[i].left;
@@ -902,8 +656,8 @@ void find_road()
             }
         road_f = find_f(white_range[istart].area[jselect].connect_num);
     }
-    //////printf("find_f third finish\n");
-    for (int i = istart; i >= iend; i--)
+
+    for (uint8 i = istart; i >= iend; i--)
     {
         twhite_range = &white_range[i];
         tmy_road = &my_road[i];//把数据存储在my_road中
@@ -925,7 +679,7 @@ void find_road()
         }
 
     }
-    //////printf("find_f forth finish\n");
+
 }
 
 ////////////////////////////////////////////
@@ -987,11 +741,11 @@ void find_my_road(void)
     uint8 i_start;
     uint8 i_end;
     uint8 j_start = MISS;
-    int width_max;
+    uint8 width_max;
     i_start = NEAR_LINE;
     i_end = FAR_LINE;
     width_max = 0;
-    for (int j = 1; j <= my_road[i_start].white_num; j++)//寻找第一行最宽
+    for (uint8 j = 1; j <= my_road[i_start].white_num; j++)//寻找第一行最宽
     {
         if (my_road[i_start].connected[j].width > width_max)
         {
@@ -1001,7 +755,7 @@ void find_my_road(void)
     }
     j_continue[i_start] = j_start;                  //确定最近的赛道
 
-    for (int i = i_start; i > i_end; i--)
+    for (uint8 i = i_start; i > i_end; i--)
     {
         tmy_road = &my_road[i];
         j_continue_ptr = &j_continue[i];
@@ -1069,18 +823,14 @@ void zebra_ordinary_two_line(void)
 void two_line(void)
 {
     uint8 i;
-//    uint8 j;
 
-    //uint8 a, b,c;
-//    uint8* left_line_ptr = NULL;
-//    uint8* right_line_ptr = NULL;
     road* tmy_road = NULL;
-//    uint8* j_continue_ptr = NULL;
+
     uint8* left_ptr = NULL;
     uint8* right_ptr = NULL;
     uint8 i_start;
     uint8 i_end;
-//    uint8 j_start = MISS;
+
     uint8 width_max;
     i_start = NEAR_LINE;
     i_end = FAR_LINE;
@@ -1113,23 +863,21 @@ void two_line(void)
 void straight_oridinary_two_line(void)
 {
     uint8 i;
-//    uint8 j;
 
-    //uint8 a, b,c;
     uint8* left_line_ptr = NULL;
     uint8* right_line_ptr = NULL;
     road* tmy_road = NULL;
     uint8* j_continue_ptr = NULL;
     uint8 i_start;
     uint8 i_end;
-//    uint8 j_start = MISS;
+
     int width_max;
     i_start = NEAR_LINE;
     i_end = FAR_LINE;
     width_max = 0;
 
     find_my_road();
-    //////printf("first  j_continue:%d,left:%d\n", j_continue[90], my_road[90].connected[j_continue[90]].left);
+
     for (i = i_start; i > i_end; i--)
     {
         j_continue_ptr = &j_continue[i];
@@ -1147,106 +895,6 @@ void straight_oridinary_two_line(void)
             *right_line_ptr = MISS;
         }
     }
-
-    /*Left_flag = 0;
-    Right_flag = 0;
-    flag = 0;
-    flagtext = 0;
-    start_line_flag = 0;
-    start_line_x = 0;*/
-
-
-    /*出十字*/
-    //double k0;
-    //  for (i = i_start; i > i_end; i--)
-    //  {
-    //      /*十字所用变量*/
-    //      double k_left = (my_road[i].connected[j_continue[i]].left - my_road[i - 2].connected[j_continue[i - 2]].left) / 2.0;
-    //      double k_left_pre = (my_road[i - 2].connected[j_continue[i - 2]].left - my_road[i - 4].connected[j_continue[i - 4]].left) / 2.0;
-    //      double k_right = (my_road[i].connected[j_continue[i]].right - my_road[i - 2].connected[j_continue[i - 2]].right) / 2.0;
-    //      double k_right_pre = (my_road[i - 2].connected[j_continue[i - 2]].right - my_road[i - 4].connected[j_continue[i - 4]].right) / 2.0;
-    //
-    //      if (fabs(k_left_pre) - fabs(k_left) > 2.0) {
-    //          Left_flag = 1;
-    //          Left_begin = i;
-    //      }
-    //      if (fabs(k_right_pre) - fabs(k_right) > 2.0) {
-    //          Right_flag = 1;
-    //          Right_begin = i;
-    //      }
-
-    //      /*左右边界*/
-    //      if ((j_continue[i] <= my_road[i].white_num))
-    //      {
-    //          left_line[i] = my_road[i].connected[j_continue[i]].left;
-    //          right_line[i] = my_road[i].connected[j_continue[i]].right;
-    //      }
-    //      else
-    //      {
-    //          left_line[i] = MISS;
-    //          right_line[i] = MISS;
-    //      }
-
-    //      /*判断复杂地形*/
-    //      if (i >= 5)
-    //      {
-    //          /*算曲率*/
-    //          /*b = my_road[i - 20].connected[j_continue[i - 20]].left;
-    //          c = my_road[i - 30].connected[j_continue[i - 30]].left;
-    //          a = my_road[i].connected[j_continue[i]].left;
-    //          k0 = process_curvity(i, i - 20, a, b, i - 30, c);*/
-
-    //          /*识别斑马线*/
-    //          for (uint8 i = 100; i >= 10; i--)
-    //          {
-    //              if (my_road[i].white_num > 7)
-    //              {
-    //                  if (my_road[i].connected[1].left > 20 && my_road[i].connected[my_road[i].white_num].right < 160)
-    //                  {
-    //                      start_line_x = i;
-    //                      uint8* my_map;
-    //                      my_map = &IMG[i][0];
-    //                      start_line_line = i;
-    //                      for (int j = 187; j > 0; j--)
-    //                      {
-    //                          *(my_map + j) = green;
-    //                      }
-    //                      Start_line();
-    //                      start_line_flag = 1;//斑马线标志位
-    //                      break;
-    //                  }
-    //              }
-    //          }
-    //          /*if (my_road[i].white_num > 7)
-    //          {
-    //              start_line_x = i;
-    //              uint8* my_map;
-    //              my_map = &IMG[i - 5][0];
-    //              start_line_line = i;
-    //              for (int j = 187; j > 0; j--)
-    //              {
-    //                  *(my_map + j) = green;
-    //              }
-    //              Start_line();
-    //              start_line_flag = 1;//斑马线标志位
-    //              break;
-    //          }*/
-    //
-    //
-    //          /*识别十字*/
-    //          if (Right_flag == 1 && Left_flag == 1 && i > 45 && i < 105)
-    //          {
-    //              Cross();
-    //              break;
-    //          }
-    //          /*else if (Right_flag == 1 && Left_flag == 1 && i >= 105) {
-    //              Cross_out();
-    //              break;
-    //          }*/
-    //
-    //      }
-    //  }
-
 }
 
 ////////////////////////////////////////////
@@ -1264,13 +912,17 @@ void trident_ordinary_two_line(void)
     uint8* j_continue_ptr = NULL;
     uint8 i_start;
     uint8 i_end;
-//    uint8 j_start = MISS;
     float k_trident = 0, k_straight = 0, k_enter = 0, k_enter_pre = 0, k_makeup = 0, b_makeup = 0;
     uint8 change_line = NEAR_LINE, end_line = NEAR_LINE, enter_line = NEAR_LINE;
     i_start = NEAR_LINE;
     i_end = FAR_LINE;
 
-    find_my_road();
+    trident_road_ptr = &trident_road[0];
+    left_line_ptr = &left_line[0];
+    right_line_ptr = &right_line[0];
+    j_continue_ptr = &j_continue[0];
+    tmy_road = &my_road[0];
+
     for (uint8 i = i_start; i > i_end; i--)
     {
         trident_road_ptr = &trident_road[i];
@@ -1278,27 +930,27 @@ void trident_ordinary_two_line(void)
         right_line_ptr = &right_line[i];
         j_continue_ptr = &j_continue[i];
         tmy_road = &my_road[i];
-        if (tmy_road->white_num != 0)
+        if ((tmy_road+i)->white_num != 0)
         {
             if (2 == trident_road_ptr->white_num)
             {
                 if (mood.trident == 1)//向左
                 {
-                    *left_line_ptr = trident_road_ptr->connected[1].left;
-                    *right_line_ptr = trident_road_ptr->connected[1].right;
+                    *(left_line_ptr+i) = trident_road_ptr->connected[1].left;
+                    *(right_line_ptr+i) = trident_road_ptr->connected[1].right;
                 }
                 else if (mood.trident == 2)//向右
                 {
-                    *left_line_ptr = trident_road_ptr->connected[2].left;
-                    *right_line_ptr = trident_road_ptr->connected[2].right;
+                    *(left_line_ptr+i) = trident_road_ptr->connected[2].left;
+                    *(right_line_ptr+i) = trident_road_ptr->connected[2].right;
                 }
                 end_line = i;
             }
             else if (0 == trident_road_ptr->white_num)
             {
-                //find_my_road();
-                *left_line_ptr = tmy_road->connected[(*j_continue_ptr)].left;
-                *right_line_ptr = tmy_road->connected[(*j_continue_ptr)].right;
+
+                *(left_line_ptr+i) = tmy_road->connected[(*j_continue_ptr)].left;
+                *(right_line_ptr+i) = tmy_road->connected[(*j_continue_ptr)].right;
                 if (end_line >= change_line)
                 {
                     change_line = i;
@@ -1307,20 +959,20 @@ void trident_ordinary_two_line(void)
             }
             else
             {
-                *left_line_ptr = MISS;
-                *right_line_ptr = MISS;
+                *(left_line_ptr+i) = MISS;
+                *(right_line_ptr+i) = MISS;
             }
             if (end_line > i)
             {
-                *left_line_ptr = MISS;
-                *right_line_ptr = MISS;
+                *(left_line_ptr+i) = MISS;
+                *(right_line_ptr+i) = MISS;
             }
 
         }
         else
         {
-            *left_line_ptr = MISS;
-            *right_line_ptr = MISS;
+            *(left_line_ptr+i) = MISS;
+            *(right_line_ptr+i) = MISS;
         }
     }
     //////printf("change_line%d,end_line%d\n", change_line, end_line);
@@ -1328,12 +980,12 @@ void trident_ordinary_two_line(void)
         /*补线操作*/
         if (mood.trident == 1)//向左
         {
-            k_trident = (float)(right_line[change_line - 1] - right_line[end_line]) / (float)(change_line - end_line - 1);
-            k_straight = (float)(right_line[change_line + 5] - right_line[change_line]) / 5.0;
+            k_trident = (float)(*(right_line_ptr +change_line - 1) - *(right_line_ptr+end_line)) / (float)(change_line - end_line - 1);
+            k_straight = (float)(*(right_line_ptr+change_line + 5) - *(right_line_ptr+change_line)) / 5.0;
             if (1)//判断两 斜率的倒数 是否为异号,如果为异号，则需要补线judge_sign(k_trident, k_straight) || ((k_trident - 0) < EPS && (k_straight - 0) < EPS)
             {
                 ////printf("三岔补线\n");
-                k_enter_pre = k_enter = (float)(right_line[i_start] - right_line[i_start - 5]) / 5.0;
+                k_enter_pre = k_enter = (float)(*(right_line_ptr+i_start) - *(right_line_ptr+i_start - 5)) / 5.0;
                 for (uint8 i = i_start; i > i_end; i--)
                 {
                     k_enter_pre = k_enter;
@@ -1351,7 +1003,7 @@ void trident_ordinary_two_line(void)
             ////printf("****************************\n");
             ////printf("%d, %d, %d, %d, %f, %f\n", enter_line, right_line[enter_line], change_line - 1, right_line[change_line - 1], k_enter, k_makeup);
             ////printf("****************************\n");
-            for (int i = enter_line; i >= change_line; i--)
+            for (uint8 i = enter_line; i >= change_line; i--)
             {
                 right_line_ptr = &right_line[i];
                 *right_line_ptr = round(k_makeup * (i - b_makeup));
@@ -1390,7 +1042,7 @@ void trident_ordinary_two_line(void)
             /*////printf("****************************\n");
             ////printf("enter line : %d\n", enter_line);
             ////printf("****************************\n");*/
-            for (int i = enter_line; i >= change_line; i--)
+            for (uint8 i = enter_line; i >= change_line; i--)
             {
                 left_line_ptr = &left_line[i];
                 *left_line_ptr = round(k_makeup * (i - b_makeup));
@@ -1433,14 +1085,14 @@ uint8 judge_sign(float k1, float k2)
 //    i_start = NEAR_LINE;
 //    i_end = FAR_LINE;
 //    int k_trident = 0, k_straight = 0;
-//    for (int i = i_start; i > i_end; i--)
+//    for (uint8 i = i_start; i > i_end; i--)
 //    {
 //
 //    }
 //}
 //void Start_line(void)
 //{
-//    for (int i = 0; i < 119; i++)
+//    for (uint8 i = 0; i < 119; i++)
 //    {
 //        left_line[i] = my_road[i].connected[1].left;
 //        right_line[i] = my_road[i].connected[my_road[i].white_num].right;
@@ -1459,7 +1111,7 @@ uint8 judge_sign(float k1, float k2)
 //  Right_END.x = 0;
 //  Right_END.y = 0;
 //  float k4=0;
-//  int i;
+//  uint8 i;
 //  if (Left_begin >= 30)
 //  {
 //      int t;
@@ -1497,7 +1149,7 @@ uint8 judge_sign(float k1, float k2)
 //              count++;
 //          }
 //          if (count == 3) {
-//              for (int i = Left_END.y; i < Right_END.y; i++) {
+//              for (uint8 i = Left_END.y; i < Right_END.y; i++) {
 //                  IMG[Right_END.x][i] = red;
 //              }
 //              break;
@@ -1505,14 +1157,14 @@ uint8 judge_sign(float k1, float k2)
 //      }
 //  }
 //  float k_left = (float)(Left_END.y - my_road[Left_begin].connected[j_continue[Left_begin]].left) / (Left_END.x - Left_begin);/*计算左右延伸线*/
-//  for (int i = Left_begin; i > Left_END.x; i--) {
+//  for (uint8 i = Left_begin; i > Left_END.x; i--) {
 //      left_line[i] = (i - Left_begin) * k_left + my_road[Left_begin].connected[j_continue[Left_begin]].left;
 //  }
 //  float k_right = (float)(Right_END.y - my_road[Right_begin].connected[j_continue[Right_begin]].right) / (Right_END.x - Right_begin);
-//  for (int i = Right_begin; i > Right_END.x; i--) {
+//  for (uint8 i = Right_begin; i > Right_END.x; i--) {
 //      right_line[i] = (i - Right_begin) * k_right + my_road[Right_begin].connected[j_continue[Right_begin]].right;
 //  }
-//  for (int i = Left_END.x; i > 2; i--)
+//  for (uint8 i = Left_END.x; i > 2; i--)
 //  {
 //      int flag_left = 0;
 //      for (int j = Left_END.y + 5; j > Left_END.y - 5; j--) {
@@ -1548,7 +1200,7 @@ uint8 judge_sign(float k1, float k2)
     Left_END.y = 0;
     Right_END.x = 0;
     Right_END.y = 0;
-    for (int i = FAR_LINE; i < NEAR_LINE; i++) {
+    for (uint8 i = FAR_LINE; i < NEAR_LINE; i++) {
         Left_end = 0;
         Right_end = 0;
         Left_END.x = 0;
@@ -1586,7 +1238,7 @@ void my_memset(uint8* ptr, uint8 num, uint8 size)
     uint8* p = ptr;
     uint8 my_num = num;
     uint8 Size = size;
-    for (int i = 0; i < Size; i++, p++)
+    for (uint8 i = 0; i < Size; i++, p++)
     {
         *p = my_num;
     }
@@ -1625,7 +1277,7 @@ void my_init(void)
 void get_mid_line(void)
 {
     my_memset(mid_line, MISS, CAMERA_H);
-    for (int i = NEAR_LINE; i >= FAR_LINE; i--) {
+    for (uint8 i = NEAR_LINE; i >= FAR_LINE; i--) {
         if (left_line[i] != MISS)
         {
             mid_line[i] = (left_line[i] + right_line[i]) / 2;
@@ -1722,7 +1374,7 @@ uint8 trident(void)
     uint8 two_side_account = 0,left_side_account = 0,right_side_account = 0;
     float k_left = 0, k_right = 0;
     ////printf("三岔判断进行\n");
-    for (int i = istart; i >= iend; i--)
+    for (uint8 i = istart; i >= iend; i--)
     {
         tmy_road = &my_road[i];
         ttrident_road = &trident_road[i];
@@ -1851,7 +1503,7 @@ uint8 tell_oblique_cross(void)
         ////printf("左右边线斜率判断失败\n");
         return 0;
     }
-    for (int i = istart; i >= iend; i--)
+    for (uint8 i = istart; i >= iend; i--)
     {
         tmy_road = &my_road[i];
         ttrident_road = &trident_road[i];
@@ -1925,7 +1577,7 @@ void oblique_cross_ordinary_two_line(void)
     int flag = 0;
     int left_flag = 0;
     int right_flag = 0;
-    //for (int i = 95; i >= i_end; i--)
+    //for (uint8 i = 95; i >= i_end; i--)
     //{
     //  left_line_ptr = &left_line[i];
     //  right_line_ptr = &right_line[i];
@@ -2031,7 +1683,7 @@ void oblique_cross_ordinary_two_line(void)
         //if (judge_sign(k_trident, k_straight))//判断两 斜率的倒数 是否为异号,如果为异号，则需要补线
         //{
         //  k_enter_pre = k_enter = (float)(right_line[i_start] - right_line[i_start - 5]) / 5.0;
-        //  for (int i = i_start; i > i_end; i--)
+        //  for (uint8 i = i_start; i > i_end; i--)
         //  {
         //      k_enter_pre = k_enter;
         //      k_enter = (float)(right_line[i] - right_line[i - 5]) / 5.0;
@@ -2054,14 +1706,14 @@ void oblique_cross_ordinary_two_line(void)
         //////printf("****************************\n");
         //////printf("%d, %d, %d, %d, %f, %f\n", enter_line, right_line[enter_line], change_line - 1, right_line[change_line - 1], k_enter, k_makeup);
         //////printf("****************************\n");
-        for (int i = enter_line; i >= change_line; i--)
+        for (uint8 i = enter_line; i >= change_line; i--)
         {
             right_line_ptr = &right_line[i];
             left_line_ptr = &left_line[i];
             tmy_road = &my_road[i];
             *right_line_ptr = round(k_makeup * (i - b_makeup));
         }
-        for (int i = change_line; i >= i_end; i--)
+        for (uint8 i = change_line; i >= i_end; i--)
         {
             right_line_ptr = &right_line[i];
             left_line_ptr = &left_line[i];
@@ -2082,7 +1734,7 @@ void oblique_cross_ordinary_two_line(void)
         ////printf("****************************\n");
         ////printf("enter line : %d,change line: %d\n", enter_line,change_line);
         ////printf("****************************\n");
-        for (int i = enter_line; i >= change_line; i--)
+        for (uint8 i = enter_line; i >= change_line; i--)
         {
             left_line_ptr = &left_line[i];
             *left_line_ptr = round(k_makeup * (i - b_makeup));
@@ -2122,11 +1774,11 @@ void circle_ordinary_two_line(void)
     {
         if (left_change_down == 113 && left_change_up < 20)//
         {
-            for (int i = left_change_down; i >= left_change_up; i--)
+            for (uint8 i = left_change_down; i >= left_change_up; i--)
             {
                 left_line[i] = left_line[left_change_down];//left
             }
-            for (int i = left_change_up - 1; i >= 0; i--)
+            for (uint8 i = left_change_up - 1; i >= 0; i--)
             {
                 right_line_ptr = &right_line[i];
                 *right_line_ptr = MISS;
@@ -2139,12 +1791,12 @@ void circle_ordinary_two_line(void)
 
             k_makeup = (float)(right_line[left_change_down] - left_line[left_change_up - 5]) / (float)(left_change_down - left_change_up + 5);
             b_makeup = (float)left_change_up - 5 - ((float)left_line[left_change_up - 5] / k_makeup);
-            for (int i = left_change_down; i >= left_change_up; i--)
+            for (uint8 i = left_change_down; i >= left_change_up; i--)
             {
                 right_line_ptr = &right_line[i];
                 *right_line_ptr = round(k_makeup * (i - b_makeup));
             }
-            for (int i = left_change_up - 1; i >= 0; i--)
+            for (uint8 i = left_change_up - 1; i >= 0; i--)
             {
                 right_line_ptr = &right_line[i];
                 *right_line_ptr = MISS;
@@ -2154,11 +1806,11 @@ void circle_ordinary_two_line(void)
         }
         else if (left_change_down != 113 && left_change_up >= 20)
         {
-            for (int i = left_change_down; i >= left_change_up; i--)
+            for (uint8 i = left_change_down; i >= left_change_up; i--)
             {
                 left_line[i] = left_line[left_change_down + 1];//left
             }
-            for (int i = left_change_up - 1; i >= 0; i--)
+            for (uint8 i = left_change_up - 1; i >= 0; i--)
             {
                 right_line_ptr = &right_line[i];
                 *right_line_ptr = MISS;
@@ -2168,11 +1820,11 @@ void circle_ordinary_two_line(void)
         }
         else if (left_change_down != 113 && left_change_up < 20)
         {
-            for (int i = left_change_down; i >= left_change_up; i--)
+            for (uint8 i = left_change_down; i >= left_change_up; i--)
             {
                 left_line[i] = left_line[left_change_down];//left
             }
-            for (int i = left_change_up - 1; i >= 0; i--)
+            for (uint8 i = left_change_up - 1; i >= 0; i--)
             {
                 right_line_ptr = &right_line[i];
                 *right_line_ptr = MISS;
@@ -2182,11 +1834,11 @@ void circle_ordinary_two_line(void)
         }
         else if (left_change_down <= 95)
         {
-            for (int i = left_change_down; i >= left_change_up; i--)
+            for (uint8 i = left_change_down; i >= left_change_up; i--)
             {
                 left_line[i] = left_line[left_change_down + 1];//left
             }
-            for (int i = left_change_up - 1; i >= 0; i--)
+            for (uint8 i = left_change_up - 1; i >= 0; i--)
             {
                 right_line_ptr = &right_line[i];
                 *right_line_ptr = MISS;
@@ -2200,11 +1852,11 @@ void circle_ordinary_two_line(void)
     {
         if (right_change_down == 113 && right_change_up < 20)//
         {
-            for (int i = right_change_down; i >= right_change_up; i--)
+            for (uint8 i = right_change_down; i >= right_change_up; i--)
             {
                 right_line[i] = right_line[right_change_down];//left
             }
-            for (int i = right_change_up - 1; i >= 0; i--)
+            for (uint8 i = right_change_up - 1; i >= 0; i--)
             {
                 right_line_ptr = &right_line[i];
                 *right_line_ptr = MISS;
@@ -2216,7 +1868,7 @@ void circle_ordinary_two_line(void)
         {
             k_makeup = (float)(left_line[right_change_down] - right_line[right_change_up-5]) / (float)(right_change_down - left_change_up+5);
             b_makeup = (float)right_change_up-5 - ((float)right_line[right_change_up-5] / k_makeup);
-            for (int i = enter_line; i >= change_line; i--)
+            for (uint8 i = enter_line; i >= change_line; i--)
             {
                 left_line_ptr = &left_line[i];
                 *left_line_ptr = round(k_makeup * (i - b_makeup));
@@ -2224,11 +1876,11 @@ void circle_ordinary_two_line(void)
         }
         else if (right_change_down != 113 && right_change_up >= 20)
         {
-            for (int i = right_change_down; i >= right_change_up; i--)
+            for (uint8 i = right_change_down; i >= right_change_up; i--)
             {
                 right_line[i] = right_line[right_change_down];//left
             }
-            for (int i = right_change_up - 1; i >= 0; i--)
+            for (uint8 i = right_change_up - 1; i >= 0; i--)
             {
                 right_line_ptr = &right_line[i];
                 *right_line_ptr = MISS;
@@ -2238,11 +1890,11 @@ void circle_ordinary_two_line(void)
         }
         else if (right_change_down != 113 && right_change_up < 20)
         {
-            for (int i = right_change_down; i >= right_change_up; i--)
+            for (uint8 i = right_change_down; i >= right_change_up; i--)
             {
                 right_line[i] = right_line[right_change_down];//left
             }
-            for (int i = right_change_up - 1; i >= 0; i--)
+            for (uint8 i = right_change_up - 1; i >= 0; i--)
             {
                 right_line_ptr = &right_line[i];
                 *right_line_ptr = MISS;
@@ -2252,11 +1904,11 @@ void circle_ordinary_two_line(void)
         }
         else if (right_change_down < 95)
         {
-            for (int i = right_change_down; i >= right_change_up; i--)
+            for (uint8 i = right_change_down; i >= right_change_up; i--)
             {
                 right_line[i] = right_line[right_change_down];//left
             }
-            for (int i = right_change_up - 1; i >= 0; i--)
+            for (uint8 i = right_change_up - 1; i >= 0; i--)
             {
                 right_line_ptr = &right_line[i];
                 *right_line_ptr = MISS;
@@ -2273,7 +1925,7 @@ void circle_ordinary_two_line(void)
     //  if (judge_sign(k_trident, k_straight))//判断两 斜率的倒数 是否为异号,如果为异号，则需要补线
     //  {
     //      k_enter_pre = k_enter = (float)(right_line[i_start] - right_line[i_start - 5]) / 5.0;
-    //      for (int i = i_start; i > i_end; i--)
+    //      for (uint8 i = i_start; i > i_end; i--)
     //      {
     //          k_enter_pre = k_enter;
     //          k_enter = (float)(right_line[i] - right_line[i - 5]) / 5.0;
@@ -2290,7 +1942,7 @@ void circle_ordinary_two_line(void)
     //  //////printf("****************************\n");
     //  //////printf("%d, %d, %d, %d, %f, %f\n", enter_line, right_line[enter_line], change_line - 1, right_line[change_line - 1], k_enter, k_makeup);
     //  //////printf("****************************\n");
-    //  for (int i = enter_line; i >= change_line; i--)
+    //  for (uint8 i = enter_line; i >= change_line; i--)
     //  {
     //      right_line_ptr = &right_line[i];
     //      *right_line_ptr = round(k_makeup * (i - b_makeup));
@@ -2305,7 +1957,7 @@ void circle_ordinary_two_line(void)
     //  ////printf("****************************\n");
     //  ////printf("enter line : %d,change line: %d\n", enter_line, change_line);
     //  ////printf("****************************\n");
-    //  for (int i = enter_line; i >= change_line; i--)
+    //  for (uint8 i = enter_line; i >= change_line; i--)
     //  {
     //      left_line_ptr = &left_line[i];
     //      *left_line_ptr = round(k_makeup * (i - b_makeup));
@@ -2340,12 +1992,12 @@ void enter_circle_ordinary_two_line(void)
 
         k_makeup = (float)(right_line[left_change_down] - left_line[left_change_up - 3]) / (float)(left_change_down - left_change_up + 3);
         b_makeup = (float)left_change_up - 3 - ((float)left_line[left_change_up - 3] / k_makeup);
-        for (int i = left_change_down; i >= left_change_up; i--)
+        for (uint8 i = left_change_down; i >= left_change_up; i--)
         {
             right_line_ptr = &right_line[i];
             *right_line_ptr = round(k_makeup * (i - b_makeup));
         }
-        for (int i = left_change_up - 1; i >= 0; i--)
+        for (uint8 i = left_change_up - 1; i >= 0; i--)
         {
             right_line_ptr = &right_line[i];
             *right_line_ptr = MISS;
@@ -2358,12 +2010,12 @@ void enter_circle_ordinary_two_line(void)
 
             k_makeup = (float)(left_line[right_change_down] - right_line[right_change_up - 3]) / (float)(right_change_down - left_change_up + 3);
             b_makeup = (float)right_change_up - 3 - ((float)right_line[right_change_up - 3] / k_makeup);
-            for (int i = enter_line; i >= change_line; i--)
+            for (uint8 i = enter_line; i >= change_line; i--)
             {
                 left_line_ptr = &left_line[i];
                 *left_line_ptr = round(k_makeup * (i - b_makeup));
             }
-            for (int i = left_change_up - 1; i >= 0; i--)
+            for (uint8 i = left_change_up - 1; i >= 0; i--)
             {
                 right_line_ptr = &right_line[i];
                 *right_line_ptr = MISS;
@@ -2546,7 +2198,7 @@ uint8 tell_mid_cross(void)
 
     //4.左右边界
     int left_count = 0, right_count = 0;
-    for (int i = 110; i > 10; i--)
+    for (uint8 i = 110; i > 10; i--)
     {
         if ((*(right_side_ptr + i) - *(right_line_ptr + i)) <= 5)
         {
@@ -2718,7 +2370,7 @@ void mid_cross_oridinary_two_line(void)
 //  left_line_ptr = &left_line[0];
 //  right_line_ptr = &right_line[0];
 //  ////printf("中十字补线进行\n");
-//  for (int i = i_start; i > i_end; i--)
+//  for (uint8 i = i_start; i > i_end; i--)
 //  {
 //      k_left = (float)(*(left_line_ptr + i) - *(left_line_ptr + i - 8)) / 8.0;
 //      k_right = (float)(*(right_line_ptr + i) - *(right_line_ptr + i - 8)) / 8.0;
@@ -2739,7 +2391,7 @@ void mid_cross_oridinary_two_line(void)
 //  if (change_line_left_down < change_line_right_down)
 //  {
 //      ////printf("test_2 !!!\n");
-//      for (int i = change_line_left_down - 3; i > i_end; i--)
+//      for (uint8 i = change_line_left_down - 3; i > i_end; i--)
 //      {
 //          k_left = (float)(*(left_line_ptr + i - 1) - *(left_line_ptr + i - 11)) / 10.0;
 //          k_right = (float)(*(right_line_ptr + i - 1) - *(right_line_ptr + i - 11)) / 10.0;
@@ -2761,7 +2413,7 @@ void mid_cross_oridinary_two_line(void)
 //  }
 //  else
 //  {
-//      for (int i = change_line_right_down - 3; i > i_end; i--)
+//      for (uint8 i = change_line_right_down - 3; i > i_end; i--)
 //      {
 //          if (i - i_end > 11)
 //          {
@@ -2796,14 +2448,14 @@ void mid_cross_oridinary_two_line(void)
 //  if(abs(k_left) > EPS)
 //  {
 //      b_left = (float)(change_line_left_up - 3) - ((float)*(left_line_ptr + change_line_left_up - 3) / k_left);
-//      for (int i = change_line_left_down; i >= change_line_left_up - 1; i--)
+//      for (uint8 i = change_line_left_down; i >= change_line_left_up - 1; i--)
 //      {
 //          *(left_line_ptr + i) = round(k_left * (i - b_left));
 //      }
 //  }
 //  else
 //  {
-//      for (int i = change_line_left_down; i >= change_line_left_up - 1; i--)
+//      for (uint8 i = change_line_left_down; i >= change_line_left_up - 1; i--)
 //      {
 //          *(left_line_ptr + i) = *(left_line_ptr + change_line_left_up - 3);
 //      }
@@ -2811,14 +2463,14 @@ void mid_cross_oridinary_two_line(void)
 //  if (abs(k_right) > EPS)
 //  {
 //      b_right = (float)(change_line_right_up - 3) - ((float)*(right_line_ptr + change_line_right_up - 3) / k_right);
-//      for (int i = change_line_right_down; i >= change_line_right_up - 1; i--)
+//      for (uint8 i = change_line_right_down; i >= change_line_right_up - 1; i--)
 //      {
 //          *(right_line_ptr + i) = round(k_right * (i - b_right));
 //      }
 //  }
 //  else
 //  {
-//      for (int i = change_line_right_down; i >= change_line_right_up - 1; i--)
+//      for (uint8 i = change_line_right_down; i >= change_line_right_up - 1; i--)
 //      {
 //          *(right_line_ptr + i) = *(right_line_ptr + change_line_right_up - 3);
 //      }
@@ -5037,7 +4689,7 @@ void find_mid(void)
     ////        mid_line_float_ptr->j = *(left_smooth_ptr + 111) + 30;
     ////    }
     ////}
-    //for (int i = 100; i > 10; i--)
+    //for (uint8 i = 100; i > 10; i--)
     //{
     //  mid_line_float_ptr = &mid_line_float[i];
     //  if (*(left_smooth_ptr + i) != MISS && *(right_smooth_ptr + i) != MISS)
@@ -5072,7 +4724,7 @@ void find_mid(void)
 
 
     //显示中线
-    for (int i = 0; i <= k; i++)
+    for (uint8 i = 0; i <= k; i++)
     {
         if (mid_line_float[i].i != MISS || mid_line_float[i].j != MISS)
         {
@@ -5161,25 +4813,25 @@ void find_mid(void)
 /////////////////////////////////////////////
 float define_PROSPECT(uint8 PROSPECT)
 {
-    uint8 i_start = NEAR_LINE, i_end = FAR_LINE;
-    int mid, R2;
-    int detle_x, detle_y;
+    //uint8 i_start = NEAR_LINE, i_end = FAR_LINE;
+    uint8 mid, R2;
+    uint8 detle_x, detle_y;
     float tanangle, arctanangle;
-    for (uint8 j = 10; j < 177; j++)
+//    for (uint8 j = 10; j < 177; j++)
+//    {
+//        for (uint8 i = 110; i > 1; i--)
+//        {
+//            R2 = (j - 93) * (j - 93) + (i - 119) * (i - 119);
+//            if (R2 >= PROSPECT * PROSPECT)
+//            {
+//                IMG[i][j] = purple;
+//                break;
+//            }
+//        }
+//    }
+    for (uint8 i = 106; i >= 20; i--)
     {
-        for (uint8 i = 110; i > 1; i--)
-        {
-            R2 = (j - 93) * (j - 93) + (i - 119) * (i - 119);
-            if (R2 >= PROSPECT * PROSPECT)
-            {
-                IMG[i][j] = purple;
-                break;
-            }
-        }
-    }
-    for (uint8 i = 106; i >= i_end; i--)
-    {
-        mid = last_mid_line[i];
+        mid = mid_line[i];
         R2 = (mid - 93) * (mid - 93) + (i - 119) * (i - 119);
 
         if (R2 >= PROSPECT * PROSPECT)
@@ -5204,10 +4856,10 @@ float define_PROSPECT(uint8 PROSPECT)
 ///////////////////////////////////////////
 void image_main()
 {
-    uint8 last_mid = 1;
-    uint8 i = 0;
-    uint8* last_mid_line_ptr = &last_mid_line[0];
-    MID_LINE_FLOAT* mid_line_float_ptr = &mid_line_float[0];
+    //uint8 last_mid = 1;
+    //uint8 i = 0;
+    //uint8* last_mid_line_ptr = &last_mid_line[0];
+    //MID_LINE_FLOAT* mid_line_float_ptr = &mid_line_float[0];
     my_init();
     search_white_range();
     find_all_connect();
@@ -5235,7 +4887,7 @@ void image_main()
 
     straight_oridinary_two_line();  //找直线赛道的左右边界
     //find_x_right_left();
-    /*for (int i = 119; i > 1; i--)
+    /*for (uint8 i = 119; i > 1; i--)
     {
 
         if (left_line[i] != MISS)
@@ -5366,7 +5018,7 @@ void image_main()
     }
     find_mid();
     /*else if(flag = )*/
-    /*for (int i = NEAR_LINE; i >= FAR_LINE; i--)
+    /*for (uint8 i = NEAR_LINE; i >= FAR_LINE; i--)
     {
         if (left[i] != MISS)
         {
@@ -5378,7 +5030,7 @@ void image_main()
             IMG[i][right[i]] = green;
         }
     }   */
-//    for (int i = NEAR_LINE; i >= FAR_LINE; i--)
+//    for (uint8 i = NEAR_LINE; i >= FAR_LINE; i--)
 //    {
 //        if (left_line[i] != MISS)
 //        {
@@ -5391,36 +5043,36 @@ void image_main()
 //        }
 //    }
 
-    uint8 break_mid = MISS;
-    for (uint8 k = 1; k <= 199; k++)
-    {
-        if ((int)mid_line_float[k].i == MISS)
-        {
-            i = (int)(mid_line_float_ptr + k - 1)->i;
-            break_mid = (int)(mid_line_float_ptr + k - 1)->j;
-            break;
-        }
-        last_mid_line[(int)(mid_line_float_ptr + k)->i] = (int)(mid_line_float_ptr + k)->j;
-        //////printf("i:%d  mid:%d\n", (int)mid_float[k].i, (int)mid_float[k].j);
-    }
-
-    for (i=i; i >= 1; i--)
-    {
-        *(last_mid_line_ptr+i) = break_mid;
-    }
-
-    for (i = 113; i >= 1; i--)
-    {
-        if (last_mid_line[i] != 0)
-        {
-            last_mid = *(last_mid_line_ptr + i);
-            break;
-        }
-    }
-    for (i=i; i <= 113; i++)
-    {
-        *(last_mid_line_ptr + i) = last_mid;
-    }
+//    uint8 break_mid = MISS;
+//    for (uint8 k = 1; k <= 199; k++)
+//    {
+//        if ((int)mid_line_float[k].i == MISS)
+//        {
+//            i = (int)(mid_line_float_ptr + k - 1)->i;
+//            break_mid = (int)(mid_line_float_ptr + k - 1)->j;
+//            break;
+//        }
+//        last_mid_line[(int)(mid_line_float_ptr + k)->i] = (int)(mid_line_float_ptr + k)->j;
+//        //////printf("i:%d  mid:%d\n", (int)mid_float[k].i, (int)mid_float[k].j);
+//    }
+//
+//    for (i=i; i >= 1; i--)
+//    {
+//        *(last_mid_line_ptr+i) = break_mid;
+//    }
+//
+//    for (i = 113; i >= 1; i--)
+//    {
+//        if (last_mid_line[i] != 0)
+//        {
+//            last_mid = *(last_mid_line_ptr + i);
+//            break;
+//        }
+//    }
+//    for (i=i; i <= 113; i++)
+//    {
+//        *(last_mid_line_ptr + i) = last_mid;
+//    }
 //    for (i=i; i >= 1; i--)
 //    {
 //        IMG[i][last_mid_line[i]] = green;
