@@ -23,7 +23,7 @@
 #include "SmartCar_EruDma.h"
 
 
-typedef struct
+typedef struct dma_link
 {
     Ifx_DMA_CH linked_list[8];//DMA链表
     IfxDma_Dma_Channel channel;              //DMA通道句柄
@@ -94,20 +94,20 @@ uint8 SmartCar_EruDma_Init(IfxDma_ChannelId dma_ch, uint8 *source_addr, uint8 *d
     {
         cfg.shadowControl               = IfxDma_ChannelShadow_none;
         cfg.operationMode               = IfxDma_ChannelOperationMode_single;
-        cfg.shadowAddress               = 0;
+        //cfg.shadowAddress               = 0;
     }
     else
     {
         cfg.shadowControl               = IfxDma_ChannelShadow_linkedList;
         cfg.operationMode               = IfxDma_ChannelOperationMode_continuous;
-        cfg.shadowAddress               = IFXCPU_GLB_ADDR_DSPR(IfxCpu_getCoreId(), (unsigned)&dma_link_list.linked_list[1]);
+        //cfg.shadowAddress               = IFXCPU_GLB_ADDR_DSPR(IfxCpu_getCoreId(), (unsigned)&dma_link_list.linked_list[1]);
     }
 
     cfg.requestMode                     = IfxDma_ChannelRequestMode_oneTransferPerRequest;
     cfg.moveSize                        = IfxDma_ChannelMoveSize_8bit;
     cfg.busPriority                     = IfxDma_ChannelBusPriority_high;
 
-    cfg.sourceAddress                   = IFXCPU_GLB_ADDR_DSPR(IfxCpu_getCoreId(), source_addr);
+    //cfg.sourceAddress                   = IFXCPU_GLB_ADDR_DSPR(IfxCpu_getCoreId(), source_addr);
     cfg.sourceAddressCircularRange      = IfxDma_ChannelIncrementCircular_none;
     cfg.sourceCircularBufferEnabled     = TRUE;
 
@@ -121,13 +121,32 @@ uint8 SmartCar_EruDma_Init(IfxDma_ChannelId dma_ch, uint8 *source_addr, uint8 *d
 
 
 
-    cfg.destinationAddress              = IFXCPU_GLB_ADDR_DSPR(IfxCpu_getCoreId(), destination_addr);
+    //cfg.destinationAddress              = IFXCPU_GLB_ADDR_DSPR(IfxCpu_getCoreId(), destination_addr);
 
     cfg.transferCount                   = single_channel_dma_count;
 
-    IfxDma_Dma_initChannel(&dmaChn, &cfg);
+    //IfxDma_Dma_initChannel(&dmaChn, &cfg);
 
-    if(1 < list_num)
+    for(int i=0; i<list_num; ++i)
+    {
+        cfg.sourceAddress = IFXCPU_GLB_ADDR_DSPR(IfxCpu_getCoreId(),source_addr);
+        cfg.destinationAddress = IFXCPU_GLB_ADDR_DSPR(IfxCpu_getCoreId(), destination_addr + i*single_channel_dma_count);
+        cfg.shadowAddress = IFXCPU_GLB_ADDR_DSPR(IfxCpu_getCoreId(), (uint32)&dma_link_list.linked_list[(i + 1) % list_num]);
+        if(i == 0)
+        {
+            IfxDma_Dma_initChannel(&dmaChn, &cfg);
+        }
+        IfxDma_Dma_initLinkedListEntry((void *)&dma_link_list.linked_list[i], &cfg);
+        if(i == 0)
+        {
+            dma_link_list.linked_list[i].CHCSR.B.SIT = 1;
+        }
+        else
+        {
+            dma_link_list.linked_list[i].CHCSR.B.SCH = 1;
+        }
+    }
+    /*if(1 < list_num)
     {
         i = 0;
         while(i < list_num)
@@ -140,15 +159,22 @@ uint8 SmartCar_EruDma_Init(IfxDma_ChannelId dma_ch, uint8 *source_addr, uint8 *d
             IfxDma_Dma_initLinkedListEntry((void *)&dma_link_list.linked_list[i], &cfg);
             i++;
         }
-    }
+    }*/
 
 
-    IfxDma_Dma_getSrcPointer(&dma_link_list.channel)->B.CLRR = 1;
+    IfxDma_Dma_getSrcPointer(&dmaChn)->B.CLRR = 1;
 
     return list_num;
 }
 
+void mysbfunction(void)
+{
+    //IfxDma_Dma_getSrcPointer(&dma_link_list.channel)->B.CLRR = 1;
+    IfxDma_resetChannel(dma_link_list.channel.dma,dma_link_list.channel.channelId);
+//    link_list_num = SmartCar_EruDma_Init(MT9V034_DMA_CH, GET_PORT_IN_ADDR(0*32), camera_buffer_addr, MT9V034_PCLK_PIN, FALLING, MT9V034_W*MT9V034_H);//引脚P00_0
 
+    //
+}
 //-------------------------------------------------------------------------------------------------------------------
 //  @brief      dma停止
 //  @param      dma_ch              选择DMA通道
@@ -171,4 +197,3 @@ void Dma_Start(IfxDma_ChannelId dma_ch)
 {
     IfxDma_enableChannelTransaction(&MODULE_DMA, dma_ch);
 }
-
