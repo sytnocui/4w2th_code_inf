@@ -56,22 +56,30 @@ void var_init(void)
     motor_kp = 1000;
     motor_ki = 500;
 
-    speed_dream = 0;
-    speed_dream_str = 1;
-    speed_dream_turn = 1;
+    speed_dream = 1;
+    speed_dream_str = 1.4;
+    speed_dream_turn = 1.4;
 
     servo_garage_left = 750;
     servo_garage_right = 850;
 
     motor_output = 0;
 
-//    imu_angle_drift = 0.535;
+    imu_angle_drift = 0.535;
     imu_dt = 0.05;
 
     car_state = car_stop;
 
+    prospect = 40;
+    near_prospect = 27;
+    far_prospect = 27;
+
+    threshold = 115;//ãÐÖµ
+
     car_direction = 1;
 }
+
+
 
 void ctrl_init(void)
 {
