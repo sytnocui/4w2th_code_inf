@@ -77,6 +77,8 @@ void var_init(void)
     threshold = 115;//ãÐÖµ
 
     car_direction = 1;
+
+    car_branch_direction = 1;
 }
 
 

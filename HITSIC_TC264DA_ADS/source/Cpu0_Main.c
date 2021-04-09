@@ -67,7 +67,7 @@ int core0_main(void)
     SmartCar_Gtm_Pwm_Init(&IfxGtm_ATOM0_6_TOUT6_P02_6_OUT,200,0);
     SmartCar_Gtm_Pwm_Init(&IfxGtm_ATOM0_7_TOUT7_P02_7_OUT,200,0);
     //串口初始化
-//    SmartCar_Uart_Init(IfxAsclin0_TX_P14_0_OUT,IfxAsclin0_RXA_P14_1_IN,1152000,0);
+    SmartCar_Uart_Init(IfxAsclin0_TX_P14_0_OUT,IfxAsclin0_RXA_P14_1_IN,921600,0);
     //外部中断初始化
 //    Eru_Init(CH0_P15_4,RISING);
 //    Eru_Init(CH4_P15_5,FALLING);
@@ -102,8 +102,10 @@ int core0_main(void)
 
     while(TRUE)
     {
-        SmartCar_OLED_Printf6x8(100,1,"%d",threshold);
-        SmartCar_OLED_Printf6x8(100,2,"%d",enco_get);
+        SmartCar_OLED_Printf6x8(100,0,"%d",threshold);
+        SmartCar_OLED_Printf6x8(100,1,"%d",car_state);
+        SmartCar_OLED_Printf6x8(100,2,"%d",car_state_pre);
+        SmartCar_OLED_Printf6x8(100,3,"%d",in_circle_flag);
 
         //摄像头回调
         callback_temp();//阻塞
@@ -112,7 +114,7 @@ int core0_main(void)
         //oled显示图像
         oled_show_img();
         //wifi传数据
-//        wifi_upload();
+        wifi_upload();
         //传图
 //        img_upload();
     }
@@ -125,7 +127,7 @@ void callback_temp(void)
     if(car_stop == car_state)
     {
         speed_dream = 0;
-        //return;
+        return;
     }
     map();//逆透视
     image_main();
