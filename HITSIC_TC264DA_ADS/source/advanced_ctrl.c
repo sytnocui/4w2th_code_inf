@@ -22,6 +22,7 @@ int history_done[car_stop+1] = {0};
 
 void my_start(void)
 {
+    SmartCar_OLED_Printf6x8(0, 2,"ready");
     Delay_ms(STM0,500);
     car_time = 0;//Í£³µ¼ÆÊ±
     Garage_Quit();
@@ -170,6 +171,7 @@ void Garage_Enter(void)
 {
     car_state = car_garage;
     imu_clear();
+    speed_dream = speed_dream_turn;
     while(imu_angle_z < 90 && imu_angle_z>-90);
     car_state = car_stop;
 }
@@ -178,6 +180,7 @@ void Garage_Quit(void)
 {
     car_state = car_garage;
     imu_clear();
+    speed_dream = speed_dream_turn;
     while(imu_angle_z < 80 && imu_angle_z>-80);
     car_state = car_straight;
 }
