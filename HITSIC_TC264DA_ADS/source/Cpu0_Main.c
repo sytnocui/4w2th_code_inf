@@ -90,7 +90,7 @@ int core0_main(void)
     Pit_Init_ms(CCU6_0,PIT_CH0,5);
     Pit_Init_ms(CCU6_0,PIT_CH1,20);
     Pit_Init_ms(CCU6_1,PIT_CH0,50);
-    Pit_Init_ms(CCU6_1,PIT_CH1,3000);
+    Pit_Init_ms(CCU6_1,PIT_CH1,1000);
 
     //ADC≥ı ºªØ
 //    ADC_Init(ADC_1,ADC1_CH4_A20);

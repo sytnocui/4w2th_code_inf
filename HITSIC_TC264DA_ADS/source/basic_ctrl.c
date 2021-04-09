@@ -60,7 +60,7 @@ void var_init(void)
     speed_dream_str = 1.2;
     speed_dream_turn = 1.2;
 
-    servo_garage_left = 750;
+    servo_garage_left = 660;
     servo_garage_right = 850;
 
     motor_output = 0;

@@ -18,8 +18,8 @@
 #include "Cpu0_Main.h"
 
 #define SERVO_RIGHT     890
-#define SERVO_LEFT      700
-#define SERVO_MID       795
+#define SERVO_LEFT      630
+#define SERVO_MID       750
 
 /*电机PID参数*/
 extern float motor_kp ;    //速度环p
