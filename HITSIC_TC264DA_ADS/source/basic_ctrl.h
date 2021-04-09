@@ -64,6 +64,7 @@ void var_init(void);//数值初始化
 void motor_ctrl(void);//电机控制
 
 void servo_ctrl(void);//舵机输出占空比
+void servo_get_err(void);
 void servo_pid_calculate(void);//舵机PID计算
 void motor_pid_calculate(void);//电机pid计算
 

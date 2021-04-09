@@ -127,14 +127,25 @@ void servo_ctrl(void)
     }
 
     /*正式计算*/
+    servo_get_err();
     servo_pid_calculate();
     SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM1_1_TOUT31_P33_9_OUT,(uint32)servo_output);
 }
 
+void servo_get_err(void)
+{
+    if(car_circle_out == car_state)
+    {
+        servo_err = -servo_angle_circle;
+    }
+    else
+    {
+        servo_err = -img_angle;
+    }
+}
+
 void servo_pid_calculate(void)
 {
-    img_var = mid_line[prospect];//前瞻处中线位置
-    servo_err = (float)(img_var-94);
     servo_pid_output = servo_kp * servo_err + servo_kd * (servo_err - servo_err_pre);
     servo_output = SERVO_MID + servo_pid_output;
     servo_err_pre = servo_err;
