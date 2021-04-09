@@ -31,37 +31,42 @@ typedef enum{
     car_garage,//车库
 }CAR_STATE;
 
+extern int in_circle_flag;
+
 extern int car_state;
 extern int car_state_pre;
 extern int car_direction;
-extern int in_circle_flag;
+
+extern int car_branch_direction;
+
 extern float servo_angle_circle;
 
-extern uint32 servo_garage_left;
-extern uint32 servo_garage_right;
+extern float servo_garage_left;
+extern float servo_garage_right;
 
-//时间相关
 extern int car_time;
 extern int circle_time;
-
-void startline_ctrl(void);//斑马线延时停车
-void State_Update(void);//状态机更新
-void Ctrl_Update(void);//选择目标速度
-void my_start(void);//发车函数
-void my_stop(void);//停车函数
-void Garage_Enter(void);
-void Garage_Quit(void);
-void OutTract_Protect(void);
+extern int cross_time;
+extern int branch_time;
+extern int zebra_time;
 
 void circle_in_ctrl(void);
 void circle_out_ctrl(void);
 
+void time_ctrl(void);//斑马线延时停车
+void State_Update(void);//状态机更新
+void Ctrl_Update();//选择目标速度
+void my_start(void);//发车函数
+void my_stop(void);//停车函数（手动停车）
+void Garage_Enter(void);
+void Garage_Quit(void);
+void OutTract_Protect(void);
+
 /*HISTORY相关*/
-boolean History_check(int type);
-void History_Update(int type);
+void History_Clean(void);
+void History_Update(void);
 
 extern int history_done[];
-extern int history_todo[];
 
 
 #endif /* SOURCE_ADVANCED_CTRL_H_ */

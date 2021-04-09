@@ -87,6 +87,7 @@ int core0_main(void)
 //    GPIO_Init(P33,12,PULLUP,0);
 //    GPIO_Init(P33,13,PULLUP,0);
     //定时中断初始化
+
     Pit_Init_ms(CCU6_0,PIT_CH0,5);
     Pit_Init_ms(CCU6_0,PIT_CH1,20);
 //    Pit_Init_ms(CCU6_1,PIT_CH0,10);
@@ -97,7 +98,6 @@ int core0_main(void)
 //    ADC_Init(ADC_1,ADC1_CH5_A21);
 
     IfxCpu_enableInterrupts();
-
     //代码初始化
     ctrl_init();
 

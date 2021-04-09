@@ -12,33 +12,25 @@ int car_state = car_stop;
 int car_state_pre = car_stop;
 int car_direction = 0;
 int car_branch_direction = 0;
-
+int in_circle_flag = 0;
 float servo_angle_circle= 0;
 
-uint32 servo_garage_left= SERVO_MID ;
-uint32 servo_garage_right= SERVO_MID ;
+float servo_garage_left= SERVO_MID ;
+float servo_garage_right= SERVO_MID ;
 
 int history_done[car_stop+1] = {0};
-int history_todo[car_stop+1] = {0};
-int in_circle_flag = 0;
-//时间相关
-int car_time =0;
-int circle_time = 0;
 
 void my_start(void)
 {
-    SmartCar_OLED_Printf6x8(0, 2,"ready");
-    Delay_ms(STM0, 1000);
-    startline_time = 0;//停车计时
-//    Garage_Quit();
-    car_state = car_straight;
+    Delay_ms(STM0,500);
+    car_time = 0;//停车计时
+    Garage_Quit();
 }
 
 void my_stop(void)
 {
     SmartCar_OLED_Printf6x8(0, 2,"stop ");
-    Delay_ms(STM0,1000);//消抖
-//    Garage_Enter();
+    Delay_ms(STM0,500);
     car_state = car_stop;
 }
 
@@ -62,7 +54,7 @@ void Ctrl_Update()
     }
     else if(car_circle_out == car_state)
     {
-        circle_out_ctrl();
+//        circle_out_ctrl();
     }
     /*正式处理*/
     else if(car_rightTurn==car_state || car_leftTurn==car_state)
@@ -77,9 +69,17 @@ void Ctrl_Update()
     {
         speed_dream = speed_dream_turn;
     }
+    else if(car_branch == car_state)
+    {
+        speed_dream = speed_dream_turn;
+    }
     else if(car_zebra == car_state)
     {
-        Garage_Enter();
+        car_branch_direction = 2;
+        if(history_done[car_zebra]>=2)
+        {
+            Garage_Enter();
+        }
     }
 }
 
@@ -96,8 +96,10 @@ void State_Update(void)
     //赛道元素判断
     else if(car_circle_out ==car_state)//如果在出环岛，而且陀螺仪没计满，就直接跳出，计满了就换成直道
     {
-        if(imu_angle_z >=70 ||imu_angle_z <=-70)
+        if(imu_angle_z >=300 ||imu_angle_z <=-300)
         {
+            beep_close();
+            in_circle_flag = 0;
             car_state = car_straight;
         }
     }
@@ -121,7 +123,7 @@ void State_Update(void)
     {
         car_state=car_cross;
     }
-    else if(img_trident == img_state)
+    else if(img_real_trident == img_state)
     {
         car_state=car_branch;
     }
@@ -134,6 +136,7 @@ void State_Update(void)
     {
         car_state=car_straight;
     }
+    History_Update();
 //    else if(k_mid > k_str && k_mid<2.5)
 //    {
 //        car_state=rightTurn;
@@ -148,31 +151,34 @@ void State_Update(void)
 //    }
 }
 
+//计时    用于history更新，保证要素判断不重复
+int car_time =0;
+int circle_time = 0;
+int cross_time = 0;
+int branch_time = 0;
+int zebra_time = 0;
 void time_ctrl(void)
 {
     car_time++;
     circle_time++;
+    cross_time++;
+    branch_time++;
+    zebra_time++;
 }
 
 void Garage_Enter(void)
 {
     car_state = car_garage;
-//    beep_Open();
     imu_clear();
-    speed_dream = speed_dream_turn;//现在状态机更新在while里，必须在这更新目标速度
     while(imu_angle_z < 90 && imu_angle_z>-90);
-//    beep_Close();
     car_state = car_stop;
 }
 
 void Garage_Quit(void)
 {
     car_state = car_garage;
-//    beep_open();
     imu_clear();
-    speed_dream = speed_dream_turn;
     while(imu_angle_z < 80 && imu_angle_z>-80);
-//    beep_close();
     car_state = car_straight;
 }
 
@@ -189,44 +195,71 @@ void circle_in_ctrl(void)
     circle_time = 0;
     beep_open();
     imu_clear();
+    in_circle_flag = 1;
 }
 
 void circle_out_ctrl(void)
 {
     beep_open();
-    imu_clear();
-    while(imu_angle_z < 150 && imu_angle_z>-150);
-    beep_close();
-    car_state = car_straight;
 }
 
 /*--------------------------history相关函数-------------------------------*/
-boolean History_Check(int type)
+void History_Clean(void)
 {
-    if(history_done[type] < history_todo[type])
+    for(uint8 i=0;i<=car_garage;i++)
     {
-        return TRUE;
-    }
-    else if(history_done[type] == history_todo[type])
-    {
-        return FALSE;
-    }
-    else
-    {
-        return FALSE;
-        //添加错误函数
+        history_done[i]=0;
     }
 }
 
-void History_Update(int type)
+//十分sb的if else写法，目前够用
+void History_Update(void)
 {
     if(car_state != car_state_pre)
     {
-        history_done[type]++;
-        car_state_pre = car_state;
+        if(car_cross == car_state)
+        {
+            if(cross_time >=1)
+            {
+                cross_time = 0;
+                history_done[car_state]++;
+                car_state_pre = car_state;
+            }
+        }
+//        else if(circle_in == car_state)
+//        {
+//            if(circle_time >=1)
+//            {
+//                circle_time = 0;
+//                history_done[car_state]++;
+//                car_state_pre = car_state;
+//            }
+//        }
+        else if(car_branch == car_state)
+        {
+            if(branch_time >=1)
+            {
+                branch_time = 0;
+                history_done[car_state]++;
+                car_state_pre = car_state;
+            }
+        }
+        else if(car_zebra == car_state)
+        {
+            if(zebra_time >=1)
+            {
+                zebra_time = 0;
+                history_done[car_state]++;
+                car_state_pre = car_state;
+            }
+        }
+        else
+        {
+            history_done[car_state]++;
+            car_state_pre = car_state;
+        }
     }
 }
-
 
 
 
