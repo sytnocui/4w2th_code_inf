@@ -74,6 +74,4 @@ void Encoder_Distance_Clear(void);
 void imu_clear(void);
 void imu_update(void);
 
-
-
 #endif /* SOURCE_BASIC_CTRL_H_ */
