@@ -1,0 +1,7 @@
+﻿##ignore this file##
+*.d
+HITSIC_TC264DA_ADS/Debug
+*.d
+*.mk
+HITSIC_TC264DA_ADS/.settings
+.metadata
