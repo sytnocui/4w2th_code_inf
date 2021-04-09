@@ -87,7 +87,6 @@ void ctrl_init(void)
     var_init();
 }
 
-//TODO:float-->uint32,换通道
 void motor_ctrl(void)
 {
     Encoder_Update();//更新编码器返回值，计算实际速度
@@ -106,8 +105,6 @@ void motor_ctrl(void)
     }
 }
 
-//TODO:探讨能不能从定时器移到回调函数里
-//TODO:float-->uint32,换通道
 void servo_ctrl(void)
 {
     /*特殊状态，不需要计算，赋值之后直接跳出*/
