@@ -57,8 +57,8 @@ void var_init(void)
     motor_ki = 500;
 
     speed_dream = 1;
-    speed_dream_str = 1.4;
-    speed_dream_turn = 1.4;
+    speed_dream_str = 1.2;
+    speed_dream_turn = 1.2;
 
     servo_garage_left = 750;
     servo_garage_right = 850;
@@ -71,8 +71,8 @@ void var_init(void)
     car_state = car_stop;
 
     prospect = 40;
-    near_prospect = 27;
-    far_prospect = 27;
+    near_prospect = 25;
+    far_prospect = 25;
 
     threshold = 115;//ãÐÖµ
 

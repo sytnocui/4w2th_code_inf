@@ -49,7 +49,7 @@ int core0_main(void)
 
     //总钻风初始化
     SmartCar_OLED_Fill(0);
-    SmartCar_OLED_Printf6x8(0, 0,"do");
+    SmartCar_OLED_Printf6x8(0, 0,"over");
     SmartCar_MT9V034_Init();
     SmartCar_OLED_Printf6x8(0, 1,"over");
     //mpu初始化
@@ -57,7 +57,6 @@ int core0_main(void)
     SmartCar_OLED_Printf6x8(0, 2,"over");
     SmartCar_MPU_Init2(this_mpu);
     SmartCar_OLED_Printf6x8(0, 3,"over");
-    SmartCar_GyroOffset(this_mpu);
 
     //编码器初始化
     SmartCar_Encoder_Init(GPT12_T5 , IfxGpt120_T5INB_P10_3_IN , IfxGpt120_T5EUDB_P10_1_IN);
@@ -90,7 +89,7 @@ int core0_main(void)
 
     Pit_Init_ms(CCU6_0,PIT_CH0,5);
     Pit_Init_ms(CCU6_0,PIT_CH1,20);
-//    Pit_Init_ms(CCU6_1,PIT_CH0,10);
+    Pit_Init_ms(CCU6_1,PIT_CH0,50);
     Pit_Init_ms(CCU6_1,PIT_CH1,3000);
 
     //ADC初始化
