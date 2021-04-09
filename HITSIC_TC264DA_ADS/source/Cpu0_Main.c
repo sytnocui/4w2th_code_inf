@@ -60,7 +60,7 @@ int core0_main(void)
     SmartCar_GyroOffset(this_mpu);
 
     //编码器初始化
-//    SmartCar_Encoder_Init(GPT12_T5 , IfxGpt120_T5INB_P10_3_IN , IfxGpt120_T5EUDB_P10_1_IN);
+    SmartCar_Encoder_Init(GPT12_T5 , IfxGpt120_T5INB_P10_3_IN , IfxGpt120_T5EUDB_P10_1_IN);
 
     /*初始化单片机功能*/
     //PWM初始化
@@ -104,6 +104,7 @@ int core0_main(void)
     while(TRUE)
     {
         SmartCar_OLED_Printf6x8(100,1,"%d",threshold);
+        SmartCar_OLED_Printf6x8(100,2,"%d",enco_get);
 
         //摄像头回调
         callback_temp();//阻塞

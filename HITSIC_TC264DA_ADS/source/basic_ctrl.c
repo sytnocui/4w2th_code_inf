@@ -82,10 +82,9 @@ void ctrl_init(void)
 //TODO:float-->uint32,换通道
 void motor_ctrl(void)
 {
-//    Encoder_Update();//更新编码器返回值，计算实际速度
-//    motor_pid_calculate();//更新电机速度
+    Encoder_Update();//更新编码器返回值，计算实际速度
+    motor_pid_calculate();//更新电机速度
 
-    motor_output = 1000 * speed_dream;
     /*输出状态判断：是否启动 与 正反转*/
     if(motor_output >= 0)//后轮正转
     {
