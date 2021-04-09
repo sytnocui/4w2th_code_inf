@@ -122,7 +122,6 @@ void callback_temp(void)
 {
     while(!mt9v034_finish_flag);
     mt9v034_finish_flag = 0;
-
     if(car_stop == car_state)
     {
         speed_dream = 0;
