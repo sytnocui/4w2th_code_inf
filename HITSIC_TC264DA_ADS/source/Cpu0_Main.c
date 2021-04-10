@@ -67,7 +67,7 @@ int core0_main(void)
     SmartCar_Gtm_Pwm_Init(&IfxGtm_ATOM0_6_TOUT6_P02_6_OUT,200,0);
     SmartCar_Gtm_Pwm_Init(&IfxGtm_ATOM0_7_TOUT7_P02_7_OUT,200,0);
     //串口初始化
-    SmartCar_Uart_Init(IfxAsclin0_TX_P14_0_OUT,IfxAsclin0_RXA_P14_1_IN,921600,0);
+//    SmartCar_Uart_Init(IfxAsclin0_TX_P14_0_OUT,IfxAsclin0_RXA_P14_1_IN,921600,0);
     //外部中断初始化
 //    Eru_Init(CH0_P15_4,RISING);
 //    Eru_Init(CH4_P15_5,FALLING);
@@ -104,9 +104,10 @@ int core0_main(void)
     {
         SmartCar_OLED_Printf6x8(100,0,"%d",threshold);
         SmartCar_OLED_Printf6x8(100,1,"%d",car_state);
-        SmartCar_OLED_Printf6x8(100,2,"%d",car_state_pre);
+        SmartCar_OLED_Printf6x8(100,2,"%d",img_state);
         SmartCar_OLED_Printf6x8(100,3,"%d",in_circle_flag);
-
+        SmartCar_OLED_Printf6x8(100,4,"%d",car_branch_direction);
+        SmartCar_OLED_Printf6x8(100,5,"%d",circle_time);
         //摄像头回调
         callback_temp();//阻塞
         //按键检测
@@ -114,7 +115,7 @@ int core0_main(void)
         //oled显示图像
         oled_show_img();
         //wifi传数据
-        wifi_upload();
+//        wifi_upload();
         //传图
 //        img_upload();
     }
@@ -174,7 +175,6 @@ void key_temp(void)
             }
             Delay_ms(STM0,20);
         }
-
     }
 }
 
@@ -233,6 +233,7 @@ IFX_INTERRUPT(cc61_pit_ch1_isr, 0, CCU6_1_CH1_ISR_PRIORITY)//目前没用
     enableInterrupts();//开启中断嵌套
     PIT_CLEAR_FLAG(CCU6_1, PIT_CH1);
     GPIO_Toggle(P21,4);
+    time_ctrl();
 }
 
 void beep_open(void)

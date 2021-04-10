@@ -557,236 +557,17 @@ void map(void)
     }
 }
 
-////////////////////////////////////////////
-//鍔熻兘锛氬ぇ娲ユ硶姹傞槇鍊�
-//杈撳叆锛氱伆搴﹀浘鐗�
-//杈撳嚭锛氭墍姹傞槇鍊�
-//澶囨敞锛�
-///////////////////////////////////////////
-
-//int  W_YZ_2 = 95, N_YZ_2 = 98, LOW_SIDE = 93, YZ_BOT = 30, YZ_TOP = 254,MIDTOP = 98,R_SIDE = 93;//W鏄乏涓婅锛孨鏄簳閮ㄥ姞涓婇儴涓棿
-//int gray_sum[256] = { 0 }, threshold_original = 0, threshold_original_pre = 0, threshold_n, threshold_w, threshold_l, threshold_midtop, threshold_right;
-//float pixepro[256];
-//int thre1() // 灏濊瘯鏈�澶ф渶灏忓悎鎴�
-//{
-//    //澶ф触娉�
-//    //uint8 abandon = 39;
-//    threshold_original_pre = threshold_original;
-//    int i, j;
-//    int* t_sum = NULL;
-//    uint8* left_side_ptr = NULL;
-//    uint8* right_side_ptr = NULL;
-//    int count = 0;
-//
-//    float* pixepro_ptr = &pixepro[0];
-//
-//
-//
-//    t_sum = &gray_sum[0];
-//
-//    //鍒濆鍖杇ray_sum[]杩欎釜鏁扮粍     //01.15鐩存帴鍦ㄥ０鏄庣殑鏃跺�欒祴鍊间负0
-//    for (i = 0; i <= 255; i++)
-//    {
-//        (*t_sum) = 0;
-//        t_sum++;
-//    }
-//
-//    //缁檊ray_sum[]璧嬪�硷紝浠ｈ〃鐏板害涓篴鐨勫儚绱犲嚭鐜扮殑娆℃暟
-//    uint8* map = NULL;
-//    t_sum = &gray_sum[0];
-//    for (i = 1; i < 120; i++)
-//    {
-//        left_side_ptr = &left_side[i];
-//        right_side_ptr = &right_side[i];
-//        map = &img_original[i][0];
-//        for (j = *left_side_ptr; j <= *right_side_ptr; j++)
-//        {
-//            (*(t_sum + (*map)))++;
-//            map++;
-//            count++;
-//        }
-//    }
-//
-//    //褰掍竴鍖�
-//    for (i = 0; i <= 255; i++)
-//        *(pixepro_ptr+i) = (float)gray_sum[i] / count;
-//
-//    float u0, u1, w0, w1, u0tmp, u1tmp, deltaTmp, deltamax = 0;
-//
-//
-//
-//    w0 = w1 = u0tmp = u1tmp = u0 = u1 = deltaTmp = 0;
-//
-//    w0 += *(pixepro_ptr + 0);
-//    u0tmp += *(pixepro_ptr + 0) * j  ;
-//
-//    for (j = 80; j <= 255; j++)
-//    {
-//        w1 += *(pixepro_ptr + j);
-//        u1tmp += *(pixepro_ptr + j) * j;
-//    }
-//    u0 = u0tmp / w0;
-//    u1 = u1tmp / w1;
-//    deltaTmp = (float)(w0 * w1 * pow((u0 - u1), 2));
-//    /*if (deltaTmp > deltamax)
-//    {
-//        deltamax = deltaTmp;
-//        threshold_original = 0;
-//    }*/
-//
-//    //i >= 1
-//    for (i = 80; i <= 255; i++)
-//    {
-//        //鑳屾櫙閮ㄥ垎
-//        w0 += *(pixepro_ptr + i);
-//        u0tmp += *(pixepro_ptr + i) * i;
-//
-//        //鍓嶆櫙閮ㄥ垎
-//        w1 -= *(pixepro_ptr + i);
-//        u1tmp -= *(pixepro_ptr + i) * i;
-//
-//        u0 = u0tmp / w0;
-//        u1 = u1tmp / w1;
-//        deltaTmp = (float)(w0 * w1 * (u0 - u1) * (u0 - u1));
-//        if (deltaTmp > deltamax)
-//        {
-//            deltamax = deltaTmp;
-//            threshold_original = i;
-//        }
-//    }
-//    threshold_original = 1 * threshold_original + 0;
-//    ////pintf("澶ф触娉曢槇鍊硷細%d\n", threshold_original);
-//    threshold_n = (int)(threshold_original * (float)N_YZ_2 / 100);
-//    threshold_w = (int)(threshold_original * (float)W_YZ_2 / 100);
-//    threshold_l = (int)(threshold_original * (float)LOW_SIDE / 100);
-//    threshold_midtop = (int)(threshold_original * (float)MIDTOP / 100);
-//    threshold_right = (int)(threshold_original * (float)R_SIDE / 100);
-//    if (threshold_n > YZ_TOP)   threshold_n = YZ_TOP;
-//    if (threshold_n < YZ_BOT)   threshold_n = YZ_BOT;
-//    if (threshold_w > YZ_TOP)   threshold_w = YZ_TOP;
-//    if (threshold_w < YZ_BOT)   threshold_w = YZ_BOT;
-//    if (threshold_original < 115) threshold_original = 115;
-//    ////pintf("threshold_n=%d\n", threshold_n);
-//    ////pintf("threshold_w=%d\n", threshold_w);
-//    ////pintf("threshold_l=%d\n", threshold_l);
-//    ////pintf("threshold_original_pre=%d\n", threshold_original_pre);
-//    //pintf("\n");
-//
-//    /*return    threshold_original;*/
-//
-//    //鍒嗗尯鍩熷彇闃堝��
-//    map = NULL;
-//    uint8* my_map = NULL;
-//    for (int i = 0; i < 119; i++)
-//    {
-//        map = &img_original[i][0];//image_Buffer_0
-//        my_map = &IMG[i][0];//img_original
-//        left_side_ptr = &left_side[i];
-//        right_side_ptr = &right_side[i];
-//        for (int j = 0; j <= 187; j++)
-//        {
-//
-//            /*(*my_map)= (*map);*/
-//
-//            //if (i <= 35 && j <= 40 )//&&  j >= 15 || j <= 172 //宸︿笂瑙掑彸涓婅  //2鏈�16鏃ュ彇娑坕 <= 35 && (j <= 40 || j >= 148)
-//            //{
-//            //  if ((*map) > threshold_w)
-//            //      (*my_map) = 255;
-//            //  else (*my_map) = 0;
-//            //}
-//            //else if (i > 35 && j <= 40)       //宸︿晶鍙充晶  i > 35 && (j <= 40 || j >= 148)
-//            //{
-//            //  if ((*map) > threshold_l)
-//            //      (*my_map) = 255;
-//            //  else (*my_map) = 0;
-//            //}
-//            //else if(i<=35 && (j > 40 && j < 165))     //涓婃柟涓棿
-//            //{
-//            //  if ((*map) > threshold_midtop)
-//            //      (*my_map) = 255;
-//            //  else (*my_map) = 0;
-//            //}
-//            //else if (i > 90 &&j >= 155)       //youxiajiao
-//            //{
-//            //  if ((*map) > (threshold_right - (j - 164) * 0.25))
-//            //      (*my_map) = 255;
-//            //  else (*my_map) = 0;
-//            //}
-//            //else if ( j >= 165)
-//            //{
-//            //  if ((*map) > (threshold_right - (j-164) *0.25))
-//            //      (*my_map) = 255;
-//            //  else (*my_map) = 0;
-//            //}
-//            //else      //涓棿
-//            //{
-//            //  if ((*map) > threshold_n)
-//            //      (*my_map) = 255;
-//            //  else (*my_map) = 0;
-//            //}
-//            if ((*map) > threshold_original-10)
-//                (*my_map) = 255;
-//            else (*my_map) = 0;
-//            map++;
-//            my_map++;
-//
-//        }
-//    }
-//    ////pintf("99 99 %d\n", img_original[99][99]);
-//    ////pintf("%d\n", threshold_original);
-//    /*for (i = 1; i < 120; i++)
-//    {
-//        for (j = 0; j < 188; j++)
-//        {
-//            IMG[i][left_side[i]] = red;
-//            IMG[i][right_side[i]] = red;
-//        }
-//    }*/
-//    return 0;
-//}
-
-////////////////////////////////////////////
-//鍔熻兘锛氫紶缁熶簩鍊煎寲
-//杈撳叆锛氱伆搴﹀浘鐗�
-//杈撳嚭锛氫簩鍊煎寲鍥剧墖
-//澶囨敞锛�
-///////////////////////////////////////////
-void THRE(int threshold)
-{
-    if (0 == threshold);
-    else {
-        uint8* map;
-        uint8* my_map;
-        for (int i = 0; i < 120; i++)
-        {
-            //my_map = &img_dis[i][0];
-//            map = &img_original[i][0];//image_Buffer_0
-            my_map = &IMG[i][0];//img_original
-            for (int j = 0; j < 188; j++)
-            {
-                if ((*map) > threshold)
-                    (*my_map) = 255;
-                else (*my_map) = 0;
-                map++;
-                my_map++;
-
-            }
-
-        }   //鏆傛椂鍙栨秷鏅�氫簩鍊煎寲锛屼娇鐢ㄥ垎鍖哄煙鐨勪簩鍊煎寲
-    }
-}
-
 //////////////////////////////////////////
-//鍔熻兘锛氭洸鐜囧垽鏂�
-//杈撳叆锛氫笁涓偣鐨勬í绾靛骇鏍�
-//杈撳嚭锛歠loat鍨嬫洸鐜囧��
-//澶囨敞锛�
+//功能：曲率判断
+//输入：三个点的横纵座标
+//输出：float型曲率值
+//备注：
 /////////////////////////////////////////
 double process_curvity(uint8 x1, uint8 x2, uint8 y1, uint8 y2, uint8 x3, uint8 y3)
 {
     double k;
     int S_of_ABC = ((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)) / 2;
-    //闈㈢Н鐨勭鍙疯〃绀烘柟鍚�
+    //面积的符号表示方向
     uint8 q1 = (uint8)((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     double AB = sqrt(q1);
     q1 = (uint8)((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2));
@@ -801,12 +582,12 @@ double process_curvity(uint8 x1, uint8 x2, uint8 y1, uint8 y2, uint8 x3, uint8 y
         k = 4.0 * (float)S_of_ABC / (AB * BC * AC);
     return k;
 }
-////////////////////////////////////////////
-//鍔熻兘锛氫笉绮楃姺鐨勬竻杞﹀ご
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
-///////////////////////////////////////////
+//////////////////////////////////////////////
+////功能：不粗犷的清车头
+////输入：
+////输出：
+////备注：
+/////////////////////////////////////////////
 //void head_clear(void)
 //{
 //    uint8* my_map;
@@ -821,29 +602,29 @@ double process_curvity(uint8 x1, uint8 x2, uint8 y1, uint8 y2, uint8 x3, uint8 y
 //    }
 //}
 ////////////////////////////////////////////
-//鍔熻兘锛氭煡鎵剧埗鑺傜偣
-//杈撳叆锛氳妭鐐圭紪鍙�
-//杈撳嚭锛氭渶鑰佺鍏�
-//澶囨敞锛氬惈璺緞鍘嬬缉
+//功能：查找父节点
+//输入：节点编号
+//输出：最老祖先
+//备注：含路径压缩
 ///////////////////////////////////////////
-int find_f(int node)//f[i]琛ㄧず绗琲涓妭鐐逛负i
+int find_f(int node)//f[i]表示第i个节点为i
 {
     if (f[node] == node) return node;
     f[node] = find_f(f[node]);
     return f[node];
 }
 ////////////////////////////////////////////
-//鍔熻兘锛氭彁鍙栬烦鍙樻部 骞跺鍏ㄩ儴鐧芥潯瀛愭爣鍙�
-//杈撳叆锛欼MG[120][188]
-//杈撳嚭锛歸hite_range[120]
-//澶囨敞锛氭寚閽堟彁閫�
+//功能：提取跳变沿 并对全部白条子标号
+//输入：IMG[120][188]
+//输出：white_range[120]
+//备注：指针提速
 ///////////////////////////////////////////
 void search_white_range()
 {
     uint8 i, j;
     int istart = NEAR_LINE;
     int iend = FAR_LINE;
-    int tnum = 0;//鍗曡鐧芥潯瀛愭�绘暟
+    int tnum = 0;//单行白条子总数
     all_connect_num = 0;
     uint8* map = NULL;
     for (i = istart; i >= iend; i--)
@@ -874,13 +655,13 @@ void search_white_range()
     }
 }
 
-//鎻愬彇鐧藉儚绱犵偣绾�
+//提取白像素点线
 
 ////////////////////////////////////////////
-//鍔熻兘锛氬鎵剧櫧鏉″瓙杩為�氭�э紝灏嗗叏閮ㄨ仈閫氱櫧鏉″瓙鐨勮妭鐐圭紪鍙峰埛鎴愭渶鍙よ�佺鍏堢殑鑺傜偣缂栧彿
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：寻找白条子连通性，将全部联通白条子的节点编号刷成最古老祖先的节点编号
+//输入：
+//输出：
+//备注：
 ///////////////////////////////////////////
 void find_all_connect()
 {
@@ -919,13 +700,13 @@ void find_all_connect()
             if (d_right == u_right) { i_u++; i_d++; }
         }
     }
-    //////pintf("find_f first finish\n");
+    ////printf("find_f first finish\n");
 }
 ////////////////////////////////////////////
-//鍔熻兘锛氬鎵捐禌閬�
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：寻找赛道
+//输入：
+//输出：
+//备注：
 ///////////////////////////////////////////
 void find_road()
 {
@@ -941,7 +722,7 @@ void find_road()
             && white_range[istart].area[i].right >= CAMERA_W / 2
             && (white_range[istart].area[i].right - white_range[istart].area[i].left) >= 90)
             road_f = find_f(white_range[istart].area[i].connect_num);
-    //////pintf("find_f second finish\n");
+    ////printf("find_f second finish\n");
     if (road_f == -1)
     {
         int widthmax = 0, jselect = 1;
@@ -953,11 +734,11 @@ void find_road()
             }
         road_f = find_f(white_range[istart].area[jselect].connect_num);
     }
-    //////pintf("find_f third finish\n");
+    ////printf("find_f third finish\n");
     for (int i = istart; i >= iend; i--)
     {
         twhite_range = &white_range[i];
-        tmy_road = &my_road[i];//鎶婃暟鎹瓨鍌ㄥ湪my_road涓�
+        tmy_road = &my_road[i];//把数据存储在my_road中
         while_range_num = twhite_range->num;
         tmy_road->white_num = 0;
         roud_while_range_num = 0;
@@ -976,15 +757,15 @@ void find_road()
         }
 
     }
-    //////pintf("find_f forth finish\n");
+    ////printf("find_f forth finish\n");
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氳繑鍥炵浉杩炰笅涓�琛岀櫧鏉″瓙缂栧彿
-//杈撳叆锛歩_start璧峰琛�  j_start鐧芥潯鏍囧彿
-//杈撳嚭锛氱櫧鏉℃爣鍙�
-//澶囨敞锛氳涓轰笅涓�琛屼笌鏈璧涢亾閲嶅彔閮ㄥ垎瀵瑰鐨勭櫧鏉′负閫夊畾璧涢亾
-//      瀛﹂暱娌℃湁浣跨敤璇ュ嚱鏁�
+//功能：返回相连下一行白条子编号
+//输入：i_start起始行  j_start白条标号
+//输出：白条标号
+//备注：认为下一行与本行赛道重叠部分对多的白条为选定赛道
+//      学长没有使用该函数
 ///////////////////////////////////////////
 uint8 find_continue(uint8 i_start, uint8 j_start)
 {
@@ -1026,10 +807,10 @@ uint8 find_continue(uint8 i_start, uint8 j_start)
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氱‘瀹氭瘡琛岃禌閬撶殑鐧芥潯缂栧彿
-//杈撳叆锛氳鏁�
-//杈撳嚭锛氭棤
-//澶囨敞锛氭妸姣忚鐨勮禌閬撶櫧鏉＄紪鍙疯鍏ユ暟缁刯_continue[]涓�
+//功能：确定每行赛道的白条编号
+//输入：行数
+//输出：无
+//备注：把每行的赛道白条编号计入数组j_continue[]中
 ///////////////////////////////////////////
 void find_my_road(void)
 {
@@ -1042,7 +823,7 @@ void find_my_road(void)
     i_start = NEAR_LINE;
     i_end = FAR_LINE;
     width_max = 0;
-    for (int j = 1; j <= my_road[i_start].white_num; j++)//瀵绘壘绗竴琛屾渶瀹�
+    for (int j = 1; j <= my_road[i_start].white_num; j++)//寻找第一行最宽
     {
         if (my_road[i_start].connected[j].width > width_max)
         {
@@ -1050,7 +831,7 @@ void find_my_road(void)
             j_start = j;
         }
     }
-    j_continue[i_start] = j_start;                  //纭畾鏈�杩戠殑璧涢亾
+    j_continue[i_start] = j_start;                  //确定最近的赛道
 
     for (int i = i_start; i > i_end; i--)
     {
@@ -1062,23 +843,23 @@ void find_my_road(void)
         }
         else
         {
-            (*(j_continue_ptr - 1)) = find_continue(i, (*j_continue_ptr));      //鍙兘浼氬嚭BUG
+            (*(j_continue_ptr - 1)) = find_continue(i, (*j_continue_ptr));      //可能会出BUG
         }
 
     }
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氭枒椹嚎鍐冲畾鍙岃竟
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：斑马线决定双边
+//输入：
+//输出：
+//备注：
 ///////////////////////////////////////////
 void zebra_ordinary_two_line(void)
 {
     uint8 width = 45;
     uint8 num;
-    ////pintf("zebra_start:%d\n", zebra_start);
+    //printf("zebra_start:%d\n", zebra_start);
     for (uint8 i = 113; i >= zebra_start + gap; i--)
     {
         if (my_road[i].white_num != 1);
@@ -1091,14 +872,14 @@ void zebra_ordinary_two_line(void)
         }
     }
 
-    if (1)//杩欓噷鏄溅搴撳湪鍙宠竟鐨勬潯浠�
+    if (1)//这里是车库在右边的条件
         for (uint8 i = 113; i >= 1; i--)
         {
             num = my_road[i].white_num;
             left_line[i] = my_road[i].connected[1].left;
             right_line[i] = left_line[i] + width;
         }
-    else//杞﹀簱鍦ㄥ乏杈�
+    else//车库在左边
     {
         for (uint8 i = 113; i >= 1; i--)
         {
@@ -1112,10 +893,10 @@ void zebra_ordinary_two_line(void)
 
 
 ////////////////////////////////////////////
-//鍔熻兘锛氬弻杈�
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：双边
+//输入：
+//输出：
+//备注：
 ///////////////////////////////////////////
 void two_line(void)
 {
@@ -1156,10 +937,10 @@ void two_line(void)
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氱洿閬撳喅瀹氬弻杈�
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：直道决定双边
+//输入：
+//输出：
+//备注：
 ///////////////////////////////////////////
 void straight_oridinary_two_line(void)
 {
@@ -1180,7 +961,7 @@ void straight_oridinary_two_line(void)
     width_max = 0;
 
     find_my_road();
-    //////pintf("first  j_continue:%d,left:%d\n", j_continue[90], my_road[90].connected[j_continue[90]].left);
+    ////printf("first  j_continue:%d,left:%d\n", j_continue[90], my_road[90].connected[j_continue[90]].left);
     for (i = i_start; i > i_end; i--)
     {
         j_continue_ptr = &j_continue[i];
@@ -1207,11 +988,11 @@ void straight_oridinary_two_line(void)
     start_line_x = 0;*/
 
 
-    /*鍑哄崄瀛�*/
+    /*出十字*/
     //double k0;
     //  for (i = i_start; i > i_end; i--)
     //  {
-    //      /*鍗佸瓧鎵�鐢ㄥ彉閲�*/
+    //      /*十字所用变量*/
     //      double k_left = (my_road[i].connected[j_continue[i]].left - my_road[i - 2].connected[j_continue[i - 2]].left) / 2.0;
     //      double k_left_pre = (my_road[i - 2].connected[j_continue[i - 2]].left - my_road[i - 4].connected[j_continue[i - 4]].left) / 2.0;
     //      double k_right = (my_road[i].connected[j_continue[i]].right - my_road[i - 2].connected[j_continue[i - 2]].right) / 2.0;
@@ -1226,7 +1007,7 @@ void straight_oridinary_two_line(void)
     //          Right_begin = i;
     //      }
 
-    //      /*宸﹀彸杈圭晫*/
+    //      /*左右边界*/
     //      if ((j_continue[i] <= my_road[i].white_num))
     //      {
     //          left_line[i] = my_road[i].connected[j_continue[i]].left;
@@ -1238,16 +1019,16 @@ void straight_oridinary_two_line(void)
     //          right_line[i] = MISS;
     //      }
 
-    //      /*鍒ゆ柇澶嶆潅鍦板舰*/
+    //      /*判断复杂地形*/
     //      if (i >= 5)
     //      {
-    //          /*绠楁洸鐜�*/
+    //          /*算曲率*/
     //          /*b = my_road[i - 20].connected[j_continue[i - 20]].left;
     //          c = my_road[i - 30].connected[j_continue[i - 30]].left;
     //          a = my_road[i].connected[j_continue[i]].left;
     //          k0 = process_curvity(i, i - 20, a, b, i - 30, c);*/
 
-    //          /*璇嗗埆鏂戦┈绾�*/
+    //          /*识别斑马线*/
     //          for (uint8 i = 100; i >= 10; i--)
     //          {
     //              if (my_road[i].white_num > 7)
@@ -1263,7 +1044,7 @@ void straight_oridinary_two_line(void)
     //                          *(my_map + j) = green;
     //                      }
     //                      Start_line();
-    //                      start_line_flag = 1;//鏂戦┈绾挎爣蹇椾綅
+    //                      start_line_flag = 1;//斑马线标志位
     //                      break;
     //                  }
     //              }
@@ -1279,12 +1060,12 @@ void straight_oridinary_two_line(void)
     //                  *(my_map + j) = green;
     //              }
     //              Start_line();
-    //              start_line_flag = 1;//鏂戦┈绾挎爣蹇椾綅
+    //              start_line_flag = 1;//斑马线标志位
     //              break;
     //          }*/
     //
     //
-    //          /*璇嗗埆鍗佸瓧*/
+    //          /*识别十字*/
     //          if (Right_flag == 1 && Left_flag == 1 && i > 45 && i < 105)
     //          {
     //              Cross();
@@ -1301,10 +1082,10 @@ void straight_oridinary_two_line(void)
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氫笁宀旇矾鍐冲畾鍙岃竟
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：三岔路决定双边
+//输入：
+//输出：
+//备注：
 ///////////////////////////////////////////
 void trident_ordinary_two_line(void)
 {
@@ -1333,12 +1114,12 @@ void trident_ordinary_two_line(void)
         {
             if (2 == trident_road_ptr->white_num)
             {
-                if (mood.trident == 1)//鍚戝乏
+                if (mood.trident == 1)//向左
                 {
                     *left_line_ptr = trident_road_ptr->connected[1].left;
                     *right_line_ptr = trident_road_ptr->connected[1].right;
                 }
-                else if (mood.trident == 2)//鍚戝彸
+                else if (mood.trident == 2)//向右
                 {
                     *left_line_ptr = trident_road_ptr->connected[2].left;
                     *right_line_ptr = trident_road_ptr->connected[2].right;
@@ -1375,16 +1156,16 @@ void trident_ordinary_two_line(void)
         }
     }
 
-    //////pintf("change_line%d,end_line%d\n", change_line, end_line);
-    //////pintf("second  LEFT:%d\n", left_line[90]);
-        /*琛ョ嚎鎿嶄綔*/
-        if (mood.trident == 1)//鍚戝乏
+    ////printf("change_line%d,end_line%d\n", change_line, end_line);
+    ////printf("second  LEFT:%d\n", left_line[90]);
+        /*补线操作*/
+        if (mood.trident == 1)//向左
         {
             k_trident = (float)(right_line[change_line - 1] - right_line[end_line]) / (float)(change_line - end_line - 1);
             k_straight = (float)(right_line[change_line + 5] - right_line[change_line]) / 5.0;
-            if (1)//鍒ゆ柇涓� 鏂滅巼鐨勫�掓暟 鏄惁涓哄紓鍙�,濡傛灉涓哄紓鍙凤紝鍒欓渶瑕佽ˉ绾縥udge_sign(k_trident, k_straight) || ((k_trident - 0) < EPS && (k_straight - 0) < EPS)
+            if (1)//判断两 斜率的倒数 是否为异号,如果为异号，则需要补线judge_sign(k_trident, k_straight) || ((k_trident - 0) < EPS && (k_straight - 0) < EPS)
             {
-                ////pintf("涓夊矓琛ョ嚎\n");
+                //printf("三岔补线\n");
                 k_enter_pre = k_enter = (float)(right_line[i_start] - right_line[i_start - 5]) / 5.0;
                 for (int i = i_start; i > i_end; i--)
                 {
@@ -1404,21 +1185,21 @@ void trident_ordinary_two_line(void)
                 b_makeup = (float)(change_line - 1) - ((float)right_line[change_line - 1] / k_makeup);
 
             }
-            ////pintf("****************************\n");
-            ////pintf("%d, %d, %d, %d, %f, %f\n", enter_line, right_line[enter_line], change_line - 1, right_line[change_line - 1], k_enter, k_makeup);
-            ////pintf("****************************\n");
+            //printf("****************************\n");
+            //printf("%d, %d, %d, %d, %f, %f\n", enter_line, right_line[enter_line], change_line - 1, right_line[change_line - 1], k_enter, k_makeup);
+            //printf("****************************\n");
             for (int i = enter_line; i >= change_line; i--)
             {
                 right_line_ptr = &right_line[i];
                 *right_line_ptr = round(k_makeup * (i - b_makeup));
             }
         }
-        else if(mood.trident == 2)//鍚戝彸
+        else if(mood.trident == 2)//向右
         {
             k_trident = (float)(left_line[change_line - 1] - left_line[end_line]) / (float)(change_line - end_line - 1);
             k_straight = (float)(left_line[change_line + 5] - left_line[change_line]) / 5.0;
             k_enter_pre = k_enter = (float)(left_line[i_start] - left_line[i_start - 10]) / 10.0;
-            if (judge_sign(k_trident, k_straight))//鍒ゆ柇涓� 鏂滅巼鐨勫�掓暟 鏄惁涓哄紓鍙�,濡傛灉涓哄紓鍙凤紝鍒欓渶瑕佽ˉ绾�
+            if (judge_sign(k_trident, k_straight))//判断两 斜率的倒数 是否为异号,如果为异号，则需要补线
             {
                 if (abs(k_trident - k_enter) > 1.7 )//|| define_straight_line(left_line, 110, change_line, 1)
                 {
@@ -1444,27 +1225,27 @@ void trident_ordinary_two_line(void)
                 k_makeup = (float)(left_line[enter_line] - left_line[change_line - 1]) / (float)(enter_line - change_line + 1);
                 b_makeup = (float)(change_line - 1) - ((float)left_line[change_line - 1] / k_makeup);
             }
-            //////pintf("****************************\n");
-            //////pintf("%d, %d, %d, %d, %f, %f\n", enter_line, left_line[enter_line], change_line - 1, left_line[change_line - 1], k_trident, k_straight);
-            /*////pintf("****************************\n");
-            ////pintf("enter line : %d\n", enter_line);
-            ////pintf("****************************\n");*/
+            ////printf("****************************\n");
+            ////printf("%d, %d, %d, %d, %f, %f\n", enter_line, left_line[enter_line], change_line - 1, left_line[change_line - 1], k_trident, k_straight);
+            /*//printf("****************************\n");
+            //printf("enter line : %d\n", enter_line);
+            //printf("****************************\n");*/
             for (int i = enter_line; i >= change_line; i--)
             {
                 left_line_ptr = &left_line[i];
                 *left_line_ptr = round(k_makeup * (i - b_makeup));
             }
         }
-        ////pintf("enter_line = %d,changge_line = %d\n", enter_line, change_line);
+        //printf("enter_line = %d,changge_line = %d\n", enter_line, change_line);
 
 }
 
 
 ////////////////////////////////////////////
-//鍔熻兘锛氬垽鏂緭鍏ョ殑鏁版嵁鍚屽彿寮傚彿
-//杈撳叆锛氬垽鏂殑涓や釜鏁版嵁
-//杈撳嚭锛�0涓哄悓鍙凤紝1涓哄紓鍙�
-//澶囨敞锛�
+//功能：判断输入的数据同号异号
+//输入：判断的两个数据
+//输出：0为同号，1为异号
+//备注：
 ///////////////////////////////////////////
 uint8 judge_sign(float k1, float k2)
 {
@@ -1474,10 +1255,10 @@ uint8 judge_sign(float k1, float k2)
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氫笁宀旇矾琛ョ嚎
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛氭湭瀹屾垚锛屽湪涓夊矓涓凡缁忚ˉ绾�
+//功能：三岔路补线
+//输入：
+//输出：
+//备注：未完成，在三岔中已经补线
 ///////////////////////////////////////////
 void trident_make_up_missed_line(void)
 {
@@ -1507,8 +1288,8 @@ void Start_line(void)
 }
 
 //void Cross(void) {
-//  Point Left_END, Right_END;//宸︾鐐癸紝鍙崇鐐�
-//  int mid_pre = (my_road[Left_begin].connected[j_continue[Left_begin]].left + my_road[Right_begin].connected[j_continue[Right_begin]].right) / 2;//棰勬祴涓嚎
+//  Point Left_END, Right_END;//左端点，右端点
+//  int mid_pre = (my_road[Left_begin].connected[j_continue[Left_begin]].left + my_road[Right_begin].connected[j_continue[Right_begin]].right) / 2;//预测中线
 //  int count = 0;
 //
 //  Left_end = 0;
@@ -1527,14 +1308,14 @@ void Start_line(void)
 //          {
 //               k4 = -((left_line[Left_begin] + right_line[Right_begin]) - (left_line[NEAR_LINE] + right_line[NEAR_LINE])) * 2.0 / (Left_begin - NEAR_LINE)
 //                  / 4.0;
-//              t = mid_pre - k4 * (i - Left_begin + 30);    //涓偣鍒濆鍊�
+//              t = mid_pre - k4 * (i - Left_begin + 30);    //中点初始值
 //          }
 //          else {
 //              t = mid_pre;
 //          }
-//          //浠庝笅鍚戜笂绠楁枩鐜�
-//          t = mid_pre - k4 * (i - Left_begin + 30);//涓偣鍒濆鍊�
-//          for (int j = t; j > my_road[Left_begin].connected[j_continue[Left_begin]].left - 5; j--) {//瀵绘壘宸︾鐐�
+//          //从下向上算斜率
+//          t = mid_pre - k4 * (i - Left_begin + 30);//中点初始值
+//          for (int j = t; j > my_road[Left_begin].connected[j_continue[Left_begin]].left - 5; j--) {//寻找左端点
 //              if (IMG[i][j] == black) {
 //                  Left_end = 1;
 //                  Left_END.x = i;
@@ -1543,7 +1324,7 @@ void Start_line(void)
 //              }
 //          }
 //
-//          for (int j = t; j < my_road[Right_begin].connected[j_continue[Right_begin]].right + 5; j++) {//瀵绘壘鍙崇鐐�
+//          for (int j = t; j < my_road[Right_begin].connected[j_continue[Right_begin]].right + 5; j++) {//寻找右端点
 //              if (IMG[i][j] == black) {
 //                  Right_end = 1;
 //                  Right_END.x = i;
@@ -1563,7 +1344,7 @@ void Start_line(void)
 //          }
 //      }
 //  }
-//  float k_left = (float)(Left_END.y - my_road[Left_begin].connected[j_continue[Left_begin]].left) / (Left_END.x - Left_begin);/*璁＄畻宸﹀彸寤朵几绾�*/
+//  float k_left = (float)(Left_END.y - my_road[Left_begin].connected[j_continue[Left_begin]].left) / (Left_END.x - Left_begin);/*计算左右延伸线*/
 //  for (int i = Left_begin; i > Left_END.x; i--) {
 //      left_line[i] = (i - Left_begin) * k_left + my_road[Left_begin].connected[j_continue[Left_begin]].left;
 //  }
@@ -1600,9 +1381,9 @@ void Start_line(void)
 //  }
 //
 //}
-/*void Cross_out()//鏈畬鎴愮殑鍑哄崄瀛�
+/*void Cross_out()//未完成的出十字
 {
-    Point Left_END, Right_END;//宸︾鐐癸紝鍙崇鐐�
+    Point Left_END, Right_END;//左端点，右端点
     Left_END.x = 0;
     Left_END.y = 0;
     Right_END.x = 0;
@@ -1614,7 +1395,7 @@ void Start_line(void)
         Left_END.y = 0;
         Right_END.x = 0;
         Right_END.y = 0;
-        for (int j = 94; j > my_road[Left_begin].connected[j_continue[Left_begin]].left - 5; j--) {//瀵绘壘宸︾鐐�
+        for (int j = 94; j > my_road[Left_begin].connected[j_continue[Left_begin]].left - 5; j--) {//寻找左端点
             if (IMG[i][j] == black) {
                 Left_end = 1;
                 Left_END.x = i;
@@ -1623,7 +1404,7 @@ void Start_line(void)
             }
         }
 
-        for (int j = 94; j < my_road[Right_begin].connected[j_continue[Right_begin]].right + 5; j++) {//瀵绘壘鍙崇鐐�
+        for (int j = 94; j < my_road[Right_begin].connected[j_continue[Right_begin]].right + 5; j++) {//寻找右端点
             if (IMG[i][j] == black) {
                 Right_end = 1;
                 Right_END.x = i;
@@ -1635,10 +1416,10 @@ void Start_line(void)
 
 }*/
 ////////////////////////////////////////////
-//鍔熻兘锛氬垵濮嬪寲
-//杈撳叆锛歱tr鏁扮粍鍦板潃锛宯um鍒濆鍖栧唴瀹癸紝size鏁扮粍澶у皬
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：初始化
+//输入：ptr数组地址，num初始化内容，size数组大小
+//输出：
+//备注：
 ///////////////////////////////////////////
 void my_memset(uint8* ptr, uint8 num, uint8 size)
 {
@@ -1652,20 +1433,20 @@ void my_memset(uint8* ptr, uint8 num, uint8 size)
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氬垵濮嬪寲
-//杈撳叆锛氭棤
-//杈撳嚭锛�
-//澶囨敞锛氬垵濮嬪寲鎵�鏈夋暟缁�
+//功能：初始化
+//输入：无
+//输出：
+//备注：初始化所有数组
 ///////////////////////////////////////////
 void my_init(void)
 {
-    memset(mid_line, MISS, sizeof(mid_line));
-    memset(left_line, MISS, sizeof(left_line));
-    memset(right_line, MISS, sizeof(right_line));
-    memset(left_smooth, MISS, sizeof(left_smooth));
-    memset(right_smooth, MISS, sizeof(right_smooth));
-    memset(right, MISS, sizeof(right));
-    memset(left, MISS, sizeof(left));
+    my_memset(mid_line, MISS, 120);
+    my_memset(left_line, MISS, 120);
+    my_memset(right_line, MISS, 120);
+    my_memset(left_smooth, MISS, 120);
+    my_memset(right_smooth, MISS, 120);
+    my_memset(right, MISS, 120);
+    my_memset(left, MISS, 120);
     memset(white_range, 0, sizeof(white_range));
     memset(mid_line_float, 0, sizeof(mid_line_float));
     memset(f, 0, sizeof(f));
@@ -1673,7 +1454,7 @@ void my_init(void)
     mood.cross = 0;
     mood.straight = 0;
     mood.circle = 0;
-    mood.trident = 0;
+    //mood.trident = 0;
     mood.zebra = 0;
     left_line_straight = 0;
     right_line_straight = 0;
@@ -1700,10 +1481,10 @@ void get_mid_line(void)
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氬垽鏂禌閬撶被鍨�
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：判断赛道类型
+//输入：
+//输出：
+//备注：
 ///////////////////////////////////////////
 IMG_STATE define_road_type(void)
 {
@@ -1721,7 +1502,7 @@ IMG_STATE define_road_type(void)
 
     else if (trident())
     {
-        mood.trident = 1;//1鎴�2锛�1鍚戝乏锛�2鍚戝彸
+        mood.trident = car_branch_direction;//1或2，1向左，2向右
         return img_trident;
     }
 
@@ -1746,24 +1527,24 @@ IMG_STATE define_road_type(void)
     }
     else if (tell_near_cross())
     {
-        //////pintf("12\n");
+        ////printf("12\n");
         mood.cross = 1;
         return img_near_cross;
     }
 
     else
     {
-        //////pintf("14\n");
+        ////printf("14\n");
         mood.straight = 1;
         return img_straight;
     }
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氬垽鏂槸鍚︿负涓夊矓璺�
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：判断是否为三岔路
+//输入：
+//输出：
+//备注：
 ///////////////////////////////////////////
 uint8 trident(void)
 {
@@ -1785,10 +1566,10 @@ uint8 trident(void)
     float k_left = 0, k_right = 0;
     if (img_state_pre == img_near_circle || img_state_pre == img_enter_circle || in_circle_flag == 1 )
     {
-        //pintf("鏍囧織浣嶅垽鏂敊璇痋n");
+        printf("标志位判断错误\n");
         return 0;
     }
-    ////pintf("涓夊矓鍒ゆ柇杩涜\n");
+    //printf("三岔判断进行\n");
     for (int i = istart; i >= iend; i--)
     {
         tmy_road = &my_road[i];
@@ -1799,7 +1580,7 @@ uint8 trident(void)
         right_ptr = &right[i];
         left_side_ptr = &left_side[i];
         right_side_ptr = &right_side[i];
-        /*鎵惧嚭鎵�鏈夌鍚堟潯浠剁殑鐧芥潯*/
+        /*找出所有符合条件的白条*/
         for (int j = 1; j <= while_range_num; j++)
         {
             if (tmy_road->connected[j].width >= 8  &&  (tmy_road->connected[j].right <= (CAMERA_W / 2 + 3) || (tmy_road->connected[j].left >= (CAMERA_W / 2 - 3))))
@@ -1811,15 +1592,15 @@ uint8 trident(void)
                 ttrident_road->connected[roud_while_range_num].width = tmy_road->connected[j].width;
             }
         }
-        if (0 == roud_while_range_num || 1 == roud_while_range_num) //宸﹀彸鐧芥潯鏁颁负0鎴栬��1锛屼笉鏄笁宀旇矾
+        if (0 == roud_while_range_num || 1 == roud_while_range_num) //左右白条数为0或者1，不是三岔路
         {
             memset(&trident_road[i], 0, sizeof(trident_road[i]));
         }
-        /*濡傛灉鎵惧嚭瓒呰繃涓や釜鐧芥潯锛岄�夋嫨鏈�澶х殑涓や釜鐧芥潯浣滀负涓夊矓璺殑涓ゅ垎鏀�*/
-        /*鎻掑叆娉曟帓搴忥紝浣垮墠涓や釜鐧芥潯瀹藉害涓烘渶澶�*/
+        /*如果找出超过两个白条，选择最大的两个白条作为三岔路的两分支*/
+        /*插入法排序，使前两个白条宽度为最大*/
         else if (ttrident_road->white_num >= 3)
         {
-            for (int m = 2; m <= roud_while_range_num; m++)//鎻掑叆娉曚篃璁镐細鍐欓敊锛屽彲鑳藉嚭BUG
+            for (int m = 2; m <= roud_while_range_num; m++)//插入法也许会写错，可能出BUG
             {
                 temp = ttrident_road->connected[m];
                 for (int n = m - 1; (n >= 1) && (ttrident_road->connected[n].width < temp.width); n--)
@@ -1849,7 +1630,7 @@ uint8 trident(void)
     {
         if (square > 44000)
         {
-            //pintf("闈㈢Н杩囧ぇ\n");
+            printf("面积过大\n");
             return 0;
         }
         for (int i = 105; i > 93; i--)
@@ -1865,17 +1646,17 @@ uint8 trident(void)
             else if (abs(*left_ptr - *left_side_ptr) < 5 && abs(*right_side_ptr - *right_ptr) > 5)
             {
                 left_side_account++;
-                //pintf("i %d  side %d  line %d\n", i, *left_side_ptr, *left_ptr);
+                printf("i %d  side %d  line %d\n", i, *left_side_ptr, *left_ptr);
             }
             else if (abs(*left_ptr - *left_side_ptr) > 5 && abs(*right_side_ptr - *right_ptr) < 5)
             {
                 right_side_account++;
-                ////pintf("i %d  side %d  line %d\n", i, *right_side_ptr, *right_ptr);
+                //printf("i %d  side %d  line %d\n", i, *right_side_ptr, *right_ptr);
             }
         }
         /*if (my_road[10].white_num == 1 && my_road[10].connected->width < 15 && (my_road[10].connected->left > 100 || my_road[10].connected->right < 90))
         {
-            //pintf("鏈夎繙鍑哄彛锛屼笖鍑哄彛涓嶅绉癨n");
+            printf("有远出口，且出口不对称\n");
             return 0;
         }*/
         /*if ((left_line_straight && abs(k_left) <= 0.5) || (right_line_straight && abs(k_right) <= 0.5))
@@ -1886,19 +1667,19 @@ uint8 trident(void)
         right_straight = define_straight_line(right, 110, 50, 2);
         if ((left_straight && !right_straight) ||  (!left_straight && right_straight))
         {
-            //pintf("宸﹀彸鏂瑰樊涓嶇鍚圽n");
+            printf("左右方差不符合\n");
             return 0;
         }*/
         if (!judge_sign(k_left, k_right))
         {
-            //pintf("鍏ュ彛鍊炬枩\n");
+            printf("入口倾斜\n");
             return 0;
         }
-        //pintf("l:%d,r:%d\n", left_straight, right_straight);
-        //pintf("left:%d,right:%d", left_side_account, right_side_account);
+        printf("l:%d,r:%d\n", left_straight, right_straight);
+        printf("left:%d,right:%d", left_side_account, right_side_account);
         if (left_side_account >= 10 || right_side_account >= 10)
         {
-            //pintf("宸﹀彸闈犺竟琛屾暟杩囧\n");
+            printf("左右靠边行数过多\n");
             return 0;
         }
         return 1;
@@ -1906,17 +1687,17 @@ uint8 trident(void)
 
     else
     {
-        //pintf("count %d  more %d \n", count,more_count);
+        printf("count %d  more %d \n", count,more_count);
         return 0;
     }
 }
 
 
 ////////////////////////////////////////////
-//鍔熻兘锛氭枩鍗佸瓧鍒ゆ柇
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：斜十字判断
+//输入：
+//输出：
+//备注：
 ///////////////////////////////////////////
 uint8 tell_oblique_cross(void)
 {
@@ -1935,20 +1716,20 @@ uint8 tell_oblique_cross(void)
     uint8 count = 0;
     uint8 two_side_account = 0, left_side_account = 0, right_side_account = 0;
     float k_left = 0, k_right = 0;
-    //pintf("鏂滃崄瀛楀垽鏂繘琛孿n");
+    printf("斜十字判断进行\n");
     if (img_state_pre != img_straight && img_state_pre != img_oblique_cross && img_state_pre != img_far_cross)
     {
-        //pintf("鏍囧織浣嶅垽鏂け璐n");
+        printf("标志位判断失败\n");
         return 0;
     }
     if (left_line_straight != 0 || right_line_straight != 0 )//|| left_straight != 0 || right_straight != 0
     {
-        //pintf("宸﹀彸杈圭嚎鏂滅巼鍒ゆ柇澶辫触\n");
+        printf("左右边线斜率判断失败\n");
         return 0;
     }
     if (square < 900)
     {
-        //pintf("闈㈢Н鍒ゆ柇澶辫触\n");
+        printf("面积判断失败\n");
         return 0;
     }
     for (int i = istart; i >= iend; i--)
@@ -1976,28 +1757,28 @@ uint8 tell_oblique_cross(void)
     }
     /*k_left = (float)(left_line[95] - left_line[10]) / 85.0;
     k_right = (float)(right_line[95] - right_line[10]) / 85.0;*/
-    //pintf("left:%d,right:%d\n", left_side_account, right_side_account);
-    if (left_side_account >= 40)//鍚戝乏
+    printf("left:%d,right:%d\n", left_side_account, right_side_account);
+    if (left_side_account >= 40)//向左
     {
         oblique_cross = 1;
-        //pintf("oblique_cross left %d\n",left_side_account);
+        printf("oblique_cross left %d\n",left_side_account);
         return 1;
     }
-    else if (right_side_account >= 40)//鍚戝彸
+    else if (right_side_account >= 40)//向右
     {
         oblique_cross = 2;
-        //pintf("oblique_cross right %d\n", right_side_account);
+        printf("oblique_cross right %d\n", right_side_account);
         return 1;
     }
-    //pintf("left:%d,right:%d\n", left_side_account, right_side_account);
+    printf("left:%d,right:%d\n", left_side_account, right_side_account);
     return 0;
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氭枩鍗佸瓧鍐冲畾鍙岃竟
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：斜十字决定双边
+//输入：
+//输出：
+//备注：
 ///////////////////////////////////////////
 void oblique_cross_ordinary_two_line(void)
 {
@@ -2014,18 +1795,18 @@ void oblique_cross_ordinary_two_line(void)
     float k_trident = 0, k_straight = 0, k_enter = 0, k_enter_pre = 0, k_makeup = 0, b_makeup = 0;
     uint8 change_line = NEAR_LINE, end_line = NEAR_LINE, enter_line = NEAR_LINE;
     uint8 left_change = NEAR_LINE, right_change = NEAR_LINE;
-    //pintf("鏂滃崄瀛楄ˉ绾胯繘琛孿n");
+    printf("斜十字补线进行\n");
     if (square < 3900)
     {
-        //pintf("鏂滃崄瀛楅潰绉繃灏廫n");
+        printf("斜十字面积过小\n");
         oblique_cross = 4;
     }
-    //double cosL[CHANGED_H] = { 0 };//浣欏鸡鐨勫钩鏂瑰乏 鎵╁ぇ1000鍊�
-    //double cosR[CHANGED_H] = { 0 };//浣欏鸡鐨勫钩鏂瑰彸 鎵╁ぇ1000鍊�
+    //double cosL[CHANGED_H] = { 0 };//余弦的平方左 扩大1000倍
+    //double cosR[CHANGED_H] = { 0 };//余弦的平方右 扩大1000倍
     //int x1 = 0;
     //int x2 = 0;
     //int y2 = 0;
-    ////i_start = 100 - gap; //闃叉闀滃ご鐣稿彉褰卞搷
+    ////i_start = 100 - gap; //防止镜头畸变影响
     //y2 = gap * gap;
     //i_start = 100 - gap;
     //i_end = 10;
@@ -2041,21 +1822,21 @@ void oblique_cross_ordinary_two_line(void)
     //  cosL[i] = cosL[i] * 1000 / ((x1 * x1 + y2) * (x2 * x2 + y2));
 
 
-    //  //璁＄畻鍙充晶浣欏鸡鍊煎钩鏂�
+    //  //计算右侧余弦值平方
     //  x1 = (int)*(right_line_ptr + i - gap) - (int)*(right_line_ptr + i);
     //  x2 = (int)*(right_line_ptr + i) - (int)*(right_line_ptr + i + gap);
     //  cosR[i] = x1 * x2 + y2;
     //  cosR[i] *= cosR[i];
     //  cosR[i] = cosR[i] * 1000 / ((x1 * x1 + y2) * (x2 * x2 + y2));
 
-    //  //pintf("琛屾暟锛�%d 宸︿綑寮︼細%d 鍙充綑寮︼細%d\n", i, cosL[i], cosR[i]);
+    //  printf("行数：%d 左余弦：%d 右余弦：%d\n", i, cosL[i], cosR[i]);
     //
     //  /*cosL[i] = process_curvity(*(left_line_ptr + i + 5), *(left_line_ptr + i), *(left_line_ptr + i - 5), i + 5, i, i - 5);
     //  cosR[i] = process_curvity(*(right_line_ptr + i + 5), *(right_line_ptr + i), *(right_line_ptr + i - 5), i + 5, i, i - 5);
-    //  //pintf("琛屾暟锛�%d 宸︿綑寮︼細%.2f 鍙充綑寮︼細%.2f\n", i, cosL[i], cosR[i]);*/
+    //  printf("行数：%d 左余弦：%.2f 右余弦：%.2f\n", i, cosL[i], cosR[i]);*/
 
     //}
-    ////pintf("84 %d , 61 %d \n", cosR[84], cosL[61]);
+    //printf("84 %d , 61 %d \n", cosR[84], cosL[61]);
     for (int i = 95; i > 10; i--)
     {
         trident_road_ptr = &trident_road[i];
@@ -2068,17 +1849,17 @@ void oblique_cross_ordinary_two_line(void)
         if (cos_L[i] <= 350 && left_change == NEAR_LINE)
         {
             left_change = i;
-            //pintf("cosL%d line%d\n", cos_L[i],i);
+            printf("cosL%d line%d\n", cos_L[i],i);
         }
         if (cos_R[i] <= 350 && right_change == NEAR_LINE)
         {
             right_change = i;
-            //pintf("cosR%d line%d\n", cos_R[i],i);
+            printf("cosR%d line%d\n", cos_R[i],i);
         }
 
 
 
-    //  if (oblique_cross == 1)//鍚戝乏
+    //  if (oblique_cross == 1)//向左
     //  {
     //      if (*(left_line_ptr) - *(left_line_ptr+1) >= 10 && left_flag == 0)
     //      {
@@ -2087,12 +1868,12 @@ void oblique_cross_ordinary_two_line(void)
     //      }
     //      k_straight = (float)(*right_line_ptr - *(right_line_ptr - 5)) / 5.0;
     //      k_trident = (float)(*(right_line_ptr + 5) - *right_line_ptr) / 5.0;
-    //      ////pintf("line%d  k_s%f , k_t%f\n",i, k_straight, k_trident);
+    //      //printf("line%d  k_s%f , k_t%f\n",i, k_straight, k_trident);
     //      flag = judge_sign(k_trident, k_straight);
     //      if (flag && right_flag == 0)
     //      {
     //          enter_line = i - 5;
-    //          //pintf("line%d   flag%d\n", i, flag);
+    //          printf("line%d   flag%d\n", i, flag);
     //          right_flag = 1;
     //      }
     //      //*right_line_ptr = *right_ptr;
@@ -2106,7 +1887,7 @@ void oblique_cross_ordinary_two_line(void)
     //      //  //*left_line_ptr = tmy_road->connected[1].left;
     //      //}
     //  }
-    //  else if (oblique_cross == 2)//鍚戝彸 ++++++++
+    //  else if (oblique_cross == 2)//向右 ++++++++
     //  {
     //      if ((*(right_line_ptr + 1) - *right_line_ptr) > 10)
     //      {
@@ -2125,12 +1906,12 @@ void oblique_cross_ordinary_two_line(void)
     //      }
     //  }
     //}
-    ////pintf("change%d  enter%d \n", change_line, enter_line);
+    //printf("change%d  enter%d \n", change_line, enter_line);
     //if (enter_line == NEAR_LINE || change_line == NEAR_LINE)
     //{
     //  return;
     }
-    //pintf("left_change %d   right_change %d\n", left_change, right_change);
+    printf("left_change %d   right_change %d\n", left_change, right_change);
     if (abs(left_change - right_change) < 15 || oblique_cross == 4)
     {
         oblique_cross = 0;
@@ -2147,14 +1928,14 @@ void oblique_cross_ordinary_two_line(void)
         change_line = right_change;
         oblique_cross = 2;
     }
-    /*琛ョ嚎鎿嶄綔*/
+    /*补线操作*/
 
-    if (oblique_cross == 1 && enter_line != NEAR_LINE && change_line != NEAR_LINE)//鍚戝乏
+    if (oblique_cross == 1 && enter_line != NEAR_LINE && change_line != NEAR_LINE)//向左
     {
 
         //k_trident = (float)(right_line[change_line - 1] - right_line[end_line]) / (float)(change_line - end_line);
         //k_straight = (float)(right_line[change_line + 5] - right_line[change_line]) / 5.0;
-        //if (judge_sign(k_trident, k_straight))//鍒ゆ柇涓� 鏂滅巼鐨勫�掓暟 鏄惁涓哄紓鍙�,濡傛灉涓哄紓鍙凤紝鍒欓渶瑕佽ˉ绾�
+        //if (judge_sign(k_trident, k_straight))//判断两 斜率的倒数 是否为异号,如果为异号，则需要补线
         //{
         //  k_enter_pre = k_enter = (float)(right_line[i_start] - right_line[i_start - 5]) / 5.0;
         //  for (int i = i_start; i > i_end; i--)
@@ -2172,14 +1953,14 @@ void oblique_cross_ordinary_two_line(void)
         //}
         k_makeup = (float)(right_line[enter_line+1] - left_line[change_line - 1]) / (float)(enter_line - change_line + 2);
         b_makeup = (float)(change_line - 1) - ((float)left_line[change_line - 1] / k_makeup);
-        ////pintf("****************************\n");
-        ////pintf("%d, %d, %d, %d, %f, %f\n", enter_line, left_line[enter_line], change_line - 1, left_line[change_line - 1], k_trident, k_straight);
-        /*//pintf("****************************\n");
-        //pintf("enter line : %d,change line: %d\n", enter_line, change_line);
-        //pintf("****************************\n");*/
-        ////pintf("****************************\n");
-        ////pintf("%d, %d, %d, %d, %f, %f\n", enter_line, right_line[enter_line], change_line - 1, right_line[change_line - 1], k_enter, k_makeup);
-        ////pintf("****************************\n");
+        //printf("****************************\n");
+        //printf("%d, %d, %d, %d, %f, %f\n", enter_line, left_line[enter_line], change_line - 1, left_line[change_line - 1], k_trident, k_straight);
+        /*printf("****************************\n");
+        printf("enter line : %d,change line: %d\n", enter_line, change_line);
+        printf("****************************\n");*/
+        //printf("****************************\n");
+        //printf("%d, %d, %d, %d, %f, %f\n", enter_line, right_line[enter_line], change_line - 1, right_line[change_line - 1], k_enter, k_makeup);
+        //printf("****************************\n");
         for (int i = enter_line; i >= change_line; i--)
         {
             right_line_ptr = &right_line[i];
@@ -2206,15 +1987,15 @@ void oblique_cross_ordinary_two_line(void)
             *right_line_ptr = MISS;
         }
     }
-    else if (oblique_cross == 2 && enter_line != NEAR_LINE && change_line != NEAR_LINE)//鍚戝彸
+    else if (oblique_cross == 2 && enter_line != NEAR_LINE && change_line != NEAR_LINE)//向右
     {
         k_makeup = (float)(left_line[enter_line] - right_line[change_line - 1]) / (float)(enter_line - change_line + 1);
         b_makeup = (float)(change_line - 1) - ((float)right_line[change_line - 1] / k_makeup);
-        ////pintf("****************************\n");
-        ////pintf("%d, %d, %d, %d, %f, %f\n", enter_line, left_line[enter_line], change_line - 1, left_line[change_line - 1], k_trident, k_straight);
-        //pintf("****************************\n");
-        //pintf("enter line : %d,change line: %d\n", enter_line,change_line);
-        //pintf("****************************\n");
+        //printf("****************************\n");
+        //printf("%d, %d, %d, %d, %f, %f\n", enter_line, left_line[enter_line], change_line - 1, left_line[change_line - 1], k_trident, k_straight);
+        printf("****************************\n");
+        printf("enter line : %d,change line: %d\n", enter_line,change_line);
+        printf("****************************\n");
         for (int i = enter_line; i >= change_line; i--)
         {
             left_line_ptr = &left_line[i];
@@ -2232,10 +2013,10 @@ void oblique_cross_ordinary_two_line(void)
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氱幆宀涘叆鍙ｅ喅瀹氬弻杈�
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：环岛入口决定双边
+//输入：
+//输出：
+//备注：
 ///////////////////////////////////////////
 void circle_ordinary_two_line(void)
 {
@@ -2253,8 +2034,8 @@ void circle_ordinary_two_line(void)
     uint8 change_line = NEAR_LINE, end_line = NEAR_LINE, enter_line = NEAR_LINE;
     i_start = NEAR_LINE;
     i_end = FAR_LINE;
-    //pintf("鐜矝琛ョ嚎   right_change_down:%d,right_change_up:%d\n", right_change_down, right_change_up);
-    if (mood.circle == 1)//宸�
+    printf("环岛补线   right_change_down:%d,right_change_up:%d\n", right_change_down, right_change_up);
+    if (mood.circle == 1)//左
     {
         if (left_change_down == 113 && left_change_up < 20)//
         {
@@ -2332,7 +2113,7 @@ void circle_ordinary_two_line(void)
         }
 
     }
-    else if (mood.circle == 2)//鍙�
+    else if (mood.circle == 2)//右
     {
         if (right_change_down == 113 && right_change_up < 20)//
         {
@@ -2408,12 +2189,12 @@ void circle_ordinary_two_line(void)
             }
         }
     }
-    /*琛ョ嚎鎿嶄綔*/
-    //if (oblique_cross == 1)//鍚戝乏
+    /*补线操作*/
+    //if (oblique_cross == 1)//向左
     //{
     //  k_trident = (float)(right_line[change_line - 1] - right_line[end_line]) / (float)(change_line - end_line);
     //  k_straight = (float)(right_line[change_line + 5] - right_line[change_line]) / 5.0;
-    //  if (judge_sign(k_trident, k_straight))//鍒ゆ柇涓� 鏂滅巼鐨勫�掓暟 鏄惁涓哄紓鍙�,濡傛灉涓哄紓鍙凤紝鍒欓渶瑕佽ˉ绾�
+    //  if (judge_sign(k_trident, k_straight))//判断两 斜率的倒数 是否为异号,如果为异号，则需要补线
     //  {
     //      k_enter_pre = k_enter = (float)(right_line[i_start] - right_line[i_start - 5]) / 5.0;
     //      for (int i = i_start; i > i_end; i--)
@@ -2430,24 +2211,24 @@ void circle_ordinary_two_line(void)
     //      b_makeup = (float)(change_line - 1) - ((float)right_line[change_line - 1] / k_makeup);
 
     //  }
-    //  //////pintf("****************************\n");
-    //  //////pintf("%d, %d, %d, %d, %f, %f\n", enter_line, right_line[enter_line], change_line - 1, right_line[change_line - 1], k_enter, k_makeup);
-    //  //////pintf("****************************\n");
+    //  ////printf("****************************\n");
+    //  ////printf("%d, %d, %d, %d, %f, %f\n", enter_line, right_line[enter_line], change_line - 1, right_line[change_line - 1], k_enter, k_makeup);
+    //  ////printf("****************************\n");
     //  for (int i = enter_line; i >= change_line; i--)
     //  {
     //      right_line_ptr = &right_line[i];
     //      *right_line_ptr = round(k_makeup * (i - b_makeup));
     //  }
     //}
-    //else if (oblique_cross == 2)//鍚戝彸
+    //else if (oblique_cross == 2)//向右
     //{
     //  k_makeup = (float)(left_line[enter_line] - left_line[change_line - 1]) / (float)(enter_line - change_line + 1);
     //  b_makeup = (float)(change_line - 1) - ((float)left_line[change_line - 1] / k_makeup);
-    //  //////pintf("****************************\n");
-    //  //////pintf("%d, %d, %d, %d, %f, %f\n", enter_line, left_line[enter_line], change_line - 1, left_line[change_line - 1], k_trident, k_straight);
-    //  ////pintf("****************************\n");
-    //  ////pintf("enter line : %d,change line: %d\n", enter_line, change_line);
-    //  ////pintf("****************************\n");
+    //  ////printf("****************************\n");
+    //  ////printf("%d, %d, %d, %d, %f, %f\n", enter_line, left_line[enter_line], change_line - 1, left_line[change_line - 1], k_trident, k_straight);
+    //  //printf("****************************\n");
+    //  //printf("enter line : %d,change line: %d\n", enter_line, change_line);
+    //  //printf("****************************\n");
     //  for (int i = enter_line; i >= change_line; i--)
     //  {
     //      left_line_ptr = &left_line[i];
@@ -2457,10 +2238,10 @@ void circle_ordinary_two_line(void)
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氱幆宀涘叆鍙ｅ喅瀹氬弻杈�
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：环岛入口决定双边
+//输入：
+//输出：
+//备注：
 ///////////////////////////////////////////
 void enter_circle_ordinary_two_line(void)
 {
@@ -2478,7 +2259,7 @@ void enter_circle_ordinary_two_line(void)
     uint8 change_line = NEAR_LINE, end_line = NEAR_LINE, enter_line = NEAR_LINE;
     i_start = NEAR_LINE;
     i_end = FAR_LINE;
-    if (circle == 1)//宸�
+    if (circle == 1)//左
     {
 
         k_makeup = (float)(right_line[right_change_down] - left_line[left_change_up - 3]) / (float)(right_change_down - left_change_up + 3);
@@ -2495,9 +2276,9 @@ void enter_circle_ordinary_two_line(void)
             left_line_ptr = &left_line[i];
             *left_line_ptr = MISS;
         }
-        //pintf("right_change_down %d  left_change_up %d\n", right_change_down, left_change_up);
+        printf("right_change_down %d  left_change_up %d\n", right_change_down, left_change_up);
     }
-    else if (circle == 2)//鍙�
+    else if (circle == 2)//右
     {
 
         k_makeup = (float)(left_line[left_change_down] - right_line[right_change_up - 3]) / (float)(left_change_down - right_change_up + 3);
@@ -2514,15 +2295,15 @@ void enter_circle_ordinary_two_line(void)
             left_line_ptr = &left_line[i];
             *left_line_ptr = MISS;
         }
-        //pintf("left_change_down %d  right_change_up %d\n", left_change_down, right_change_up);
+        printf("left_change_down %d  right_change_up %d\n", left_change_down, right_change_up);
     }
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氬垽鏂槸鍚︿负涓崄瀛�
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛氫笉澶ソ鐢�
+//功能：判断是否为中十字
+//输入：
+//输出：
+//备注：不太好用
 ///////////////////////////////////////////
 uint8 mid_cross(void)
 {
@@ -2542,7 +2323,7 @@ uint8 mid_cross(void)
     uint8 left_straight = 0, right_straight = 0;
     left_line_ptr = &left_line[0];
     right_line_ptr = &right_line[0];
-    ////pintf("涓崄瀛楀垽鏂繘琛孿n");
+    //printf("中十字判断进行\n");
     for (int i = i_start; i > i_end; i--)
     {
         k_left = (float)(*(left_line_ptr + i) - *(left_line_ptr + i - 8)) / 8.0;
@@ -2606,7 +2387,7 @@ uint8 mid_cross(void)
     }
 
     k_left = (float)(*(left_line_ptr + change_line_left_down) - *(left_line_ptr + change_line_left_up - 1)) / (float)(change_line_left_down - change_line_left_up + 1);
-    k_right = (float)(*(right_line_ptr + change_line_right_down) - *(right_line_ptr + change_line_right_up - 1)) / (float)(change_line_right_down - change_line_right_up + 1);//璁＄畻宸﹀彸绐佸彉鐐规墍杩炲煄鐩寸嚎鐨勬枩鐜�
+    k_right = (float)(*(right_line_ptr + change_line_right_down) - *(right_line_ptr + change_line_right_up - 1)) / (float)(change_line_right_down - change_line_right_up + 1);//计算左右突变点所连城直线的斜率
 
     if (change_line_left_down != 0 && change_line_left_up != 0 && change_line_right_down != 0 && change_line_right_up != 0 && abs(k_left) < 1.0 && abs(k_right) < 1.0)
     {
@@ -2614,22 +2395,22 @@ uint8 mid_cross(void)
     }
     else
     {
-        ////pintf("********************************\n");
-        ////pintf("right up %d  right down %d\n", right_line[82], right_line[84]);
-        ////pintf("********************************\n");
-        ////pintf("********************************\n");
-        ////pintf("k left :%f , k right :%f\n", k_left, k_right);
-        ////pintf("left down:%d,right down:%d,left up:%d,right up:%d\n", change_line_left_down, change_line_right_down, change_line_left_up, change_line_right_up);
-        ////pintf("********************************\n");
+        //printf("********************************\n");
+        //printf("right up %d  right down %d\n", right_line[82], right_line[84]);
+        //printf("********************************\n");
+        //printf("********************************\n");
+        //printf("k left :%f , k right :%f\n", k_left, k_right);
+        //printf("left down:%d,right down:%d,left up:%d,right up:%d\n", change_line_left_down, change_line_right_down, change_line_left_up, change_line_right_up);
+        //printf("********************************\n");
         return 0;
     }
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氬垽鏂槸鍚︿负涓崄瀛�
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：判断是否为中十字
+//输入：
+//输出：
+//备注：
 ///////////////////////////////////////////
 uint8 tell_mid_cross(void)
 {
@@ -2646,21 +2427,21 @@ uint8 tell_mid_cross(void)
     right_line_ptr = &right_line[0];
     left_side_ptr = &left_side[0];
     right_side_ptr = &right_side[0];
-    ////pintf("涓崄瀛楀垽鏂繘琛孿n");
-    //1.鏍囧織閲忓垽鏂�
+    //printf("中十字判断进行\n");
+    //1.标志量判断
     if (img_state_pre != img_mid_cross && img_state_pre != img_far_cross && img_state_pre != img_oblique_cross
             && img_state_pre != img_straight && img_state_pre != img_trident && img_state != img_real_trident)
     {
-        ////pintf("鍗佸瓧鏍囧織閲忓垽鏂け璐�, %d\n", img_state_pre);
+        //printf("十字标志量判断失败, %d\n", img_state_pre);
         return 0;
     }
 
-    //2.鏈�涓婄鏈夋棤璧涢亾鍒ゆ柇
+    //2.最上端有无赛道判断
     for (uint8 i = 30; i >= 15; i--)
     {
         if ( *(j_continue_ptr + i) == MISS)//|| (*(right_line_ptr + i) - *(left_line_ptr + i)) <= 20
         {
-            ////pintf("鍗佸瓧涓婄鏃犺禌閬揬n");
+            //printf("十字上端无赛道\n");
             return 0;
         }
 
@@ -2668,29 +2449,29 @@ uint8 tell_mid_cross(void)
 
 
 
-    //3.闀跨櫧鏉�
+    //3.长白条
     uint8 long_flag = 0;
-    for (uint8 i = 103; i >= 1; i--)  //45璋冨弬
+    for (uint8 i = 103; i >= 1; i--)  //45调参
     {
         if ((*(right_line_ptr + i) - *(left_line_ptr + i)) >= 50)
         {
             long_flag++;
         }
     }
-    //////pintf("long_flag锛�%d\n", long_flag);
+    ////printf("long_flag：%d\n", long_flag);
     if (long_flag <= 10)
     {
-        ////pintf("涓崄瀛� 闀跨櫧鏉℃暟鐩笉澶� %d\n", long_flag);
+        //printf("中十字 长白条数目不够 %d\n", long_flag);
         return 0;
     }
 
     if (*(right_line_ptr + 1) - *(left_line_ptr + 1) >= 55)
     {
-        ////pintf("涓崄瀛� 鏈�杩滅杩囬暱\n");
+        //printf("中十字 最远端过长\n");
         return 0;
     }
 
-    //4.宸﹀彸杈圭晫
+    //4.左右边界
     int left_count = 0, right_count = 0;
     for (int i = 110; i > 10; i--)
     {
@@ -2705,11 +2486,11 @@ uint8 tell_mid_cross(void)
     }
     if (left_count <= 10 && right_count <= 10)
     {
-        ////pintf("宸﹀彸杈圭晫鍒ゆ柇澶辫触\n");
+        //printf("左右边界判断失败\n");
         return 0;
     }
 
-    //5.鍑哄彛鍒ゆ柇
+    //5.出口判断
     for (uint8 i = 75; i > 15; i--) //l_mark1<r_mark1?(l_mark1-3):(r_mark1-3)
     {
         if (*(right_line_ptr + i) <= 120 && *(right_line_ptr + i) >= 80 && *(left_line_ptr + i) <= 105 && *(left_line_ptr + i) >= 50 && (*(right_line_ptr + i) - *(left_line_ptr + i)) < 30)
@@ -2717,7 +2498,7 @@ uint8 tell_mid_cross(void)
             if (*(right_line_ptr + i) <= 120)
             {
                 find_flag = TRUE;
-                //////pintf("mid_cross_line:%d,l_mark1:%d,r_mark1:%d,cross line left:%d,cross line right:%d\n", mid_cross_line, l_mark1, r_mark1, left_line[mid_cross_line], right_line[mid_cross_line]);
+                ////printf("mid_cross_line:%d,l_mark1:%d,r_mark1:%d,cross line left:%d,cross line right:%d\n", mid_cross_line, l_mark1, r_mark1, left_line[mid_cross_line], right_line[mid_cross_line]);
                 break;
             }
 
@@ -2726,7 +2507,7 @@ uint8 tell_mid_cross(void)
     }
     if (find_flag == FALSE)
     {
-        ////pintf("涓崄瀛楀嚭鍙ISS\n");
+        //printf("中十字出口MISS\n");
         return 0;
     }
 
@@ -2742,18 +2523,18 @@ uint8 tell_mid_cross(void)
     //}
     //if (mid_cross_line == MISS)
     //{
-    //  ////pintf("涓崄瀛� 鏈�杩滆澶亸\n");
+    //  //printf("中十字 最远行太偏\n");
     //  return 0;
     //}
-    //////pintf("mid_cross_line:%d\n", mid_cross_line);
+    ////printf("mid_cross_line:%d\n", mid_cross_line);
     return 1;
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氫腑鍗佸瓧鍐冲畾鍙岃竟
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：中十字决定双边
+//输入：
+//输出：
+//备注：
 ///////////////////////////////////////////
 void mid_cross_oridinary_two_line(void)
 {
@@ -2768,10 +2549,10 @@ void mid_cross_oridinary_two_line(void)
     right_line_ptr = &right_line[0];
     left_side_ptr = &left_side[0];
     right_side_ptr = &right_side[0];
-    //1.瀵绘壘鍏ュ彛
+    //1.寻找入口
     for (uint8 i = 110; i >= 90; i--)
     {
-        //灏忕獊鍙�
+        //小突变
         if (*(left_line_ptr + i) - *(left_line_ptr + i - 1) >= 2 || *(left_line_ptr + i) <= *(left_side_ptr + i) + 2)
         {
             l_mark1 = i;
@@ -2780,7 +2561,7 @@ void mid_cross_oridinary_two_line(void)
     }
     for (uint8 i = 110; i >= 90; i--)
     {
-        //灏忕獊鍙�
+        //小突变
         if (*(right_line_ptr + i - 1) - *(right_line_ptr + i) >= 2 || *(right_line_ptr + i) <= *(right_side_ptr + i) + 2)
         {
             r_mark1 = i;
@@ -2794,15 +2575,15 @@ void mid_cross_oridinary_two_line(void)
             if (*(right_line_ptr + i) <= 120)
             {
                 mid_cross_line = i;
-                ////pintf("mid_cross_line:%d,l_mark1:%d,r_mark1:%d,cross line left:%d,cross line right:%d\n", mid_cross_line, l_mark1, r_mark1, left_line[mid_cross_line], right_line[mid_cross_line]);
+                //printf("mid_cross_line:%d,l_mark1:%d,r_mark1:%d,cross line left:%d,cross line right:%d\n", mid_cross_line, l_mark1, r_mark1, left_line[mid_cross_line], right_line[mid_cross_line]);
                 break;
             }
 
         }
         //pre_width = *(right_line_ptr + i) - *(left_line_ptr + i);
     }
-    //////pintf("mid_cross_line:%d,l_mark1:%d,r_mark1:%d,cross line left:%d,cross line right:%d\n", mid_cross_line, l_mark1, r_mark1,left_line[mid_cross_line],right_line[mid_cross_line]);
-    //////pintf("%d %d++++++++++++++++++\n", l_mark1, r_mark1);
+    ////printf("mid_cross_line:%d,l_mark1:%d,r_mark1:%d,cross line left:%d,cross line right:%d\n", mid_cross_line, l_mark1, r_mark1,left_line[mid_cross_line],right_line[mid_cross_line]);
+    ////printf("%d %d++++++++++++++++++\n", l_mark1, r_mark1);
 
     l_mark2 = mid_cross_line;
     r_mark2 = mid_cross_line;
@@ -2820,7 +2601,7 @@ void mid_cross_oridinary_two_line(void)
     //for (uint8 i = 113; i >= l_mark1; i--)
     //{
     //  left_line[i] = x_left[i];
-    //  //////pintf("i%:d left:%d\n", i, left_line[i]);
+    //  ////printf("i%:d left:%d\n", i, left_line[i]);
     //}
     for (uint8 i = l_mark1; i >= l_mark2; i--)
     {
@@ -2863,7 +2644,7 @@ void mid_cross_oridinary_two_line(void)
 //  uint8 left_straight = 0, right_straight = 0;
 //  left_line_ptr = &left_line[0];
 //  right_line_ptr = &right_line[0];
-//  ////pintf("涓崄瀛楄ˉ绾胯繘琛孿n");
+//  //printf("中十字补线进行\n");
 //  for (int i = i_start; i > i_end; i--)
 //  {
 //      k_left = (float)(*(left_line_ptr + i) - *(left_line_ptr + i - 8)) / 8.0;
@@ -2881,10 +2662,10 @@ void mid_cross_oridinary_two_line(void)
 //          break;
 //      }
 //  }
-//  ////pintf("test_1 !!!\n");
+//  //printf("test_1 !!!\n");
 //  if (change_line_left_down < change_line_right_down)
 //  {
-//      ////pintf("test_2 !!!\n");
+//      //printf("test_2 !!!\n");
 //      for (int i = change_line_left_down - 3; i > i_end; i--)
 //      {
 //          k_left = (float)(*(left_line_ptr + i - 1) - *(left_line_ptr + i - 11)) / 10.0;
@@ -2938,7 +2719,7 @@ void mid_cross_oridinary_two_line(void)
 //      }
 //  }
 //  k_left = (float)(*(left_line_ptr + change_line_left_down + 3) - *(left_line_ptr + change_line_left_up - 3)) / (float)(change_line_left_down - change_line_left_up + 6);
-//  k_right = (float)(*(right_line_ptr + change_line_right_down + 3) - *(right_line_ptr + change_line_right_up - 3)) / (float)(change_line_right_down - change_line_right_up + 6);//璁＄畻宸﹀彸绐佸彉鐐规墍杩炲煄鐩寸嚎鐨勬枩鐜�
+//  k_right = (float)(*(right_line_ptr + change_line_right_down + 3) - *(right_line_ptr + change_line_right_up - 3)) / (float)(change_line_right_down - change_line_right_up + 6);//计算左右突变点所连城直线的斜率
 //  if(abs(k_left) > EPS)
 //  {
 //      b_left = (float)(change_line_left_up - 3) - ((float)*(left_line_ptr + change_line_left_up - 3) / k_left);
@@ -2970,32 +2751,32 @@ void mid_cross_oridinary_two_line(void)
 //      }
 //  }
 //
-//  ////pintf("********************************\n");
-//  ////pintf("k left :%f , k right :%f\n", k_left, k_right);
-//  ////pintf("left down:%d,right down:%d,left up:%d,right up:%d\n", change_line_left_down, change_line_right_down, change_line_left_up, change_line_right_up);
-//  ////pintf("********************************\n");
+//  //printf("********************************\n");
+//  //printf("k left :%f , k right :%f\n", k_left, k_right);
+//  //printf("left down:%d,right down:%d,left up:%d,right up:%d\n", change_line_left_down, change_line_right_down, change_line_left_up, change_line_right_up);
+//  //printf("********************************\n");
 //  /*if (change_line_left_down != 0 && change_line_left_up != 0 && change_line_right_down != 0 && change_line_right_up != 0 && abs(k_left) < 1.0 && abs(k_right) < 1.0)
 //  {
 //
 //  }*/
 //  /*else
 //  {
-//      ////pintf("********************************\n");
-//      ////pintf("right up %d  right down %d\n", right_line[82], right_line[84]);
-//      ////pintf("********************************\n");
-//      ////pintf("********************************\n");
-//      ////pintf("k left :%f , k right :%f\n", k_left, k_right);
-//      ////pintf("left down:%d,right down:%d,left up:%d,right up:%d\n", change_line_left_down, change_line_right_down, change_line_left_up, change_line_right_up);
-//      ////pintf("********************************\n");
+//      //printf("********************************\n");
+//      //printf("right up %d  right down %d\n", right_line[82], right_line[84]);
+//      //printf("********************************\n");
+//      //printf("********************************\n");
+//      //printf("k left :%f , k right :%f\n", k_left, k_right);
+//      //printf("left down:%d,right down:%d,left up:%d,right up:%d\n", change_line_left_down, change_line_right_down, change_line_left_up, change_line_right_up);
+//      //printf("********************************\n");
 //      return 0;
 //  }*/
 //}
 
 ////////////////////////////////////////////
-//鍔熻兘锛氱洿閬撳喅瀹氬弻杈�
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛氳ˉ绾跨増鏈�
+//功能：直道决定双边
+//输入：
+//输出：
+//备注：补线版本
 ///////////////////////////////////////////
 void straight_oridinary_two_line_makeup(void)
 {
@@ -3024,7 +2805,7 @@ void straight_oridinary_two_line_makeup(void)
     width_max = 0;
 
     //find_my_road();
-    ////////pintf("first  j_continue:%d,left:%d\n", j_continue[90], my_road[90].connected[j_continue[90]].left);
+    //////printf("first  j_continue:%d,left:%d\n", j_continue[90], my_road[90].connected[j_continue[90]].left);
 
     //for (i = i_start; i > i_end; i--)
     //{
@@ -3048,55 +2829,55 @@ void straight_oridinary_two_line_makeup(void)
         if (cos_L[i] < 300 && cos_L[i] > 0)
         {
             left_count++;
-            ////pintf("宸︿綑寮�: %d  cosL %d  \n", i, cos_L[i]);
+            //printf("左余弦: %d  cosL %d  \n", i, cos_L[i]);
         }
         if (cos_R[i] < 300 && cos_R[i] > 0)
         {
             right_count++;
-            ////pintf("鍙充綑寮�: %d  cosR %d  \n", i, cos_R[i]);
+            //printf("右余弦: %d  cosR %d  \n", i, cos_R[i]);
         }
     }
-    ////pintf("left_count %d   right_count %d\n", left_count, right_count);
-    ////pintf("left_line_straight %d   right_line_straight %d\n", left_line_straight, right_line_straight);
-    if (left_count != 0 && right_count != 0 && left_line_straight == 0 && right_line_straight == 0)/*婊¤冻鏉′欢杩涜琛ョ嚎*/ //&& (left_count >5 || right_count >5)
+    //printf("left_count %d   right_count %d\n", left_count, right_count);
+    //printf("left_line_straight %d   right_line_straight %d\n", left_line_straight, right_line_straight);
+    if (left_count != 0 && right_count != 0 && left_line_straight == 0 && right_line_straight == 0)/*满足条件进行补线*/ //&& (left_count >5 || right_count >5)
     {
-        ////pintf("杩涘叆鐩寸嚎琛ョ嚎\n");
+        //printf("进入直线补线\n");
 
         for (int i = 104; i > 10; i--)
         {
             if (cos_L[i] >= 0 && cos_L[i] <= 350 && left_change == NEAR_LINE)
             {
                 left_change = i;
-                ////pintf("cosL%d line%d\n", cos_L[i], i);
+                //printf("cosL%d line%d\n", cos_L[i], i);
             }
             if (cos_R[i] >= 0 && cos_R[i] <= 350 && right_change == NEAR_LINE)
             {
                 right_change = i;
-                ////pintf("cosR%d line%d\n", cos_R[i], i);
+                //printf("cosR%d line%d\n", cos_R[i], i);
             }
         }
         if (left_change == NEAR_LINE || right_change == NEAR_LINE || abs(left_change - right_change) < 10)
         {
             direction = 0;
         }
-        else if (left_change < right_change)//鍚戝乏
+        else if (left_change < right_change)//向左
         {
             enter_line = right_change;
             change_line = left_change;
             direction = 1;
         }
-        else//鍚戝彸
+        else//向右
         {
             enter_line = left_change;
             change_line = right_change;
             direction = 2;
         }
-        if (direction == 1)//鍚戝乏
+        if (direction == 1)//向左
         {
 
             //k_trident = (float)(right_line[change_line - 1] - right_line[end_line]) / (float)(change_line - end_line);
             //k_straight = (float)(right_line[change_line + 5] - right_line[change_line]) / 5.0;
-            //if (judge_sign(k_trident, k_straight))//鍒ゆ柇涓� 鏂滅巼鐨勫�掓暟 鏄惁涓哄紓鍙�,濡傛灉涓哄紓鍙凤紝鍒欓渶瑕佽ˉ绾�
+            //if (judge_sign(k_trident, k_straight))//判断两 斜率的倒数 是否为异号,如果为异号，则需要补线
             //{
             //  k_enter_pre = k_enter = (float)(right_line[i_start] - right_line[i_start - 5]) / 5.0;
             //  for (int i = i_start; i > i_end; i--)
@@ -3114,14 +2895,14 @@ void straight_oridinary_two_line_makeup(void)
             //}
             k_makeup = (float)(right_line[enter_line + 1] - left_line[change_line - 1]) / (float)(enter_line - change_line + 2);
             b_makeup = (float)(change_line - 1) - ((float)left_line[change_line - 1] / k_makeup);
-            //////pintf("****************************\n");
-            //////pintf("%d, %d, %d, %d, %f, %f\n", enter_line, left_line[enter_line], change_line - 1, left_line[change_line - 1], k_trident, k_straight);
-            /*////pintf("****************************\n");
-            ////pintf("enter line : %d,change line: %d\n", enter_line, change_line);
-            ////pintf("****************************\n");*/
-            //////pintf("****************************\n");
-            //////pintf("%d, %d, %d, %d, %f, %f\n", enter_line, right_line[enter_line], change_line - 1, right_line[change_line - 1], k_enter, k_makeup);
-            //////pintf("****************************\n");
+            ////printf("****************************\n");
+            ////printf("%d, %d, %d, %d, %f, %f\n", enter_line, left_line[enter_line], change_line - 1, left_line[change_line - 1], k_trident, k_straight);
+            /*//printf("****************************\n");
+            //printf("enter line : %d,change line: %d\n", enter_line, change_line);
+            //printf("****************************\n");*/
+            ////printf("****************************\n");
+            ////printf("%d, %d, %d, %d, %f, %f\n", enter_line, right_line[enter_line], change_line - 1, right_line[change_line - 1], k_enter, k_makeup);
+            ////printf("****************************\n");
             for (int i = enter_line; i >= change_line; i--)
             {
                 right_line_ptr = &right_line[i];
@@ -3137,15 +2918,15 @@ void straight_oridinary_two_line_makeup(void)
                 *right_line_ptr = MISS;
             }
         }
-        else if (direction == 2)//鍚戝彸
+        else if (direction == 2)//向右
         {
             k_makeup = (float)(left_line[enter_line] - right_line[change_line - 1]) / (float)(enter_line - change_line + 1);
             b_makeup = (float)(change_line - 1) - ((float)right_line[change_line - 1] / k_makeup);
-            //////pintf("****************************\n");
-            //////pintf("%d, %d, %d, %d, %f, %f\n", enter_line, left_line[enter_line], change_line - 1, left_line[change_line - 1], k_trident, k_straight);
-            ////pintf("****************************\n");
-            ////pintf("enter line : %d,change line: %d\n", enter_line, change_line);
-            ////pintf("****************************\n");
+            ////printf("****************************\n");
+            ////printf("%d, %d, %d, %d, %f, %f\n", enter_line, left_line[enter_line], change_line - 1, left_line[change_line - 1], k_trident, k_straight);
+            //printf("****************************\n");
+            //printf("enter line : %d,change line: %d\n", enter_line, change_line);
+            //printf("****************************\n");
             for (int i = enter_line; i >= change_line; i--)
             {
                 left_line_ptr = &left_line[i];
@@ -3161,7 +2942,7 @@ void straight_oridinary_two_line_makeup(void)
         }
         else if (direction == 0)
         {
-            ////pintf("涓や晶绐佸彉鐐硅繃杩沑n");
+            //printf("两侧突变点过进\n");
         }
 
     }
@@ -3174,11 +2955,11 @@ void straight_oridinary_two_line_makeup(void)
     start_line_x = 0;*/
 
 
-    /*鍑哄崄瀛�*/
+    /*出十字*/
     //double k0;
     //  for (i = i_start; i > i_end; i--)
     //  {
-    //      /*鍗佸瓧鎵�鐢ㄥ彉閲�*/
+    //      /*十字所用变量*/
     //      double k_left = (my_road[i].connected[j_continue[i]].left - my_road[i - 2].connected[j_continue[i - 2]].left) / 2.0;
     //      double k_left_pre = (my_road[i - 2].connected[j_continue[i - 2]].left - my_road[i - 4].connected[j_continue[i - 4]].left) / 2.0;
     //      double k_right = (my_road[i].connected[j_continue[i]].right - my_road[i - 2].connected[j_continue[i - 2]].right) / 2.0;
@@ -3193,7 +2974,7 @@ void straight_oridinary_two_line_makeup(void)
     //          Right_begin = i;
     //      }
 
-    //      /*宸﹀彸杈圭晫*/
+    //      /*左右边界*/
     //      if ((j_continue[i] <= my_road[i].white_num))
     //      {
     //          left_line[i] = my_road[i].connected[j_continue[i]].left;
@@ -3205,16 +2986,16 @@ void straight_oridinary_two_line_makeup(void)
     //          right_line[i] = MISS;
     //      }
 
-    //      /*鍒ゆ柇澶嶆潅鍦板舰*/
+    //      /*判断复杂地形*/
     //      if (i >= 5)
     //      {
-    //          /*绠楁洸鐜�*/
+    //          /*算曲率*/
     //          /*b = my_road[i - 20].connected[j_continue[i - 20]].left;
     //          c = my_road[i - 30].connected[j_continue[i - 30]].left;
     //          a = my_road[i].connected[j_continue[i]].left;
     //          k0 = process_curvity(i, i - 20, a, b, i - 30, c);*/
 
-    //          /*璇嗗埆鏂戦┈绾�*/
+    //          /*识别斑马线*/
     //          for (uint8 i = 100; i >= 10; i--)
     //          {
     //              if (my_road[i].white_num > 7)
@@ -3230,7 +3011,7 @@ void straight_oridinary_two_line_makeup(void)
     //                          *(my_map + j) = green;
     //                      }
     //                      Start_line();
-    //                      start_line_flag = 1;//鏂戦┈绾挎爣蹇椾綅
+    //                      start_line_flag = 1;//斑马线标志位
     //                      break;
     //                  }
     //              }
@@ -3246,12 +3027,12 @@ void straight_oridinary_two_line_makeup(void)
     //                  *(my_map + j) = green;
     //              }
     //              Start_line();
-    //              start_line_flag = 1;//鏂戦┈绾挎爣蹇椾綅
+    //              start_line_flag = 1;//斑马线标志位
     //              break;
     //          }*/
     //
     //
-    //          /*璇嗗埆鍗佸瓧*/
+    //          /*识别十字*/
     //          if (Right_flag == 1 && Left_flag == 1 && i > 45 && i < 105)
     //          {
     //              Cross();
@@ -3269,10 +3050,10 @@ void straight_oridinary_two_line_makeup(void)
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氬垽鏂槸鍚︿负鍗佸瓧
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛氭病鍐欏畬
+//功能：判断是否为十字
+//输入：
+//输出：
+//备注：没写完
 ///////////////////////////////////////////
 //uint8 cross(void)
 //{
@@ -3346,7 +3127,7 @@ void straight_oridinary_two_line_makeup(void)
 //    }
 //
 //    k_left = (float)(*(left_line_ptr + change_line_left_down) - *(left_line_ptr + change_line_left_up)) / (float)(change_line_left_down - change_line_left_up);
-//    k_right = (float)(*(right_line_ptr + change_line_right_down) - *(right_line_ptr + change_line_right_up)) / (float)(change_line_right_down - change_line_right_up);//璁＄畻宸﹀彸绐佸彉鐐规墍杩炲煄鐩寸嚎鐨勬枩鐜�
+//    k_right = (float)(*(right_line_ptr + change_line_right_down) - *(right_line_ptr + change_line_right_up)) / (float)(change_line_right_down - change_line_right_up);//计算左右突变点所连城直线的斜率
 //
 //    if (change_line_left_down != 0 && change_line_left_up != 0 && change_line_right_down != 0 && change_line_right_up != 0 && abs(k_left) < 0.5 && abs(k_right) < 0.5)
 //    {
@@ -3354,26 +3135,26 @@ void straight_oridinary_two_line_makeup(void)
 //    }
 //    else
 //    {
-//        ////pintf("********************************\n");
-//        ////pintf("right up %d  right down %d\n", right_line[82], right_line[84]);
-//        ////pintf("********************************\n");
-//        ////pintf("********************************\n");
-//        ////pintf("k left :%f , k right :%f\n", k_left, k_right);
-//        ////pintf("left down:%d,right down:%d,left up:%d,right up:%d\n", change_line_left_down, change_line_right_down, change_line_left_up, change_line_right_up);
-//        ////pintf("********************************\n");
+//        //printf("********************************\n");
+//        //printf("right up %d  right down %d\n", right_line[82], right_line[84]);
+//        //printf("********************************\n");
+//        //printf("********************************\n");
+//        //printf("k left :%f , k right :%f\n", k_left, k_right);
+//        //printf("left down:%d,right down:%d,left up:%d,right up:%d\n", change_line_left_down, change_line_right_down, change_line_left_up, change_line_right_up);
+//        //printf("********************************\n");
 //        return 0;
 //    }
 //}
 
 ////////////////////////////////////////////
-//鍔熻兘锛氬垽鏂槸鍚︿负杩戝崄瀛�
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：判断是否为近十字
+//输入：
+//输出：
+//备注：
 ///////////////////////////////////////////
 uint8 tell_near_cross(void)
 {
-    //绮楃暐鎵炬瘡琛岀櫧鏉″搴旂殑璧涢亾
+    //粗略找每行白条对应的赛道
     uint8 i_start, i_end;
     i_start = NEAR_LINE;
     i_end = FAR_LINE;
@@ -3385,13 +3166,13 @@ uint8 tell_near_cross(void)
     right_line_ptr = &right_line[0];
     left_side_ptr = &left_side[0];
     right_side_ptr = &right_side[0];
-    //1.鏍囧織閲忓垽鏂�
+    //1.标志量判断
     if (img_state_pre != img_mid_cross && img_state_pre != img_near_cross)
     {
-        ////pintf("杩戝崄瀛楁爣蹇楅噺鍒ゆ柇澶辫触\n");
+        //printf("近十字标志量判断失败\n");
         return 0;
     }
-    ////pintf("杩戝崄瀛楀垽鏂繘琛孿n");
+    //printf("近十字判断进行\n");
     /*for (uint8 i = 100; i >= 20; i--)
     {
         if (*(j_continue + i) == 0 || *(right_line_ptr + i) - *(left_line_ptr + i) <= 25)
@@ -3399,9 +3180,9 @@ uint8 tell_near_cross(void)
     }*/
 
     uint8 long_white_flag = 0;
-    for (uint8 i = 110; i >= 65; i--)  //45璋冨弬
+    for (uint8 i = 110; i >= 65; i--)  //45调参
     {
-        //////pintf("i:%d width:%d\n", i, x_right[i] - x_left[i]);
+        ////printf("i:%d width:%d\n", i, x_right[i] - x_left[i]);
 
         if (i < 82 && *(right_line_ptr + i) - *(left_line_ptr + i) >= 50)
         {
@@ -3410,16 +3191,16 @@ uint8 tell_near_cross(void)
         }
         else if (i >= 82 && (0 || (*(left_line_ptr + i) <= *(left_side_ptr+i) + 5 && *(right_line_ptr + i) >= *(right_side_ptr + i) - 5)))//x_right[i] - x_left[i] >= 55
         {
-            //////pintf("%d \n", i);
+            ////printf("%d \n", i);
             long_white_flag++;
         }
 
     }
 
-    ////pintf("杩戝崄瀛� 闀跨櫧鏉℃暟%d\n", long_white_flag);
+    //printf("近十字 长白条数%d\n", long_white_flag);
     if (long_white_flag < 5)
     {
-        ////pintf("杩戝崄瀛� 闀跨櫧鏉″垽鏂け璐�%d\n", long_white_flag);
+        //printf("近十字 长白条判断失败%d\n", long_white_flag);
         return 0;
     }
 
@@ -3428,7 +3209,7 @@ uint8 tell_near_cross(void)
     float p;
     i_start = 100;
     i_end = 20;
-    //瀵绘壘鍗佸瓧涓績   寮卞垽鎹�   2020.7.25鍔�
+    //寻找十字中心   弱判据   2020.7.25加
 
     uint8 cross_centre = NEAR_LINE;
     uint8 max_road = 0, max_road_num;
@@ -3444,10 +3225,10 @@ uint8 tell_near_cross(void)
     cross_centre = max_road_num;
 
     p = (float)(*(left_side_ptr + cross_centre) - *(left_side_ptr + cross_centre)) / (float)max_road;
-    ////pintf("cross_centre:%d width:%d\n", cross_centre, my_road[cross_centre].connected[*(j_continue + cross_centre)].width);
+    //printf("cross_centre:%d width:%d\n", cross_centre, my_road[cross_centre].connected[*(j_continue + cross_centre)].width);
     if (max_road < 40)
     {
-        ////pintf("鍗佸瓧涓績杩囩煭\n");
+        //printf("十字中心过短\n");
         return 0;
     }
 
@@ -3461,13 +3242,13 @@ uint8 tell_near_cross(void)
     }
     if (short_white <= 2)
     {
-        ////pintf("杩戝崄瀛� 鐭櫧鏉℃暟鐩笉澶焅n");
+        //printf("近十字 短白条数目不够\n");
         return 0;
     }
 
     /**********************************************************************************
     ***********************************************************************************/
-    //2020.2.28 淇敼 宸﹀彸鍒嗗紑瀵绘壘
+    //2020.2.28 修改 左右分开寻找
     uint8 l_near_flag = 0;
     uint8 r_near_flag = 0;
     uint8 start_find = 113;
@@ -3488,17 +3269,17 @@ uint8 tell_near_cross(void)
     if (l_near_flag > 15 || r_near_flag > 15)
     {
         //start_find = i;
-        ////pintf("start find:%d  宸﹂潬杈硅锛�%d鍙抽潬杈硅锛�%d\n", start_find, l_near_flag, r_near_flag);
+        //printf("start find:%d  左靠边行：%d右靠边行：%d\n", start_find, l_near_flag, r_near_flag);
         //break;
     }
     if (l_near_flag <= 15 && r_near_flag <= 15)
     {
-        ////pintf("闈犺竟琛屾暟杩囧皯\n");
+        //printf("靠边行数过少\n");
         return 0;
     }
     else if (l_near_flag >= 35 || r_near_flag >= 35)
     {
-        ////pintf("闈犺竟琛屾暟杩囧\n");
+        //printf("靠边行数过多\n");
         return 0;
     }
     /**********************************************************************************
@@ -3524,10 +3305,10 @@ uint8 tell_near_cross(void)
         }
     }
 
-    ////pintf("杩戝崄瀛� 宸︾獊鍙橈細%d 鍙崇獊鍙�:%d\n", L_tubian, R_tubian);
+    //printf("近十字 左突变：%d 右突变:%d\n", L_tubian, R_tubian);
     if (L_tubian == MISS && R_tubian == MISS)
     {
-        ////pintf("杩戝崄瀛楁湭鎵惧埌宸﹀彸绐佸彉");
+        //printf("近十字未找到左右突变");
         return 0;
     }
 
@@ -3536,12 +3317,12 @@ uint8 tell_near_cross(void)
 
     //if (*(right_line_ptr + 1) <= 70 || *(left_line_ptr + 1) >= 118)
     //{
-    //  ////pintf("杩戝崄瀛楁渶杩滆澶亸");
+    //  //printf("近十字最远行太偏");
     //  return 0;
     //}
 
 
-    //杩戝崄瀛楁壘鍑哄彛
+    //近十字找出口
 
     uint8 l_exit, r_exit;
     uint8 l_threshold, r_threshold;
@@ -3549,7 +3330,7 @@ uint8 tell_near_cross(void)
     r_exit = MISS;
 
 
-    //鐩殑锛氳秴澶ц搴︾殑杩戝崄瀛楋紝闃堝�煎簲璇ュ垎寮�璁＄畻
+    //目的：超大角度的近十字，阈值应该分开计算
     if (l_near_flag > r_near_flag)
     {
         l_threshold = 10;
@@ -3582,11 +3363,11 @@ uint8 tell_near_cross(void)
             break;
         }
     }
-    ////pintf("l_exit:%d r_exit:%d\n", l_exit, r_exit);
+    //printf("l_exit:%d r_exit:%d\n", l_exit, r_exit);
 
     if ((r_exit <= 113 && r_exit >= 100) || (l_exit <= 113 && l_exit >= 100))
     {
-        ////pintf("鍑哄彛澶潬涓媆n");
+        //printf("出口太靠下\n");
         return 0;
     }
 
@@ -3600,10 +3381,10 @@ uint8 tell_near_cross(void)
 
 }
 ////////////////////////////////////////////
-//鍔熻兘锛氳繎鍗佸瓧鍒ゆ柇鍙岃竟锛岃ˉ绾�
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：近十字判断双边，补线
+//输入：
+//输出：
+//备注：
 ///////////////////////////////////////////
 
 //void near_cross_oridinary_two_line(void)
@@ -3618,7 +3399,7 @@ uint8 tell_near_cross(void)
 //  right_side_ptr = &right_side[0];
 //  /*for (uint8 i = 113; i >= 1; i--)
 //  {
-//      ////pintf(" i:%d  瀹藉害锛�%d,side:%d  姣斾緥锛�%.2f\n",i, x_right[i] - x_left[i], right_side[i] - left_side[i],(float)(right_side[i] - left_side[i])/(float)(x_right[i] - x_left[i]));
+//      //printf(" i:%d  宽度：%d,side:%d  比例：%.2f\n",i, x_right[i] - x_left[i], right_side[i] - left_side[i],(float)(right_side[i] - left_side[i])/(float)(x_right[i] - x_left[i]));
 //  }*/
 //  uint8 i_start, i_end;
 //  uint8 l_exit, r_exit;
@@ -3648,14 +3429,14 @@ uint8 tell_near_cross(void)
 //      }
 //      else akward_flag++;
 //      //x = (float)side_width / (float)width;
-//      //////pintf("i:%d  proportion:%f\n", i,x);
+//      ////printf("i:%d  proportion:%f\n", i,x);
 //  }
 //
-//  ////pintf("akward_flag:%d\n", akward_flag);
+//  //printf("akward_flag:%d\n", akward_flag);
 //  //if (akward_flag >= 12) akward_flag = 1;
 //  if (akward_flag >= 15 && (l_exit != MISS || r_exit != MISS) || 1)
 //  {
-//      //宸﹁ˉ绾�
+//      //左补线
 //      x0 = 105;
 //      y0 = left_side[105];
 //      x1 = l_exit;
@@ -3678,7 +3459,7 @@ uint8 tell_near_cross(void)
 //      {
 //          tnum = a * i + b;
 //          lstr[i] = tnum;
-//          //////pintf("鍙宠ˉ绾匡細%d\n", rstr[i]);
+//          ////printf("右补线：%d\n", rstr[i]);
 //          if (tnum >= LEFT_SIDE && tnum <= RIGHT_SIDE)
 //          {
 //              lstr[i] = tnum;
@@ -3691,7 +3472,7 @@ uint8 tell_near_cross(void)
 //
 //      /*****************************************************************************
 //      ******************************************************************************/
-//      //鍙宠ˉ绾�
+//      //右补线
 //      x0 = 105;
 //      y0 = right_side[105];
 //      x1 = r_exit;
@@ -3714,7 +3495,7 @@ uint8 tell_near_cross(void)
 //      {
 //          tnum = a * i + b;
 //          rstr[i] = tnum;
-//          //////pintf("鍙宠ˉ绾匡細%d\n", rstr[i]);
+//          ////printf("右补线：%d\n", rstr[i]);
 //          if (tnum >= LEFT_SIDE && tnum <= RIGHT_SIDE)
 //          {
 //              rstr[i] = tnum;
@@ -3749,7 +3530,7 @@ uint8 tell_near_cross(void)
 //      }*/
 //      /*for (uint8 i = 113; i >= 1; i--)
 //      {
-//          ////pintf("%d  L:%d  R:%d\n", i,left_line[i], right_line[i]);
+//          //printf("%d  L:%d  R:%d\n", i,left_line[i], right_line[i]);
 //      }*/
 //  }
 //  /*****************************************************************************
@@ -3778,10 +3559,10 @@ void near_cross_oridinary_two_line(void)
     right_line_ptr = &right_line[0];
     left_side_ptr = &left_side[0];
     right_side_ptr = &right_side[0];
-    //1.瀵绘壘鍏ュ彛
+    //1.寻找入口
     //for (uint8 i = 110; i >= 90; i--)
     //{
-    //  //灏忕獊鍙�
+    //  //小突变
     //  if (*(left_line_ptr + i) - *(left_line_ptr + i - 1) >= 2 || *(left_line_ptr + i) <= *(left_side_ptr + i) + 2)
     //  {
     //      l_mark1 = i;
@@ -3790,7 +3571,7 @@ void near_cross_oridinary_two_line(void)
     //}
     //for (uint8 i = 110; i >= 90; i--)
     //{
-    //  //灏忕獊鍙�
+    //  //小突变
     //  if (*(right_line_ptr + i - 1) - *(right_line_ptr + i) >= 2 || *(right_line_ptr + i) <= *(right_side_ptr + i) + 2)
     //  {
     //      r_mark1 = i;
@@ -3807,8 +3588,8 @@ void near_cross_oridinary_two_line(void)
         }
         //pre_width = *(right_line_ptr + i) - *(left_line_ptr + i);
     }
-    ////pintf("mid_cross_line:%d,l_mark1:%d,r_mark1:%d\n", mid_cross_line, l_mark1, r_mark1);
-    //////pintf("%d %d++++++++++++++++++\n", l_mark1, r_mark1);
+    //printf("mid_cross_line:%d,l_mark1:%d,r_mark1:%d\n", mid_cross_line, l_mark1, r_mark1);
+    ////printf("%d %d++++++++++++++++++\n", l_mark1, r_mark1);
 
     l_mark2 = mid_cross_line;
     r_mark2 = mid_cross_line;
@@ -3826,12 +3607,12 @@ void near_cross_oridinary_two_line(void)
     //for (uint8 i = 113; i >= l_mark1; i--)
     //{
     //  left_line[i] = x_left[i];
-    //  //////pintf("i%:d left:%d\n", i, left_line[i]);
+    //  ////printf("i%:d left:%d\n", i, left_line[i]);
     //}
     for (uint8 i = l_mark1; i >= l_mark2; i--)
     {
         *(left_line_ptr + i) = i * k + b;
-        //////pintf("i%:d left:%d\n", i, left_line[i]);
+        ////printf("i%:d left:%d\n", i, left_line[i]);
     }
 
 
@@ -3854,10 +3635,10 @@ void near_cross_oridinary_two_line(void)
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氳繙鍗佸瓧璇嗗埆,椤轰究鎵炬爣蹇楃偣
-//杈撳叆锛�
-//杈撳嚭锛�0 涓嶆槸鍗佸瓧   1 鏄崄瀛�
-//澶囨敞锛�
+//功能：远十字识别,顺便找标志点
+//输入：
+//输出：0 不是十字   1 是十字
+//备注：
 ///////////////////////////////////////////
 uint8 tell_far_cross(void)
 {
@@ -3867,7 +3648,7 @@ uint8 tell_far_cross(void)
         return 0;
     }*/
 
-    //绮楃暐鎵炬瘡琛岀櫧鏉″搴旂殑璧涢亾
+    //粗略找每行白条对应的赛道
     uint8 i_start, i_end;
     i_start = NEAR_LINE;
     i_end = FAR_LINE;
@@ -3882,44 +3663,44 @@ uint8 tell_far_cross(void)
 /**********************************************************************************
 ***********************************************************************************/
 
-//闀跨櫧鏉¤禌閬撴暟鑷冲皯澶т簬7
+//长白条赛道数至少大于7
     uint8 long_white_num_flag = 0;
     uint8 white_length = 0;
     uint8 tmy_road_num = 0;
-    ////pintf("杩滃崄瀛楀垽鏂繘琛孿n");
+    //printf("远十字判断进行\n");
     for (uint8 i = i_start; i >= i_end; i--)
     {
         tmy_road_num = *(j_continue_ptr + i);
-        if (tmy_road_num == 0)//濡傛灉涓�琛屽唴鏃犵櫧鏉★紝璁や负姝よ鐧芥潯浠ヤ笂娌℃湁鍙敤璧涢亾
+        if (tmy_road_num == 0)//如果一行内无白条，认为此行白条以上没有可用赛道
         {
             break;
         }
         else
         {
             white_length = my_road[i].connected[tmy_road_num].width;
-            if (white_length >= 70)//2020.7.12鏀�  90
+            if (white_length >= 70)//2020.7.12改  90
             {
                 long_white_num_flag++;
-                //////pintf("%d,%d,%d,%d\n",i, right_side[i] , left_line[i], white_length);
+                ////printf("%d,%d,%d,%d\n",i, right_side[i] , left_line[i], white_length);
             }
         }
     }
     if (long_white_num_flag <= 7)
     {
-        ////pintf("杩滃崄瀛� 闀跨櫧鏉℃暟鐩笉澶焅n");
-        ////pintf("杩滃崄瀛� 闀跨櫧鏉℃暟:%d\n", long_white_num_flag);
+        //printf("远十字 长白条数目不够\n");
+        //printf("远十字 长白条数:%d\n", long_white_num_flag);
         return 0;
     }
     else
     {
-        ////pintf("杩滃崄瀛� 闀跨櫧鏉℃暟鐩垽鏂�氳繃\n");
-        ////pintf("杩滃崄瀛� 闀跨櫧鏉℃暟:%d\n", long_white_num_flag);
+        //printf("远十字 长白条数目判断通过\n");
+        //printf("远十字 长白条数:%d\n", long_white_num_flag);
     }
 
 
     /**********************************************************************************
     ***********************************************************************************/
-    //涓嶅簲鏈夎緝澶歮iss璧涢亾 闃堝�艰涓�5琛�
+    //不应有较多miss赛道 阈值设为5行
 
     uint8 miss_flag = 0;
     i_start = 100;
@@ -3929,28 +3710,28 @@ uint8 tell_far_cross(void)
         if (*(j_continue_ptr + i) == 0 )
         {
             miss_flag++;
-            //////pintf("j_continue\n");
+            ////printf("j_continue\n");
         }
         else if (*(right_line_ptr + i) - *(left_line_ptr + i) <= 20)
         {
             miss_flag++;
-            //////pintf("right - left%d\n",i);
+            ////printf("right - left%d\n",i);
         }
     }
     if (miss_flag >= 2)
     {
-        ////pintf("杩滃崄瀛� miss琛岃繃澶� %d\n",miss_flag);
+        //printf("远十字 miss行过多 %d\n",miss_flag);
         return 0;
     }
     else
     {
-        ////pintf("杩滃崄瀛� miss琛屽垽鏂�氳繃\n");
+        //printf("远十字 miss行判断通过\n");
     }
 
 
     /**********************************************************************************
     ***********************************************************************************/
-    //瀵绘壘鍗佸瓧涓績
+    //寻找十字中心
     uint8 cross_centre = 113;
     uint8 max_road = 0, max_road_num;
     road* tmy_road = NULL;
@@ -3967,18 +3748,18 @@ uint8 tell_far_cross(void)
         }
     }
     cross_centre = max_road_num;
-    ////pintf("杩滃崄瀛� 鍗佸瓧涓績锛�%d\n", cross_centre);
+    //printf("远十字 十字中心：%d\n", cross_centre);
     if (cross_centre > 70)
     {
-        ////pintf("鍗佸瓧涓績杩囪繎\n");
+        //printf("十字中心过近\n");
         return 0;
     }
     /*else if (cross_centre < 10)
     {
-        ////pintf("鍗佸瓧涓績杩囪繙\n");
+        //printf("十字中心过远\n");
         return 0;
     }*/
-    ////璋冭瘯鐢�
+    ////调试用
     //for (uint8 j = x_left[cross_centre]; j <= x_right[cross_centre]; j++)
     //{
     //  IMG[cross_centre][j] = red;
@@ -3987,21 +3768,21 @@ uint8 tell_far_cross(void)
 
 /**********************************************************************************
 ***********************************************************************************/
-//宸﹀彸璧涢亾姹俢os鍊煎钩鏂�
+//左右赛道求cos值平方
 
-    int cosL[CHANGED_H] = { 0 };//浣欏鸡鐨勫钩鏂瑰乏 鎵╁ぇ1000鍊�
-    int cosR[CHANGED_H] = { 0 };//浣欏鸡鐨勫钩鏂瑰彸 鎵╁ぇ1000鍊�
+    int cosL[CHANGED_H] = { 0 };//余弦的平方左 扩大1000倍
+    int cosR[CHANGED_H] = { 0 };//余弦的平方右 扩大1000倍
     int x1 = 0;
     int x2 = 0;
     int y2 = 0;
 
-    i_start = 100 - gap; //闃叉闀滃ご鐣稿彉褰卞搷
+    i_start = 100 - gap; //防止镜头畸变影响
     i_end = cross_centre;
 
     y2 = gap * gap;
     for (uint8 i = i_start; i >= i_end; i--)
     {
-        //璁＄畻宸︿晶浣欏鸡鍊煎钩鏂�
+        //计算左侧余弦值平方
         x1 = (int)*(left_line_ptr + i - gap) - (int)*(left_line_ptr + i);
         x2 = (int)*(left_line_ptr + i) - (int)*(left_line_ptr + i + gap);
         cosL[i] = x1 * x2 + y2;
@@ -4009,25 +3790,25 @@ uint8 tell_far_cross(void)
         cosL[i] = cosL[i] * 1000 / ((x1 * x1 + y2) * (x2 * x2 + y2));
 
 
-        //璁＄畻鍙充晶浣欏鸡鍊煎钩鏂�
+        //计算右侧余弦值平方
         x1 = (int)*(right_line_ptr + i - gap) - (int)*(right_line_ptr + i);
         x2 = (int)*(right_line_ptr + i) - (int)*(right_line_ptr + i + gap);
         cosR[i] = x1 * x2 + y2;
         cosR[i] *= cosR[i];
         cosR[i] = cosR[i] * 1000 / ((x1 * x1 + y2) * (x2 * x2 + y2));
 
-        //////pintf("琛屾暟锛�%d 宸︿綑寮︼細%d 鍙充綑寮︼細%d\n",i, cosL[i], cosR[i]);
+        ////printf("行数：%d 左余弦：%d 右余弦：%d\n",i, cosL[i], cosR[i]);
     }
 
 
 
     /**********************************************************************************
     ***********************************************************************************/
-    //浣欏鸡鍊煎钩鏂规壘鍗佸瓧鍏ュ彛
+    //余弦值平方找十字入口
     uint8 l_enter = MISS, r_enter = MISS;
     uint8 l_enter2 = MISS, r_enter2 = MISS;
 
-    i_start = 95; //闃叉闀滃ご鐣稿彉褰卞搷
+    i_start = 95; //防止镜头畸变影响
     i_end = cross_centre;
 
     for (uint8 i = i_start; i >= i_end; i--)
@@ -4049,7 +3830,7 @@ uint8 tell_far_cross(void)
 
     }
 
-    //////pintf("r_enter:%d\n", r_enter);
+    ////printf("r_enter:%d\n", r_enter);
 
     for (uint8 i = 90; i >= i_end; i--)
     {
@@ -4068,8 +3849,8 @@ uint8 tell_far_cross(void)
             break;
         }
     }
-    //////pintf("r_enter2:%d\n", r_enter2);
-    //////pintf("r_enter:%d\n", r_enter);
+    ////printf("r_enter2:%d\n", r_enter2);
+    ////printf("r_enter:%d\n", r_enter);
 
     if (l_enter2 != MISS && l_enter == MISS)
     {
@@ -4094,25 +3875,25 @@ uint8 tell_far_cross(void)
     }
 
 
-    ////pintf("宸﹀叆鍙ｏ細%d 鍙冲叆鍙ｏ細%d\n", l_enter, r_enter);
+    //printf("左入口：%d 右入口：%d\n", l_enter, r_enter);
     if (l_enter == MISS)
     {
-        ////pintf("宸﹀叆鍙ｄ涪澶盶n");
+        //printf("左入口丢失\n");
         return 0;
     }
     if (r_enter == MISS)
     {
-        ////pintf("鍙冲叆鍙ｄ涪澶盶n");
+        //printf("右入口丢失\n");
         return 0;
     }
     if (abs(l_enter - r_enter) > 30)
     {
-        ////pintf("鍏ュ彛鐩歌窛杩囪繙\n");
+        //printf("入口相距过远\n");
         return 0;
     }
     if (cross_centre > l_enter || cross_centre > r_enter)
     {
-        ////pintf("鍗佸瓧涓績浣庝簬鍗佸瓧鍏ュ彛\n");
+        //printf("十字中心低于十字入口\n");
         return 0;
     }
 
@@ -4145,10 +3926,10 @@ void far_cross_oridinary_two_line(void)
 
     uint8 i_start, i_end;
 
-    //鏈�灏忎簩涔樻硶琛ョ嚎
+    //最小二乘法补线
     uint8 detla_x = 0;
     uint8 bxbegin = 105;
-    uint8 bxend = FAR_LINE;//璋冨弬
+    uint8 bxend = FAR_LINE;//调参
     uint8 lstr[CHANGED_H] = { 0 }, rstr[CHANGED_H] = { 0 };
     int tnum = 0;
     float a = 0, b = 0, x_average = 0, y_average = 0, xy_average = 0, x2_average = 0;
@@ -4158,7 +3939,7 @@ void far_cross_oridinary_two_line(void)
 
     /*******************************************************************************************************
     ********************************************************************************************************/
-    //宸︿晶琛ョ嚎
+    //左侧补线
     x_average = (float)(i_start + i_end) / 2;
     for (uint8 i = i_start; i >= i_end; i--)
     {
@@ -4178,7 +3959,7 @@ void far_cross_oridinary_two_line(void)
     else a = 0;
 
     b = y_average - a * x_average;
-    //////pintf("a:%f\n", a);
+    ////printf("a:%f\n", a);
     i_start = l_enter;
     i_end = FAR_LINE;
     for (uint8 i = i_start; i >= i_end; i--)
@@ -4189,10 +3970,10 @@ void far_cross_oridinary_two_line(void)
         else lstr[i] = MISS;
     }
 
-//    for (uint8 i = i_start; i >= i_end; i--)
-//        IMG[i][lstr[i]] = red;
-    ////pintf("宸﹁ˉ绾縜:%f, b:%f\n", a, b);
-        //鍙充晶琛ョ嚎
+    for (uint8 i = i_start; i >= i_end; i--)
+        IMG[i][lstr[i]] = red;
+    //printf("左补线a:%f, b:%f\n", a, b);
+        //右侧补线
     a = 0;
     b = 0;
     x_average = 0;
@@ -4222,7 +4003,7 @@ void far_cross_oridinary_two_line(void)
         a = (x_average * y_average - xy_average) / (x_average * x_average - x2_average);
     }
     else a = 0;
-    //////pintf("a:%f\n", a);
+    ////printf("a:%f\n", a);
     b = y_average - a * x_average;
 
     i_start = r_enter;
@@ -4235,13 +4016,13 @@ void far_cross_oridinary_two_line(void)
             rstr[i] = tnum;
         else rstr[i] = MISS;
     }
-//    for (uint8 i = i_start; i >= i_end; i--)
-//        IMG[i][rstr[i]] = red;
-    ////pintf("鍙宠ˉ绾縜:%f, b:%f\n", a, b);
+    for (uint8 i = i_start; i >= i_end; i--)
+        IMG[i][rstr[i]] = red;
+    //printf("右补线a:%f, b:%f\n", a, b);
     /*******************************************************************************************************
     ********************************************************************************************************/
 
-    //瀵绘壘鍑哄彛 鎸囬拡鍔犻�熺増 2020.1.13
+    //寻找出口 指针加速版 2020.1.13
 
     uint8 l_exit = 1, r_exit = 1;
     uint8* x_l;
@@ -4256,7 +4037,7 @@ void far_cross_oridinary_two_line(void)
 
     float x1, x2, y1, y2, k;
     uint8 l_exit_flag = 0, r_exit_flag = 0;
-    ////pintf("l_cross_limit %d\n", l_cross_limit);
+    //printf("l_cross_limit %d\n", l_cross_limit);
     if (l_cross_limit == 0)
     {
         for (uint8 i = cross_center; i >= FAR_LINE; i--)
@@ -4269,7 +4050,7 @@ void far_cross_oridinary_two_line(void)
             if (l_exit_flag >= 4)
             {
                 l_exit = i;
-                ////pintf("宸﹀嚭鍙ｆ崟鑾�:%d\n", l_exit);
+                //printf("左出口捕获:%d\n", l_exit);
                 //IMG[i][*(x_l + i)] = red;
                 break;
             }
@@ -4282,7 +4063,7 @@ void far_cross_oridinary_two_line(void)
             if (abs(*(left_line_ptr + i) - *(left_line_ptr + i - gap)) <= 3 && abs(*(left_line_ptr + i) - *(left_line_ptr + i + gap)) <= 3 && (*(left_line_ptr + i) - *(left_side_ptr + i)) >= 15)
             {
                 l_exit = i;
-                ////pintf("宸﹀嚭鍙ｆ崟鑾�2:%d\n", l_exit);
+                //printf("左出口捕获2:%d\n", l_exit);
                 //IMG[i][*(x_l + i)] = red;
                 break;
             }
@@ -4303,7 +4084,7 @@ void far_cross_oridinary_two_line(void)
         }
     }
 
-    ////pintf("r_cross_limit %d\n", r_cross_limit);
+    //printf("r_cross_limit %d\n", r_cross_limit);
     if (r_cross_limit == 0)
     {
         for (uint8 i = cross_center; i >= FAR_LINE; i--)
@@ -4316,7 +4097,7 @@ void far_cross_oridinary_two_line(void)
             if (r_exit_flag >= 4)
             {
                 r_exit = i;
-                ////pintf("鍙冲嚭鍙ｆ崟鑾�:%d \n", r_exit);
+                //printf("右出口捕获:%d \n", r_exit);
                 //IMG[i][*(x_r + i)] = red;
                 break;
             }
@@ -4329,7 +4110,7 @@ void far_cross_oridinary_two_line(void)
             if (abs(*(right_line_ptr + i) - *(right_line_ptr + i - gap)) <= 3 && abs(*(right_line_ptr + i) - *(right_line_ptr + i + gap)) <= 3 && (*(right_side_ptr + i) - *(right_line_ptr + i)) >= 15)
             {
                 r_exit = i;
-                ////pintf("鍙冲嚭鍙ｆ崟鑾�2:%d\n", r_exit);
+                //printf("右出口捕获2:%d\n", r_exit);
                 //IMG[i][*(x_l + i)] = red;
                 break;
             }
@@ -4413,9 +4194,9 @@ void far_cross_oridinary_two_line(void)
         }
     }*/
 
-    ////pintf("left:%d , right:%d\n", l_enter, r_enter);
+    //printf("left:%d , right:%d\n", l_enter, r_enter);
 
-    for (uint8 i = l_enter; i >= l_exit; i--) //涓嶉渶瑕佽�冭檻鍑哄彛鏈崟鑾风殑鎯呭喌锛屽洜涓� l_exit 銆乺_exit鍒濆鍖栦负 FAR_LINE
+    for (uint8 i = l_enter; i >= l_exit; i--) //不需要考虑出口未捕获的情况，因为 l_exit 、r_exit初始化为 FAR_LINE
     {
         *(left_line_ptr + i) = *(ptr_l + i);
     }
@@ -4425,15 +4206,15 @@ void far_cross_oridinary_two_line(void)
     }
 
 
-    ////pintf("%d %d\n", l_exit, r_exit);
+    //printf("%d %d\n", l_exit, r_exit);
 
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氭帴杩戠幆宀�
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：接近环岛
+//输入：
+//输出：
+//备注：
 ///////////////////////////////////////////
 uint8 near_circle(void)
 {
@@ -4442,8 +4223,8 @@ uint8 near_circle(void)
     float k_left = 0, k_right = 0;
     uint8* left_line_ptr = NULL;
     uint8* right_line_ptr = NULL;
-    //pintf("鐜矝鍒ゆ柇杩涜\n");
-    if (left_line_straight == 0 && right_line_straight != 0)//宸︿晶涓嶄负鐩撮亾锛屽彸渚т负鐩撮亾,鍙兘鏄乏渚ф湁鐜矝
+    printf("环岛判断进行\n");
+    if (left_line_straight == 0 && right_line_straight != 0)//左侧不为直道，右侧为直道,可能是左侧有环岛
     {
         k_right = (float)(right_line[100] - right_line[40]) / 60.0;
         for (int i = i_start; i > i_end; i--)
@@ -4467,14 +4248,14 @@ uint8 near_circle(void)
             }
         }
         k_left = (float)(left_line[left_change_up - 5] - left_line[left_change_up]) / (-5.0);
-        //pintf("**********************************\n");
-        //pintf("LEFT:%d ,%d , %d , %d , %f\n",left_line[left_change_down], left_line[left_change_up],left_change_down, left_change_up,k_right);
-        //pintf("**********************************\n");
+        printf("**********************************\n");
+        printf("LEFT:%d ,%d , %d , %d , %f\n",left_line[left_change_down], left_line[left_change_up],left_change_down, left_change_up,k_right);
+        printf("**********************************\n");
         if ( left_change_down > left_change_up  && abs(k_right) < 0.21)//&& k_left < 0 && left_change_down != NEAR_LINE && left_change_up != NEAR_LINE &&
         {
-            ////pintf("*********************************************\n");
-            ////pintf("return 1\n");
-            ////pintf("*********************************************\n");
+            //printf("*********************************************\n");
+            //printf("return 1\n");
+            //printf("*********************************************\n");
             mood.circle = 1;
             circle = 1;
             return 1;
@@ -4482,7 +4263,7 @@ uint8 near_circle(void)
 
 
     }
-    else if (left_line_straight != 0 && right_line_straight == 0)//宸︿晶涓虹洿閬擄紝鍙充晶涓嶄负鐩撮亾,鍙兘鏄彸渚ф湁鐜矝
+    else if (left_line_straight != 0 && right_line_straight == 0)//左侧为直道，右侧不为直道,可能是右侧有环岛
     {
         k_left = (float)(left_line[100] - left_line[40]) / 60.0;
         for (int i = i_start; i > 30; i--)
@@ -4506,30 +4287,30 @@ uint8 near_circle(void)
             }
         }
         k_right = (float)(right_line[right_change_up - 5] - right_line[right_change_up]) / (-5.0);
-        //pintf("**********************************\n");
-        //pintf("RIGHT:%d , %d , %f\n", right_change_down, right_change_up, k_left);
-        //pintf("**********************************\n");
-        if ( right_change_down > right_change_up &&  abs(k_left) < 0.5)//k_right > 0 && right_change_down != NEAR_LINE && right_change_up != NEAR_LINE &&
+        printf("**********************************\n");
+        printf("RIGHT:%d , %d , %f\n", right_change_down, right_change_up, k_left);
+        printf("**********************************\n");
+        if ( right_change_down > right_change_up &&  abs(k_left) < 0.35)//k_right > 0 && right_change_down != NEAR_LINE && right_change_up != NEAR_LINE &&
         {
-            ////pintf("*********************************************\n");
-            ////pintf("return 2\n");
-            ////pintf("*********************************************\n");
+            //printf("*********************************************\n");
+            //printf("return 2\n");
+            //printf("*********************************************\n");
             mood.circle = 2;
             circle = 2;
             return 2;
         }
     }
-    ////pintf("*********************************************\n");
-    ////pintf("return 0\n");
-    ////pintf("*********************************************\n");
+    //printf("*********************************************\n");
+    //printf("return 0\n");
+    //printf("*********************************************\n");
     return 0;
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氳繘鍏ョ幆宀�
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：进入环岛
+//输入：
+//输出：
+//备注：
 ///////////////////////////////////////////
 uint8 enter_circle(void)
 {
@@ -4541,13 +4322,13 @@ uint8 enter_circle(void)
     uint8* right_line_ptr = &right_line[0];
     left_change_up = NEAR_LINE;
     right_change_up = NEAR_LINE;
-    //pintf("enter circle鍒ゆ柇 %d\n",circle_count);
+    printf("enter circle判断 %d\n",circle_count);
     if (circle_count <= 4)
     {
-        //pintf("no\n");
+        printf("no\n");
         return 0;
     }
-    //pintf("circle %d\n", circle);
+    printf("circle %d\n", circle);
     if (circle == 1)
     {
         for (int i = i_start; i > i_end; i--)
@@ -4576,32 +4357,32 @@ uint8 enter_circle(void)
     }
     if (left_change_up == NEAR_LINE && right_change_up == NEAR_LINE)
     {
-        //pintf("find change line failed\n");
+        printf("find change line failed\n");
         return 0;
     }
-    //pintf("left_change_up %d  right_change_up %d\n", left_change_up, right_change_up);
+    printf("left_change_up %d  right_change_up %d\n", left_change_up, right_change_up);
     return 1;
 }
 
 //////////////////////////////////////////////
-////鍔熻兘锛氭枒椹嚎璇嗗埆
-////杈撳叆锛�
-////杈撳嚭锛�
-////澶囨敞锛氬彲鍙栧�艰寖鍥� 13-15琛�
+////功能：斑马线识别
+////输入：
+////输出：
+////备注：可取值范围 13-15行
 /////////////////////////////////////////////
 uint8 tell_zebra(void)
 {
 
     uint8 tnum = 0;
     uint8 zebra_count = 0;
-    ////pintf("鏂戦┈绾垮垽鏂繘琛孿n");
-    //////pintf("1************************\n");
-    //鏈�涓婄瑕佹槸鏈夋棤璧涢亾閮ㄥ垎锛屽垯涓嶅彲鑳芥槸鏂戦┈绾�
+    //printf("斑马线判断进行\n");
+    ////printf("1************************\n");
+    //最上端要是有无赛道部分，则不可能是斑马线
     for (uint8 i = 20; i > 1; i--)
     {
         if (my_road[i].white_num == 0)
         {
-            //////pintf("2************************\n");
+            ////printf("2************************\n");
             return 0;
         }
     }
@@ -4630,14 +4411,14 @@ uint8 tell_zebra(void)
 
     for (uint8 i = i_start; i >= i_end; i--)
     {
-        output = k * i + b; //绠�
+        output = k * i + b; //算
         //IMG[i][output] = red;
-        output = output - my_road[i].connected[1].left;//宸�
-        output *= output;//骞虫柟
-        add_square = add_square + output;//绱姞
+        output = output - my_road[i].connected[1].left;//差
+        output *= output;//平方
+        add_square = add_square + output;//累加
     }
 
-    l_v = (float)add_square / (float)(i_start - i_end);//鏂瑰樊
+    l_v = (float)add_square / (float)(i_start - i_end);//方差
 
 
 
@@ -4659,21 +4440,21 @@ uint8 tell_zebra(void)
     for (uint8 i = i_start; i >= i_end; i--)
     {
         number = number = my_road[i].white_num;
-        output = k * i + b; //绠�
+        output = k * i + b; //算
         //IMG[i][output] = red;
-        output = output - my_road[i].connected[number].right;//宸�
-        output *= output;//骞虫柟
-        add_square = add_square + output;//绱姞
+        output = output - my_road[i].connected[number].right;//差
+        output *= output;//平方
+        add_square = add_square + output;//累加
     }
 
-    r_v = (float)add_square / (float)(i_start - i_end);//鏂瑰樊
+    r_v = (float)add_square / (float)(i_start - i_end);//方差
 
-    ////pintf("鏂戦┈绾挎柟宸紙宸︼級锛�%f\n", l_v);
-    ////pintf("鏂戦┈绾挎柟宸紙鍙筹級锛�%f\n", r_v);
+    //printf("斑马线方差（左）：%f\n", l_v);
+    //printf("斑马线方差（右）：%f\n", r_v);
 
     if ((left_straight != 0 && right_straight==0 && left_line_straight ==0 && right_line_straight == 0) || (left_straight == 0 && right_straight != 0 && left_line_straight == 0 && right_line_straight == 0))//(l_v <= 10 && r_v >= 40) || (l_v >= 40 && r_v <= 10)
     {
-        ////pintf("閫氳繃\n");
+        //printf("通过\n");
     }
     else {
         return 0;
@@ -4681,19 +4462,19 @@ uint8 tell_zebra(void)
     /******************************************************************************************/
     /******************************************************************************************/
 
-    uint8 road_max_width = 45;          //36璋冨弬锛屼竴鑸负璧涢亾瀹藉害
+    uint8 road_max_width = 45;          //36调参，一般为赛道宽度
     uint8 mark_left = MISS, mark_right = MISS;
 
     for (uint8 i = 113; i > 10; i--)
     {
         tnum = my_road[i].white_num;
-        //////pintf("%d %d\n", tnum, my_road[i].connected[6].left - my_road[i].connected[2].left);
+        ////printf("%d %d\n", tnum, my_road[i].connected[6].left - my_road[i].connected[2].left);
 
         if (tnum >= 6 && (my_road[i].connected[6].left - my_road[i].connected[2].left) <= road_max_width)
         {
             mark_left = my_road[i].connected[2].left;
             mark_right = my_road[i].connected[6].left;
-            ////pintf("i:%d mark_left:%d mark_right:%d\n", i, mark_left, mark_right);
+            //printf("i:%d mark_left:%d mark_right:%d\n", i, mark_left, mark_right);
 
             for (uint8 j = i; j > i - 10; j--)
             {
@@ -4707,22 +4488,22 @@ uint8 tell_zebra(void)
                 {
                     zebra_start = i;
                     //zebra_end = j;
-                    ////pintf("start:%d\n", zebra_start);
+                    //printf("start:%d\n", zebra_start);
                     return 1;
                 }
-                ////pintf("zebra_count:%d\n", zebra_count);
+                //printf("zebra_count:%d\n", zebra_count);
             }
         }
     }
-    //////pintf("i:%d mark_left:%d mark_right:%d\n", i, mark_left, mark_right);
+    ////printf("i:%d mark_left:%d mark_right:%d\n", i, mark_left, mark_right);
     return 0;
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氬集閬撲紭鍖�
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：弯道优化
+//输入：
+//输出：
+//备注：
 ///////////////////////////////////////////
 uint8 roof(void)
 {
@@ -4742,8 +4523,8 @@ uint8 roof(void)
     right_side_ptr = &right_side[0];
     left_smooth_ptr = &left_smooth[0];
     right_smooth_ptr = &right_smooth[0];
-    ////pintf("roof\n");
-    //瀵绘壘绗竴涓潪miss琛�
+    //printf("roof\n");
+    //寻找第一个非miss行
     for (i = 1; i <= 80; i++)
     {
         if (*(left_line_ptr+i) != MISS || *(right_line_ptr+i) != MISS)
@@ -4753,7 +4534,7 @@ uint8 roof(void)
             break;
         }
     }
-    ////pintf("roof line 1:%d\n", roof_line);
+    //printf("roof line 1:%d\n", roof_line);
     if (roof_line == 1)
     {
         return 0;
@@ -4762,7 +4543,7 @@ uint8 roof(void)
     {
         roof_flag = 1;
     }
-    ////pintf("roof line:%d\n", roof_line);
+    //printf("roof line:%d\n", roof_line);
     uint8 left_min = 255, left_min_line=0;
     uint8 right_min = 255, right_min_line=0;
     uint8 flag = 1;
@@ -4796,16 +4577,16 @@ uint8 roof(void)
             //break;
         }
     }
-    ////pintf("鍦嗗姬椤朵慨姝�: 宸�%d %d  鍙�%d %d\n", left_min, left_min_line, right_min, right_min_line);//瀛樺湪鏈祴鍊肩殑鎯呭喌
+    //printf("圆弧顶修正: 左%d %d  右%d %d\n", left_min, left_min_line, right_min, right_min_line);//存在未赋值的情况
 
-    if (left_min < right_min)//宸︽嫄
+    if (left_min < right_min)//左拐
     {
         for (i = roof_line; i <= left_min_line; i++)
         {
             *(left_smooth_ptr + i) = MISS;
         }
     }
-    if (left_min > right_min)//宸︽嫄
+    if (left_min > right_min)//左拐
     {
         for (i = roof_line; i <= right_min_line; i++)
         {
@@ -4816,10 +4597,10 @@ uint8 roof(void)
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氱洿閬撳喅瀹氬弻杈�
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛氳档瀹佺殑
+//功能：直道决定双边
+//输入：
+//输出：
+//备注：赵宁的
 ///////////////////////////////////////////
 
 //void straight_oridinary_two_line(void)
@@ -4879,10 +4660,10 @@ uint8 roof(void)
 //}
 
 ////////////////////////////////////////////
-//鍔熻兘锛氱‘瀹氭槸涓嶆槸鐩撮亾
-//杈撳叆锛氭暟缁勬寚閽堬紝璧峰琛岋紝缁堟琛�
-//杈撳嚭锛�0---涓嶇洿  1---鐩�  2---杩戜技鐩撮亾
-//澶囨敞锛氭柟宸�50涓虹洿閬撶殑鍒嗙晫绾�
+//功能：确定是不是直道
+//输入：数组指针，起始行，终止行
+//输出：0---不直  1---直  2---近似直道
+//备注：方差50为直道的分界线
 ///////////////////////////////////////////
 uint8 define_straight_line(uint8* line, uint8 start_line, uint8 end_line, uint8 dirction)
 {
@@ -4924,25 +4705,25 @@ uint8 define_straight_line(uint8* line, uint8 start_line, uint8 end_line, uint8 
 
     for (i = i_start; i >= i_end; i--)
     {
-        output = k * i + b; //绠�
+        output = k * i + b; //算
         //IMG[i][output] = red;
-        output = output - *(line + i);//宸�
-        output *= output;//骞虫柟
-        add_square = add_square + output;//绱姞
+        output = output - *(line + i);//差
+        output *= output;//平方
+        add_square = add_square + output;//累加
     }
 
-    variance = (float)add_square / (float)(i_start - i_end);//鏂瑰樊
-    ////pintf("鏂瑰樊锛�%f\n", variance);
+    variance = (float)add_square / (float)(i_start - i_end);//方差
+    //printf("方差：%f\n", variance);
     if (variance <= 5) return 1;
     //else if (variance > 5 && variance < 35) return 2;
     else return 0;
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氬墠鍚庢眰骞冲潎浣嶇疆婊ゆ尝
-//杈撳叆锛歶int8 left_line[CHANGED_H];//宸﹁竟绾�  uint8 right_line[CHANGED_H];//鍙宠竟绾�
-//杈撳嚭锛歶int8 left_smooth[CHANGED_H];//宸︽护娉� uint8 right_smooth[CHANGED_H];//鍙虫护娉�
-//澶囨敞锛�2020.2.19娣诲姞 copy瀛﹂暱
+//功能：前后求平均位置滤波
+//输入：uint8 left_line[CHANGED_H];//左边线  uint8 right_line[CHANGED_H];//右边线
+//输出：uint8 left_smooth[CHANGED_H];//左滤波 uint8 right_smooth[CHANGED_H];//右滤波
+//备注：2020.2.19添加 copy学长
 ///////////////////////////////////////////
 void filter_two_line(void)
 {
@@ -4950,14 +4731,14 @@ void filter_two_line(void)
     uint8 i_end;
     uint8 i;
     int j_add = 0;
-    uint8 num = 2;//鍚戜笂鎴栧悜涓嬭鍙栧灏戜釜鐐�
+    uint8 num = 2;//向上或向下要取多少个点
     uint8 sum;
     uint8 left_top = NEAR_LINE - gap, right_top = NEAR_LINE + gap;
     uint8* left_line_ptr = NULL;
     uint8* right_line_ptr = NULL;
     uint8* left_smooth_ptr = NULL;
     uint8* right_smooth_ptr = NULL;
-    sum = 2 * num + 1;//姣忎釜鐐圭殑鍊肩敱鍛ㄥ洿鎬诲叡鍑犱釜鐐瑰喅瀹�
+    sum = 2 * num + 1;//每个点的值由周围总共几个点决定
     left_line_ptr = &left_line[0];
     right_line_ptr = &right_line[0];
     left_smooth_ptr = &left_smooth[0];
@@ -4975,7 +4756,7 @@ void filter_two_line(void)
     //memset(left_smooth, MISS, CHANGED_H);
     //memset(right_smooth, MISS, CHANGED_H);
 
-    //宸﹁竟鐣�
+    //左边界
 
     i_start = NEAR_LINE - num;
     i_end = left_top + num;
@@ -4999,7 +4780,7 @@ void filter_two_line(void)
         j_add += *(left_line_ptr + i - num - 1);
     }
 
-    //鍙宠竟鐣�
+    //右边界
     i_start = NEAR_LINE - num;
     i_end = right_top + num;
 
@@ -5021,8 +4802,8 @@ void filter_two_line(void)
         j_add -= *(right_line_ptr + i + num);
         j_add += *(right_line_ptr + i - num - 1);
     }
-    //////pintf("left_top:%d , right_top%d\n", left_top, right_top);
-    //////pintf("left_smooth%d,right_smooth%d\n", left_smooth[70], right_smooth[70]);
+    ////printf("left_top:%d , right_top%d\n", left_top, right_top);
+    ////printf("left_smooth%d,right_smooth%d\n", left_smooth[70], right_smooth[70]);
 }
 
 void if_connect(void)
@@ -5050,7 +4831,7 @@ void if_connect(void)
             break;
         }
     }
-    //////pintf("left_smooth%d,right_smooth%d\n", left_smooth[70], right_smooth[70]);
+    ////printf("left_smooth%d,right_smooth%d\n", left_smooth[70], right_smooth[70]);
 }
 
 void if_smooth(void)
@@ -5058,8 +4839,8 @@ void if_smooth(void)
     uint8 g = 10;
     uint8 i_start, i_end;
     uint8 Lmiss_flag = MISS, Rmiss_flag = MISS;
-    int cosL[CHANGED_H] = { 0 };//浣欏鸡鐨勫钩鏂瑰乏 鎵╁ぇ1000鍊�
-    int cosR[CHANGED_H] = { 0 };//浣欏鸡鐨勫钩鏂瑰彸 鎵╁ぇ1000鍊�
+    int cosL[CHANGED_H] = { 0 };//余弦的平方左 扩大1000倍
+    int cosR[CHANGED_H] = { 0 };//余弦的平方右 扩大1000倍
     int x1 = 0;
     int x2 = 0;
     int y2 = 0;
@@ -5069,7 +4850,7 @@ void if_smooth(void)
     left_smooth_ptr = &left_smooth[0];
     right_smooth_ptr = &right_smooth[0];
 
-    i_start = 80; //闃叉闀滃ご鐣稿彉褰卞搷
+    i_start = 80; //防止镜头畸变影响
     i_end = 15;
     for (uint8 i = 113; i >= 1; i--)
     {
@@ -5084,7 +4865,7 @@ void if_smooth(void)
     y2 = g * g;
     for (uint8 i = i_start; i >= i_end; i--)
     {
-        //璁＄畻宸︿晶浣欏鸡鍊煎钩鏂�
+        //计算左侧余弦值平方
         x1 = (int)(*(left_smooth_ptr + i - g)) - (int)(*(left_smooth_ptr + i));
         x2 = (int)(*(left_smooth_ptr + i)) - (int)(*(left_smooth_ptr + i + g));
         cosL[i] = x1 * x2 + y2;
@@ -5092,14 +4873,14 @@ void if_smooth(void)
         cosL[i] = cosL[i] * 1000 / ((x1 * x1 + y2) * (x2 * x2 + y2));
 
 
-        //璁＄畻鍙充晶浣欏鸡鍊煎钩鏂�
+        //计算右侧余弦值平方
         x1 = (int)(*(right_smooth_ptr + i - g)) - (int)(*(right_smooth_ptr + i));
         x2 = (int)(*(right_smooth_ptr + i)) - (int)(*(right_smooth_ptr + i + g));
         cosR[i] = x1 * x2 + y2;
         cosR[i] *= cosR[i];
         cosR[i] = cosR[i] * 1000 / ((x1 * x1 + y2) * (x2 * x2 + y2));
 
-        //////pintf("琛屾暟锛�%d 宸︿綑寮︼細%d 鍙充綑寮︼細%d\n", i, cosL[i], cosR[i]);
+        ////printf("行数：%d 左余弦：%d 右余弦：%d\n", i, cosL[i], cosR[i]);
 
     }
     for (uint8 i = i_start; i >= i_end; i--)
@@ -5118,8 +4899,8 @@ void if_smooth(void)
             break;
         }
     }
-    //////pintf("COSL[86]%d\n", cosL[86]);
-    //////pintf("L%d  R%d\n", Lmiss_flag, Rmiss_flag);
+    ////printf("COSL[86]%d\n", cosL[86]);
+    ////printf("L%d  R%d\n", Lmiss_flag, Rmiss_flag);
 
 
     if (Lmiss_flag != MISS)
@@ -5136,14 +4917,14 @@ void if_smooth(void)
             *(right_smooth_ptr + i) = MISS;
         }
     }
-    //////pintf("left_smooth%d,right_smooth%d\n", left_smooth[70], right_smooth[70]);
+    ////printf("left_smooth%d,right_smooth%d\n", left_smooth[70], right_smooth[70]);
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氬垵姝ュ喅瀹氬弻杈�
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛氶�氳繃涓婁竴寮犲浘鐨勪腑绾挎壘鍒版柊鍥剧殑璧涢亾鐧芥潯锛屽苟鏍囨敞鍙岃竟
+//功能：初步决定双边
+//输入：
+//输出：
+//备注：通过上一张图的中线找到新图的赛道白条，并标注双边
 ///////////////////////////////////////////
 void find_x_right_left(void)
 {
@@ -5180,7 +4961,7 @@ void find_x_right_left(void)
 
     }
 
-    //杩為�氬垽鏂�
+    //连通判断
     uint8 break_line = MISS;
     for (uint8 i = 110; i >= 1; i--)
     {
@@ -5246,10 +5027,10 @@ void find_x_right_left(void)
 }
 
 //////////////////////////////////////////////
-////鍔熻兘锛氬鎵惧綋鍓嶈鏈�鍙兘鏄垜瑕佽杩涜禌閬撶殑鐧芥潯缂栧彿
-////杈撳叆锛氳鏁�
-////杈撳嚭锛氱櫧鏉＄紪鍙�
-////澶囨敞锛氭棤
+////功能：寻找当前行最可能是我要行进赛道的白条编号
+////输入：行数
+////输出：白条编号
+////备注：无
 /////////////////////////////////////////////
 uint8 define_my_way(uint8 line)
 {
@@ -5305,26 +5086,26 @@ uint8 define_my_way(uint8 line)
 
 
 ////////////////////////////////////////////
-//鍔熻兘锛氭壘涓嚎(婊ゆ尝涔嬪悗)
-//杈撳叆锛歶int8 left_smooth[CHANGED_H];//宸︽护娉� uint8 right_smooth[CHANGED_H];//鍙虫护娉�
-//杈撳嚭锛歮id_float
-//澶囨敞锛氳禌閬撲袱杈圭殑瀵瑰簲鐐硅窛绂绘渶鐭�
+//功能：找中线(滤波之后)
+//输入：uint8 left_smooth[CHANGED_H];//左滤波 uint8 right_smooth[CHANGED_H];//右滤波
+//输出：mid_float
+//备注：赛道两边的对应点距离最短
 ///////////////////////////////////////////
 void find_mid(void)
 {
     uint8 i_left;
     uint8 i_right;
     int k;
-    int dis_l2;//濡傛灉寤堕暱宸︿晶鐨勮窛绂诲钩鏂�
-    int dis_r2;//濡傛灉寤堕暱鍙充晶鐨勮窛绂诲钩鏂�
-    int k_x = 1;//閲忕翰绯绘暟
-    int k_y = 1;//閲忕翰绯绘暟锛燂紵锛�4.23  5鏀�1
+    int dis_l2;//如果延长左侧的距离平方
+    int dis_r2;//如果延长右侧的距离平方
+    int k_x = 1;//量纲系数
+    int k_y = 1;//量纲系数？？？4.23  5改1
     int x;
     int y;
     uint8 i_fore = 3;
-    uint8 break_flag = 0;//鏂嚎鐨勬柟鍚�,0涓哄乏锛�1涓哄彸
-    uint8 break_num = 0;//鏂嚎鐨勬暟閲忥紝鏈�澶氫负2
-    uint8 num;//涓庡灏戜釜涔嬪墠鐨勭偣寤堕暱
+    uint8 break_flag = 0;//断线的方向,0为左，1为右
+    uint8 break_num = 0;//断线的数量，最多为2
+    uint8 num;//与多少个之前的点延长
     i_left = NEAR_LINE - gap;///////////
     i_right = NEAR_LINE - gap;///////////
     MID_LINE_FLOAT* mid_line_float_ptr = NULL;
@@ -5344,13 +5125,14 @@ void find_mid(void)
 
         if (break_num == 0)
         {
-            if (*(left_smooth_ptr + i_left - i_fore) == MISS || *(right_smooth_ptr + i_right - i_fore) == MISS) break;
+            //  //printf("%d * (%d %d) (%d %d)\n",i_fore,i_left,left_smooth[i_left],i_right,right_smooth[i_right]);
             x = (int)(*(left_smooth_ptr + i_left - i_fore)) - (int)(*(right_smooth_ptr + i_right));
             y = (int)i_left - (int)i_fore - (int)i_right;
             dis_l2 = k_x * x * x + k_y * y * y;
             x = (int)(*(left_smooth_ptr + i_left)) - (int)(*(right_smooth_ptr + i_right - i_fore));
             y = (int)i_left - (int)i_right + (int)i_fore;
             dis_r2 = k_x * x * x + k_y * y * y;
+            ////printf("k:%d  dis_l2:%d  dis_r2：%d\n",k,dis_l2,dis_r2);
             if (dis_l2 == dis_r2)
             {
                 i_left--;
@@ -5377,23 +5159,23 @@ void find_mid(void)
             {
                 break_num++;
                 break_flag = 0;
-                ////pintf("宸︿晶鏂� line:%d\n",i_left);
+                //printf("左侧断 line:%d\n",i_left);
             }
             if (i_right < i_fore  || (*(right_smooth_ptr + i_right - 1)) == MISS)
             {
                 break_num++;
                 break_flag = 1;
-                ////pintf("鍙充晶鏂� line:%d\n", i_right);
+                //printf("右侧断 line:%d\n", i_right);
             }
         }
         else if (break_num == 1)
         {
-            //褰撲竴杈逛涪澶辩殑鏃跺�欙紝浠呬粎鏍规嵁涓�杈硅蛋
+            //当一边丢失的时候，仅仅根据一边走
             if (break_flag)
             {
-                //娌垮乏渚э紝鍙充晶鏂�
+                //沿左侧，右侧断
 
-                //娌垮乏渚�
+                //沿左侧
                 i_left--;
                 mid_line_float_ptr->i = (mid_line_float_ptr - 1)->i - 1;
                 mid_line_float_ptr->j = (mid_line_float_ptr - 1)->j + (float)(*(left_smooth_ptr + i_left)) - (float)(*(left_smooth_ptr + i_left + 1));
@@ -5403,7 +5185,7 @@ void find_mid(void)
                     k--;
                     continue;
                 }
-                //鏂嚎鍒ゆ柇
+                //断线判断
                 if ( i_left < FAR_LINE || (*(left_smooth_ptr + i_left - 1)) == MISS )
                 {
                     break_num++;
@@ -5411,9 +5193,9 @@ void find_mid(void)
             }
             else
             {
-                //娌垮彸渚э紝宸︿晶鏂�
+                //沿右侧，左侧断
 
-                //娌垮乏渚�
+                //沿左侧
                 i_right--;
                 mid_line_float_ptr->i = (mid_line_float_ptr - 1)->i - 1;
                 mid_line_float_ptr->j = (mid_line_float_ptr - 1)->j + (float)(*(right_smooth_ptr + i_right)) - (float)(*(right_smooth_ptr + i_right + 1));
@@ -5423,7 +5205,7 @@ void find_mid(void)
                     k--;
                     continue;
                 }
-                //鏂嚎鍒ゆ柇
+                //断线判断
                 if ( i_right < FAR_LINE || (*(right_smooth + i_right - 1)) == MISS )
                 {
                     break_num++;
@@ -5432,19 +5214,78 @@ void find_mid(void)
         }
         else
         {
-            //瀵荤嚎缁撴潫
+            //寻线结束
             break;
         }
 
 
     }
 
+    ////单边寻线
+    ////uint8 left_miss_count = 0, right_miss_count = 0;//
+    //uint8* left_side_ptr = NULL;
+    //uint8* right_side_ptr = NULL;
+    //left_side_ptr = &left_side[0];
+    //right_side_ptr = &right_side[0];
+    //uint8 oneside_left_flag = 0, oneside_right_flag = 0;
+    ////if (*(left_smooth_ptr + 111) != MISS && *(right_smooth_ptr + 111) != MISS)
+    ////{
+    ////    if (abs(*(left_smooth_ptr + 111) - *(left_side_ptr + 111)) < 5 && abs(*(right_smooth_ptr + 111) - *(right_side_ptr + 111)) >= 5)//左侧超出摄像头边界，仅右边寻线
+    ////    {
+    ////        mid_line_float_ptr->j = *(right_smooth_ptr + 111) - 30;
+    ////    }
+    ////    if (abs(*(right_smooth_ptr + 111) - *(right_side_ptr + 111)) < 5 && abs(*(left_smooth_ptr + 111) - *(left_side_ptr + 111)) >= 5)//左侧超出摄像头边界，仅右边寻线
+    ////    {
+    ////        mid_line_float_ptr->j = *(left_smooth_ptr + 111) + 30;
+    ////    }
+    ////}
+    //for (int i = 100; i > 10; i--)
+    //{
+    //  mid_line_float_ptr = &mid_line_float[i];
+    //  if (*(left_smooth_ptr + i) != MISS && *(right_smooth_ptr + i) != MISS)
+    //  {
+    //      for (k = 1; k < MID_MAX; k++)
+    //      {
+    //          if ((abs(*(left_smooth_ptr + i) - *(left_side_ptr + i)) < 8 && abs(*(right_smooth_ptr + i) - *(right_side_ptr + i)) >= 8) || oneside_left_flag)//左侧超出摄像头边界，仅右边寻线
+    //          {
+    //              if (mid_line_float_ptr->i == i)
+    //              {
+    //                  //left_miss_count++;
+    //                  mid_line_float_ptr->j = *(right_smooth_ptr + i) - (*(right_smooth_ptr + i + 1) - (mid_line_float_ptr + 1)->j) + 0.3;
+    //                  oneside_left_flag = 1;
+    //                  //printf("单边寻线_2:%d,%f  %f\n", i, mid_line_float[i + 1].j, mid_line_float[i].j);
+    //              }
+    //          }
+    //          if ((abs(*(right_smooth_ptr + i) - *(right_side_ptr + i)) < 8 && abs(*(left_smooth_ptr + i) - *(left_side_ptr + i)) >= 8) || oneside_right_flag)//左侧超出摄像头边界，仅右边寻线
+    //          {
+    //              if (mid_line_float_ptr->i == i)
+    //              {
+    //                  //right_miss_count++;
+    //                  mid_line_float_ptr->j = *(left_smooth_ptr + i) + ((mid_line_float_ptr + 1)->j - *(left_smooth_ptr + i + 1)) + 2;
+    //                  oneside_right_flag = 1;
+    //                  //printf("单边寻线_3\n");
+    //              }
+    //          }
+    //      }
+    //
+    //  }
+    //}
 
 
 
-    //鏂嚎寤堕暱
-    uint8 extern_num = 20;//涓庡灏戜釜涔嬪墠鐨勭偣寤堕暱  2020.7.26鏀�20
-    uint8 i_start, i_end;//寤堕暱璧风偣涓庝腑鐐�
+    //显示中线
+//    for (int i = 0; i <= k; i++)
+//    {
+//        if (mid_line_float[i].i != MISS || mid_line_float[i].j != MISS)
+//        {
+//            IMG[(int)mid_line_float[i].i][(int)mid_line_float[i].j] = purple;
+//        }
+//    }
+
+
+    //断线延长
+    uint8 extern_num = 20;//与多少个之前的点延长  2020.7.26改20
+    uint8 i_start, i_end;//延长起点与中点
     uint8 tk;
     uint8 bxref_actualnum = 0;
     int tnum = 0;
@@ -5457,8 +5298,8 @@ void find_mid(void)
     }
     if (k == 0 || k == 1) return;
 
-    //鏈�灏忎簩涔樻硶寤堕暱涓嚎
-    //y 鍒� x 琛�
+    //最小二乘法延长中线
+    //y 列 x 行
     a = 0;
     b = 0;
     x_average = 0;
@@ -5515,10 +5356,10 @@ void find_mid(void)
 }
 
 //////////////////////////////////////////////
-////鍔熻兘锛氬渾褰㈠墠鐬�
-////杈撳叆锛氬墠鐬昏鏁�
-////杈撳嚭锛氬亸宸搴�
-////澶囨敞锛氾紙93,119锛変负鍦嗗績
+////功能：圆形前瞻
+////输入：前瞻行数
+////输出：偏差角度
+////备注：（93,119）为圆心
 /////////////////////////////////////////////
 float define_PROSPECT(uint8 PROSPECT)
 {
@@ -5547,10 +5388,10 @@ float define_PROSPECT(uint8 PROSPECT)
         {
             detle_x = 93 - mid;
             detle_y = 119 - i;
-            //////pintf("%d %d\n",i,mid);
+            ////printf("%d %d\n",i,mid);
             tanangle = (float)detle_x / (float)detle_y;
-            arctanangle = tanangle - (tanangle * tanangle * tanangle) / 3;  //arctan锛坸锛� 楹﹀厠鍔虫灄灞曞紑
-            //////pintf("angle锛�%f\n", arctanangle * 100);
+            arctanangle = tanangle - (tanangle * tanangle * tanangle) / 3;  //arctan（x） 麦克劳林展开
+            ////printf("angle：%f\n", arctanangle * 100);
             return arctanangle * 100;
         }
     }
@@ -5558,10 +5399,10 @@ float define_PROSPECT(uint8 PROSPECT)
 }
 
 ////////////////////////////////////////////
-//鍔熻兘锛氬浘鍍忎富鍑芥暟
-//杈撳叆锛�
-//杈撳嚭锛�
-//澶囨敞锛�
+//功能：图像主函数
+//输入：
+//输出：
+//备注：
 ///////////////////////////////////////////
 void image_main()
 {
@@ -5570,21 +5411,19 @@ void image_main()
     uint8* last_mid_line_ptr = &last_mid_line[0];
     road* tmy_road = NULL;
     MID_LINE_FLOAT* mid_line_float_ptr = &mid_line_float[0];
-
     my_init();
     search_white_range();
     find_all_connect();
     find_road();
-
     /*int size_f = 0,size_white_rang = 0,size_mid_float = 0;
     size_f = sizeof(f);
     size_white_rang = sizeof(white_range);
     size_mid_float = sizeof(mid_line_float);
-    ////pintf("f:%d, white:%d, mid:%d \n", size_f, size_white_rang, size_mid_float);*/
+    //printf("f:%d, white:%d, mid:%d \n", size_f, size_white_rang, size_mid_float);*/
     /*ordinary_two_line();
     get_mid_line();
     k_mid = (mid_line[60] - mid_line[80]) / 20;*/
-    /*鍓嶇灮涓洪粦鑹�*/
+    /*前瞻为黑色*/
     /*for (int j = 0; j <= 187; j++)
     {
         IMG[50][j] = red;
@@ -5595,12 +5434,9 @@ void image_main()
         IMG[100][j] = red;
         IMG[110][j] = red;
     }*/
+    two_line();//找赛道左右边界
 
-
-    two_line();//鎵捐禌閬撳乏鍙宠竟鐣�
-
-    straight_oridinary_two_line();  //鎵剧洿绾胯禌閬撶殑宸﹀彸杈圭晫
-
+    straight_oridinary_two_line();  //找直线赛道的左右边界
     //find_x_right_left();
     /*for (int i = 119; i > 1; i--)
     {
@@ -5615,9 +5451,7 @@ void image_main()
             IMG[i][right_line[i]] = green;
         }
     }*/
-    //////pintf("first  LEFT:%d\n", left_line[90]);
-
-
+    ////printf("first  LEFT:%d\n", left_line[90]);
     for (int i = 107; i > 0; i--)
     {
         tmy_road = &my_road[i];
@@ -5626,6 +5460,8 @@ void image_main()
             square = square + tmy_road->connected[j].width;
         }
     }
+    //printf("面积 %d\n", square);
+
     left_line_straight = define_straight_line(left_line, 100, 40, 1);
     right_line_straight = define_straight_line(right_line, 100, 40, 2);
     left_straight = define_straight_line(left, 100, 40, 1);
@@ -5645,18 +5481,18 @@ void image_main()
     right_line_ptr = &right_line[0];
     left_side_ptr = &left_side[0];
     right_side_ptr = &right_side[0];
-//
-//
+
+
     int x1 = 0;
     int x2 = 0;
     int y2 = 0;
-    i_start = 110; //闃叉闀滃ご鐣稿彉褰卞搷
+    i_start = 110; //防止镜头畸变影响
     i_end = 10;
 
     y2 = gap * gap;
     for (uint8 i = i_start; i >= i_end; i--)
     {
-        //璁＄畻宸︿晶浣欏鸡鍊煎钩鏂�
+        //计算左侧余弦值平方
         x1 = (int)*(left_line_ptr + i - gap) - (int)*(left_line_ptr + i);
         x2 = (int)*(left_line_ptr + i) - (int)*(left_line_ptr + i + gap);
         cos_L[i] = x1 * x2 + y2;
@@ -5664,22 +5500,23 @@ void image_main()
         cos_L[i] = cos_L[i] * 1000 / ((x1 * x1 + y2) * (x2 * x2 + y2));
 
 
-        //璁＄畻鍙充晶浣欏鸡鍊煎钩鏂�
+        //计算右侧余弦值平方
         x1 = (int)*(right_line_ptr + i - gap) - (int)*(right_line_ptr + i);
         x2 = (int)*(right_line_ptr + i) - (int)*(right_line_ptr + i + gap);
         cos_R[i] = x1 * x2 + y2;
         cos_R[i] *= cos_R[i];
         cos_R[i] = cos_R[i] * 1000 / ((x1 * x1 + y2) * (x2 * x2 + y2));
 
-        //////pintf("琛屾暟锛�%d 宸︿綑寮︼細%d 鍙充綑寮︼細%d\n",i, cos_L[i], cos_R[i]);
+        ////printf("行数：%d 左余弦：%d 右余弦：%d\n",i, cos_L[i], cos_R[i]);
     }
+
     if (img_zebra == img_state)
     {
         zebra_ordinary_two_line();
         filter_two_line();
-        ////pintf("*********************************************\n");
-        ////pintf("zebra\n");
-        ////pintf("*********************************************\n");
+        //printf("*********************************************\n");
+        //printf("zebra\n");
+        //printf("*********************************************\n");
     }
     else if (img_trident == img_state || img_real_trident == img_state)
     {
@@ -5689,9 +5526,9 @@ void image_main()
         //if_smooth();
         //get_mid_line();
         prospect = near_prospect;
-        ////pintf("*********************************************\n");
-        ////pintf("trident\n");
-        ////pintf("*********************************************\n");
+        //printf("*********************************************\n");
+        //printf("trident\n");
+        //printf("*********************************************\n");
 
     }
     else if (img_oblique_cross == img_state)
@@ -5700,9 +5537,9 @@ void image_main()
         filter_two_line();
         if_connect();
         prospect = near_prospect;
-        ////pintf("*********************************************\n");
-        ////pintf("oblique_cross\n");
-        ////pintf("*********************************************\n");
+        //printf("*********************************************\n");
+        //printf("oblique_cross\n");
+        //printf("*********************************************\n");
     }
     else if (img_near_circle == img_state)
     {
@@ -5710,9 +5547,9 @@ void image_main()
         filter_two_line();
         if_connect();
         //get_mid_line();
-        ////pintf("*********************************************\n");
-        ////pintf("near circle\n");
-        ////pintf("*********************************************\n");
+        //printf("*********************************************\n");
+        //printf("near circle\n");
+        //printf("*********************************************\n");
     }
     else if (img_enter_circle == img_state)
     {
@@ -5720,9 +5557,9 @@ void image_main()
         filter_two_line();
         if_connect();
         //get_mid_line();
-        ////pintf("*********************************************\n");
-        ////pintf("enter circle\n");
-        ////pintf("*********************************************\n");
+        //printf("*********************************************\n");
+        //printf("enter circle\n");
+        //printf("*********************************************\n");
     }
     else if (img_far_cross == img_state)
     {
@@ -5730,9 +5567,9 @@ void image_main()
         filter_two_line();
         if_connect();
         //if_smooth();
-        ////pintf("*********************************************\n");
-        ////pintf("far cross\n");
-        ////pintf("*********************************************\n");
+        //printf("*********************************************\n");
+        //printf("far cross\n");
+        //printf("*********************************************\n");
     }
     else if (img_mid_cross == img_state)
     {
@@ -5742,9 +5579,9 @@ void image_main()
         prospect = near_prospect;
         //if_smooth();
         //get_mid_line();
-//        ////pintf("*********************************************\n");
-//        ////pintf("mid cross\n");
-//        ////pintf("*********************************************\n");
+//        //printf("*********************************************\n");
+//        //printf("mid cross\n");
+//        //printf("*********************************************\n");
     }
     else if (img_near_cross == img_state)
     {
@@ -5754,9 +5591,9 @@ void image_main()
         prospect = far_prospect;
         //if_smooth();
         //get_mid_line();
-//        ////pintf("*********************************************\n");
-//        ////pintf("near cross\n");
-//        ////pintf("*********************************************\n");
+//        //printf("*********************************************\n");
+//        //printf("near cross\n");
+//        //printf("*********************************************\n");
     }
     else
     {
@@ -5769,9 +5606,9 @@ void image_main()
 
         if (!roof_flag)
             if_smooth();
-//        ////pintf("*********************************************\n");
-//        ////pintf("straight\n");
-//        ////pintf("*********************************************\n");
+//        //printf("*********************************************\n");
+//        //printf("straight\n");
+//        //printf("*********************************************\n");
     }
     if (img_near_circle == img_state)
     {
@@ -5784,7 +5621,7 @@ void image_main()
             circle_count--;
         }
     }
-//
+
     if(img_trident == img_state || img_real_trident == img_state)
     {
         trident_count++;
@@ -5824,7 +5661,7 @@ void image_main()
 //            IMG[i][right_line[i]] = green;
 //        }
 //    }
-//
+
     uint8 break_mid = MISS;
     for (uint8 k = 1; k <= 199; k++)
     {
@@ -5835,10 +5672,10 @@ void image_main()
             break;
         }
         last_mid_line[(int)(mid_line_float_ptr + k)->i] = (int)(mid_line_float_ptr + k)->j;
-        //////pintf("i:%d  mid:%d\n", (int)mid_float[k].i, (int)mid_float[k].j);
+        ////printf("i:%d  mid:%d\n", (int)mid_float[k].i, (int)mid_float[k].j);
     }
 
-    for (i=i; i >= 1; i--)
+    for (i; i >= 1; i--)
     {
         *(last_mid_line_ptr+i) = break_mid;
     }
@@ -5851,16 +5688,14 @@ void image_main()
             break;
         }
     }
-    for (i=i; i <= 113; i++)
+    for (i; i <= 113; i++)
     {
         *(last_mid_line_ptr + i) = last_mid;
     }
-    for (i=i; i >= 1; i--)
+    for (i; i >= 1; i--)
     {
         IMG[i][last_mid_line[i]] = 0;
     }
-
     img_angle = define_PROSPECT(prospect);
 }
-
 
