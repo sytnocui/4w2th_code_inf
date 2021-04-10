@@ -32,11 +32,15 @@ float imu_angle_drift = 0;
 float imu_accl[3] = {0.0f, 0.0f, 0.0f};
 float imu_gyro[3] = {0.0f, 0.0f, 0.0f};
 
-
 /*舵机PID参数*/
 float servo_kp = 0.0;      //位置环p
-float servo_ki = 0.0;      //位置环i
-float servo_kd = 0.0;      //位置环d
+float servo_kd = 0.0;      //位置环i
+float servo_kp_str = 0.0;      //位置环p
+float servo_kd_str = 0.0;      //位置环i
+float servo_kp_turn = 0.0;      //位置环p
+float servo_kd_turn = 0.0;      //位置环i
+
+
 float servo_err = 0;
 float servo_err_pre = 0;
 float servo_pid_output = 0;
@@ -51,34 +55,52 @@ int startline_time =0;
 void var_init(void)
 {
     servo_kp = 3;
-    servo_kd = 6;
-
+    servo_kd = 5;
+    servo_kp_str = 1;      //位置环p
+    servo_kd_str = 3;      //位置环i
+    servo_kp_turn = 3;      //位置环p
+    servo_kd_turn = 6;      //位置环i
     motor_kp = 1000;
     motor_ki = 500;
-
     speed_dream = 1;
-    speed_dream_str = 1.2;
-    speed_dream_turn = 1.2;
-
-    servo_garage_left = 660;
-    servo_garage_right = 850;
-
+    speed_dream_str = 1.6;
+    speed_dream_turn = 1.2  ;
+    servo_garage_left = 640;
+    servo_garage_right = 870;
     motor_output = 0;
-
     imu_angle_drift = 0.535;
     imu_dt = 0.05;
-
     car_state = car_stop;
-
     prospect = 40;
     near_prospect = 25;
     far_prospect = 25;
-
-    threshold = 115;//阈值
-
-    car_direction = 1;
-
+    threshold = 100;//阈值
+    car_direction = 0;
     car_branch_direction = 1;
+
+//    servo_kp = 3;
+//    servo_kd = 6;
+//    servo_kp_str = 3;      //位置环p
+//    servo_kd_str = 6;      //位置环i
+//    servo_kp_turn = 3;      //位置环p
+//    servo_kd_turn = 6;      //位置环i
+//    motor_kp = 1000;
+//    motor_ki = 500;
+//    speed_dream = 1;
+//    speed_dream_str = 1.2;
+//    speed_dream_turn = 1.2;
+//    servo_garage_left = 640;
+//    servo_garage_right = 870;
+//    motor_output = 0;
+//    imu_angle_drift = 0.535;
+//    imu_dt = 0.05;
+//    car_state = car_stop;
+//    prospect = 40;
+//    near_prospect = 25;
+//    far_prospect = 25;
+//    threshold = 100;//阈值
+//    car_direction = 0;
+//    car_branch_direction = 1;
 }
 
 
