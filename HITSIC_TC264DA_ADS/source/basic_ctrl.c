@@ -54,41 +54,17 @@ int startline_time =0;
 
 void var_init(void)
 {
-    servo_kp = 3;
-    servo_kd = 5;
-    servo_kp_str = 1;      //位置环p
-    servo_kd_str = 3;      //位置环i
-    servo_kp_turn = 3;      //位置环p
-    servo_kd_turn = 6;      //位置环i
-    motor_kp = 1000;
-    motor_ki = 500;
-    speed_dream = 1;
-    speed_dream_str = 1.6;
-    speed_dream_turn = 1.2  ;
-    servo_garage_left = 640;
-    servo_garage_right = 870;
-    motor_output = 0;
-    imu_angle_drift = 0.535;
-    imu_dt = 0.05;
-    car_state = car_stop;
-    prospect = 40;
-    near_prospect = 25;
-    far_prospect = 25;
-    threshold = 100;//阈值
-    car_direction = 0;
-    car_branch_direction = 1;
-
 //    servo_kp = 3;
-//    servo_kd = 6;
-//    servo_kp_str = 3;      //位置环p
-//    servo_kd_str = 6;      //位置环i
+//    servo_kd = 5;
+//    servo_kp_str = 1;      //位置环p
+//    servo_kd_str = 3;      //位置环i
 //    servo_kp_turn = 3;      //位置环p
 //    servo_kd_turn = 6;      //位置环i
 //    motor_kp = 1000;
 //    motor_ki = 500;
 //    speed_dream = 1;
-//    speed_dream_str = 1.2;
-//    speed_dream_turn = 1.2;
+//    speed_dream_str = 1.6;
+//    speed_dream_turn = 1.2  ;
 //    servo_garage_left = 640;
 //    servo_garage_right = 870;
 //    motor_output = 0;
@@ -101,6 +77,30 @@ void var_init(void)
 //    threshold = 100;//阈值
 //    car_direction = 0;
 //    car_branch_direction = 1;
+
+    servo_kp = 3;
+    servo_kd = 6;
+    servo_kp_str = 3;      //位置环p
+    servo_kd_str = 6;      //位置环i
+    servo_kp_turn = 3;      //位置环p
+    servo_kd_turn = 6;      //位置环i
+    motor_kp = 1000;
+    motor_ki = 500;
+    speed_dream = 1;
+    speed_dream_str = 1.2;
+    speed_dream_turn = 1.2;
+    servo_garage_left = 640;
+    servo_garage_right = 870;
+    motor_output = 0;
+    imu_angle_drift = 0.535;
+    imu_dt = 0.05;
+    car_state = car_stop;
+    prospect = 40;
+    near_prospect = 25;
+    far_prospect = 25;
+    threshold = 130;//阈值
+    car_direction = 1;
+    car_branch_direction = 1;
 }
 
 
@@ -147,6 +147,11 @@ void servo_ctrl(void)
         {
             SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM1_1_TOUT31_P33_9_OUT,(uint32)servo_garage_right);
         }
+        return;
+    }
+    if(car_zebra == car_state)//出入库
+    {
+        SmartCar_Gtm_Pwm_Setduty(&IfxGtm_ATOM1_1_TOUT31_P33_9_OUT,(uint32)SERVO_MID);
         return;
     }
 

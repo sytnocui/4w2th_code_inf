@@ -113,7 +113,7 @@ void State_Update(void)
     //赛道元素判断
     else if(car_circle_out ==car_state)//如果在出环岛，而且陀螺仪没计满，就直接跳出，计满了就换成直道
     {
-        if(imu_angle_z >=300 ||imu_angle_z <=-300)
+        if(imu_angle_z >=280 ||imu_angle_z <=-280)
         {
             beep_close();
             in_circle_flag = 0;
