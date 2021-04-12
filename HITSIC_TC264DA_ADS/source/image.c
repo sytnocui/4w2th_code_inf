@@ -289,217 +289,36 @@ uint8 startline_flag = 0;
 /*消畸变*/
 //void Distortion(void)
 //{
-    //uint8 i, j;
-    //uint8* pdis = NULL;//处理前图像
-    //uint8* sdis = NULL;//处理后图像
-    //int x0, y0, x, y;
-    //uint8 r;
-    //double k1, k2;
-    //k1 = -0.00000;
-    //k2 = -0.00000;        //01.15调参数为k1=-0.000012；k2 = -0.000019
-    //pdis = &image_Buffer_0[0][0];
-    //sdis = &img_dis[0][0];
-    //for (i = 0; i < CAMERA_H; i++)
-    //{
-    //  y = i - CAMERA_H / 2;
-    //  for (j = 0; j < CAMERA_W; j++)
-    //  {
-    //      x = j - CAMERA_W / 2 - 3;
-    //      x0 = round(x * (1 + k1 * x * x + k2 * y * y));
-    //      y0 = round(y * (1 + k1 * x * x + k2 * y * y));
-    //      x0 = x0 + CAMERA_W / 2;
-    //      y0 = y0 + CAMERA_H / 2;
-    //      if (x0 < 0 || x0 > CAMERA_W || y0 < 0 || y0 > CAMERA_H) {
-    //          *(sdis + i * CAMERA_W + j) = 0;
-    //      }
-    //      else {
-    //          *(sdis + i * CAMERA_W + j) = *(pdis + y0 * CAMERA_W + x0);
-    //      }
-    //  }
-    //}
+//    uint8 i, j;
+//    uint8* pdis = NULL;//处理前图像
+//    uint8* sdis = NULL;//处理后图像
+//    int x0, y0, x, y;
+//    uint8 r;
+//    double k1, k2;
+//    k1 = -0.00000;
+//    k2 = -0.00000;        //01.15调参数为k1=-0.000012；k2 = -0.000019
+//    pdis = &image_Buffer_0[0][0];
+//    sdis = &img_dis[0][0];
+//    for (i = 0; i < CAMERA_H; i++)
+//    {
+//      y = i - CAMERA_H / 2;
+//      for (j = 0; j < CAMERA_W; j++)
+//      {
+//          x = j - CAMERA_W / 2 - 3;
+//          x0 = round(x * (1 + k1 * x * x + k2 * y * y));
+//          y0 = round(y * (1 + k1 * x * x + k2 * y * y));
+//          x0 = x0 + CAMERA_W / 2;
+//          y0 = y0 + CAMERA_H / 2;
+//          if (x0 < 0 || x0 > CAMERA_W || y0 < 0 || y0 > CAMERA_H) {
+//              *(sdis + i * CAMERA_W + j) = 0;
+//          }
+//          else {
+//              *(sdis + i * CAMERA_W + j) = *(pdis + y0 * CAMERA_W + x0);
+//          }
+//      }
+//    }
 //}
 
-////////////////////////////////////////////
-//功能：模糊大津法
-//输入：
-//输出：
-//备注：总出错，不用了
-///////////////////////////////////////////
-//void vague_OSTU(void)
-//{
-//    /*基本变量*/
-//    float threshold = 150;//阈值
-//    int histogram[256] = { 0 };//灰度直方图
-//    int N = 120 * 188;
-//    /*模糊变量*/
-//    uint8 L1 = 130, L2 = 150, L3 = 0, L4 = 240;//区域门限初始化
-//    float uA[256] = { 0 }, uB[256] = { 0 }, uC[256] = { 0 };//区域隶属度
-//    float PA = 0, PB = 0, PC = 0;//区域出现概率
-//    float PAA[256] = { 0 }, PBB[256] = { 0 }, PCC[256] = { 0 };//每个区域中，个灰度值出现的概率
-//    float mA = 0, mB = 0, mC = 0;//区域平均灰度
-//    float S = 0; //最大类间方差
-//    float preS = 0;//上一个最大类间方差
-//    int gray_1 = 0, gray_2 = 0;//α区域和β区域最高频率灰度值
-//    uint8 temp_point[256] = { 0 };
-//    uint8 temp_k = 0;
-//    int temp_i = 0;
-//    uint8 break_point = 0;//寻找α区域和β区域最合适分割点的中间变量
-//    uint8 temp_1 = 0, temp_2 = 0;//寻找最高频率灰度值的中间变量
-//
-//    /*模糊OSTU求阈值*/
-//
-//    //1.统计灰度直方图
-//    uint8* map = NULL;
-//    for (int i = 1; i < 120; i++)
-//    {
-//        map = &image_Buffer_0[i][0];
-//        for (int j = 0; j < 188; j++)
-//        {
-//            if ((*map) == 0)
-//            {
-//                (*map) = 1;
-//            }
-//            histogram[(*map)]++;
-//            map++;
-//        }
-//    }
-//    //2.寻找合适的分割点
-//    for (int i = 2; i < 256; i++)
-//    {
-//        if (histogram[i] >= histogram[i - 1]) {
-//            temp_point[i] = temp_point[i - 1] + 1;
-//        }
-//        else {
-//            temp_point[i] = temp_point[i - 1] - 1;
-//        }
-//    }
-//    for (int j = 11; j < 245; j++)
-//    {
-//        if (temp_point[j] <= temp_point[j + 10] && temp_point[j] <= temp_point[j - 10]) {
-//            temp_i = temp_i + j;
-//            temp_k++;
-//            ////pintf("i:%d,k:%d\n", temp_i, temp_k);
-//            //////pintf("判断\n");
-//        }
-//    }
-//    ////pintf("temp_i:%d,temp_k:%d\n", temp_i, temp_k);
-//    break_point = round((float)temp_i / (float)temp_k);
-//    ////pintf("break_point:%d\n", break_point);
-//    //3.寻找α区域和β区域最高频率灰度值
-//    for (int i = 1; i <= break_point; i++)
-//    {
-//        if (temp_1 < histogram[i])
-//        {
-//            temp_1 = histogram[i];
-//            gray_1 = i;
-//        }
-//    }
-//    for (int i = break_point; i <= 240; i++)
-//    {
-//        if (temp_2 < histogram[i])
-//        {
-//            temp_2 = histogram[i];
-//            gray_2 = i;
-//        }
-//    }
-//    //4.重新定义区域门限
-//    L1 = gray_1;
-//    L2 = gray_1 + 30;
-//    L4 = gray_2;
-//    ////pintf("L1 %d,L2 %d,L4 %d\n", L1, L2, L4);
-//    if (L4 <= L2)
-//    {
-//        L4 = L2 + 20;
-//    }
-//    //5.求A类区域灰度值相关变量
-//    for (int i = 1; i < L2; i++)
-//    {
-//        if (i <= L1)
-//        {
-//            uA[i] = 1;
-//        }
-//        else if (i > L1 && i <= L2)
-//        {
-//            uA[i] = (i / (L1 - L2)) - (L2 / (L1 - L2));
-//        }
-//        PA = PA + uA[i] * histogram[i];//为了方便计算，先不除以N
-//    }
-//    ////pintf("1. PA%f\n", PA);
-//    for (int i = 0; i < L2; i++)
-//    {
-//
-//        PAA[i] = uA[i] * histogram[i] / PA;
-//        mA = mA + i * PAA[i];//为了方便计算，先不除以N
-//    }
-//    ////pintf("2. PA%f\n", PA);
-//    PA = PA / (float)N;
-//    //6.滑动L3求阈值
-//    for (L3 = L2; L3 <= L4; L3++)
-//    {
-//        mB = 0;
-//        mC = 0;
-//        PB = 0;
-//        PC = 0;
-//        for (int i = L1; i <= L4; i++)
-//        {
-//            if (i >= L1 && i < L2) {
-//                uB[i] = (i / (L2 - L1)) - (L1 / (L2 - L1));
-//            }
-//            else if (i >= L2 && i <= L3) {
-//                uB[i] = 1;
-//            }
-//            else if (i > L3 && i <= L4) {
-//                uB[i] = (i / (L3 - L4)) - (L4 / (L3 - L4));
-//            }
-//            PB = PB + uB[i] * histogram[i];
-//        }
-//        for (int i = L3; i <= 255; i++)
-//        {
-//            if (i < L4 && i >= L3) {
-//                uC[i] = (i / (L4 - L3)) - (L3 / (L4 - L3));
-//            }
-//            else if (i >= L4) {
-//                uC[i] = 1;
-//            }
-//            PC = PC + uC[i] * histogram[i];
-//        }
-//        for (int i = L1; i <= L4;i++)
-//        {
-//            PBB[i] = uB[i] * histogram[i] / PB;//B区域各灰度值出现的概率
-//                mB = mB + i * PBB[i];//B区域的平均灰度
-//        }
-//        for (int i = L3; i <= 255; i++)
-//        {
-//            PCC[i] = uC[i] * histogram[i] / PC;//B区域各灰度值出现的概率
-//            mC = mC + i * PCC[i];//B区域的平均灰度
-//        }
-//        PB = PB / N;
-//        PC = PC / N;
-//        S = abs(PA * PB * PC * (mC - mA) * (mC - mB) * (mB - mA));//最大类间方差
-//        if (S > preS)
-//        {
-//            preS = S;
-//            threshold = (L1 + L2 + L3) / 3;
-//        }
-//    }
-//    ////pintf("threshold:%f\n", threshold);
-//    ////pintf("PA%f,PB%f,PC%f\n", PA, PB, PC);
-//    /*二值化*/
-//    uint8* my_map = NULL;
-//    for (int i = 0; i < 120; i++)
-//    {
-//        map = &image_Buffer_0[i][0];//image_Buffer_0
-//        my_map = &IMG[i][0];//img_original
-//        for (int j = 0; j < 188; j++)
-//        {
-//            if ((*map) > threshold)
-//                (*my_map) = 255;
-//            else (*my_map) = 0;
-//            map++;
-//            my_map++;
-//        }
-//    }
-//}
 ////////////////////////////////////////////
 //功能：逆透视变换 // 指针优化版
 //输入：
@@ -516,8 +335,8 @@ void map(void)
     ss = &right_side[0];
     uint8* str = NULL;
     uint8* ptr = NULL;
-    str = &img_original[0][0];//变换后数组img_original
-    ptr = (uint8*)mt9v034_image;//变换前数组image_Buffer_0
+    str = &IMG[0][0];//变换后数组img_original
+    ptr = img_original[0][0];//变换前数组image_Buffer_0
     uint8* pptr = NULL;
     uint8* sstr = NULL;
     pptr = &i_fix[0];
@@ -526,6 +345,35 @@ void map(void)
     uint8* tstr = NULL;
     uint8* tsstr = NULL;
     uint8* tptr = NULL;
+
+    uint8* pdis = NULL;//处理前图像
+    uint8* sdis = NULL;//处理后图像
+    int x0, y0, x, y;
+    uint8 r;
+    double k1, k2;
+    k1 = -0.00000;
+    k2 = -0.00000;        //01.15调参数为k1=-0.000012；k2 = -0.000019
+    pdis = (uint8*)mt9v034_image;
+    sdis = &img_original[0][0];
+    for (i = 0; i < CAMERA_H; i++)
+    {
+      y = i - CAMERA_H / 2;
+      for (j = 0; j < CAMERA_W; j++)
+      {
+          x = j - CAMERA_W / 2 - 3;
+          x0 = round(x * (1 + k1 * x * x + k2 * y * y));
+          y0 = round(y * (1 + k1 * x * x + k2 * y * y));
+          x0 = x0 + CAMERA_W / 2;
+          y0 = y0 + CAMERA_H / 2;
+          if (x0 < 0 || x0 > CAMERA_W || y0 < 0 || y0 > CAMERA_H) {
+              *(sdis + i * CAMERA_W + j) = 0;
+          }
+          else {
+              *(sdis + i * CAMERA_W + j) = *(pdis + y0 * CAMERA_W + x0);
+          }
+      }
+    }
+
     for (i = 0; i < CAMERA_H; i++)
     {
         j_begin = *(pp + i);
@@ -539,18 +387,18 @@ void map(void)
         }
     }
 
-    uint8* map=NULL;
+    //uint8* map=NULL;
     uint8* my_map=NULL;
     for (int i = 0; i < 120; i++)
     {
-       map = &img_original[i][0];
+       //map = &img_original[i][0];
        my_map = &IMG[i][0];
        for (int j = 0; j < 188; j++)
        {
-           if ((*map) > threshold)
+           if ((*my_map) > threshold)
                (*my_map) = 255;
            else (*my_map) = 0;
-           map++;
+           //map++;
            my_map++;
        }
     }
