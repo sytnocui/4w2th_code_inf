@@ -329,30 +329,30 @@ void map(void)
 {
     uint8 img_original[120][188] = {0};
     uint8 i,j;
-    uint8* pp = NULL;
-    uint8* ss = NULL;
+    uint8 const *pp = NULL;
+    uint8 const *ss = NULL;
     pp = &left_side[0];
     ss = &right_side[0];
     uint8* str = NULL;
     uint8* ptr = NULL;
     str = &IMG[0][0];//变换后数组img_original
-    ptr = img_original[0][0];//变换前数组image_Buffer_0
-    uint8* pptr = NULL;
-    uint8* sstr = NULL;
+    ptr = &img_original[0][0];//变换前数组image_Buffer_0
+    uint8 const *pptr = NULL;
+    uint8 const *sstr = NULL;
     pptr = &i_fix[0];
     sstr = &j_fix[0][0];
-    int j_begin, j_end;
+    uint8 j_begin, j_end;
     uint8* tstr = NULL;
-    uint8* tsstr = NULL;
+    uint8 const *tsstr = NULL;
     uint8* tptr = NULL;
 
     uint8* pdis = NULL;//处理前图像
     uint8* sdis = NULL;//处理后图像
     int x0, y0, x, y;
-    uint8 r;
+    //uint8 r;
     double k1, k2;
-    k1 = -0.00000;
-    k2 = -0.00000;        //01.15调参数为k1=-0.000012；k2 = -0.000019
+    k1 = -0.000014;
+    k2 = -0.000014;        //01.15调参数为k1=-0.000012；k2 = -0.000019
     pdis = (uint8*)mt9v034_image;
     sdis = &img_original[0][0];
     for (i = 0; i < CAMERA_H; i++)
@@ -389,11 +389,11 @@ void map(void)
 
     //uint8* map=NULL;
     uint8* my_map=NULL;
-    for (int i = 0; i < 120; i++)
+    for (uint8 i = 0; i < 120; i++)
     {
        //map = &img_original[i][0];
        my_map = &IMG[i][0];
-       for (int j = 0; j < 188; j++)
+       for (uint8 j = 0; j < 188; j++)
        {
            if ((*my_map) > threshold)
                (*my_map) = 255;
@@ -688,9 +688,9 @@ int find_f(int node)//f[i]表示第i个节点为i
 void search_white_range()
 {
     uint8 i, j;
-    int istart = NEAR_LINE;
-    int iend = FAR_LINE;
-    int tnum = 0;//单行白条子总数
+    uint8 istart = NEAR_LINE;
+    uint8 iend = FAR_LINE;
+    uint8 tnum = 0;//单行白条子总数
     all_connect_num = 0;
     uint8* map = NULL;
     for (i = istart; i >= iend; i--)
@@ -783,7 +783,7 @@ void find_road()
     int while_range_num = 0, roud_while_range_num = 0;
     all_range* twhite_range = NULL;
     road* tmy_road = NULL;
-    for (int i = 1; i <= white_range[istart].num; i++)
+    for (uint8 i = 1; i <= white_range[istart].num; i++)
         if (white_range[istart].area[i].left <= CAMERA_W / 2
             && white_range[istart].area[i].right >= CAMERA_W / 2
             && (white_range[istart].area[i].right - white_range[istart].area[i].left) >= 90)
@@ -792,7 +792,7 @@ void find_road()
     if (road_f == -1)
     {
         int widthmax = 0, jselect = 1;
-        for (int i = 1; i <= white_range[istart].num; i++)
+        for (uint8 i = 1; i <= white_range[istart].num; i++)
             if (white_range[istart].area[i].right - white_range[istart].area[i].left > widthmax)
             {
                 widthmax = white_range[istart].area[i].right - white_range[istart].area[i].left;
@@ -801,14 +801,14 @@ void find_road()
         road_f = find_f(white_range[istart].area[jselect].connect_num);
     }
     //////pintf("find_f third finish\n");
-    for (int i = istart; i >= iend; i--)
+    for (uint8 i = istart; i >= iend; i--)
     {
         twhite_range = &white_range[i];
         tmy_road = &my_road[i];//把数据存储在my_road中
         while_range_num = twhite_range->num;
         tmy_road->white_num = 0;
         roud_while_range_num = 0;
-        for (int j = 1; j <= while_range_num; j++)
+        for (uint8 j = 1; j <= while_range_num; j++)
         {
             if (find_f(twhite_range->area[j].connect_num) == road_f)
             {
@@ -885,11 +885,11 @@ void find_my_road(void)
     uint8 i_start;
     uint8 i_end;
     uint8 j_start = MISS;
-    int width_max;
+    uint8 width_max;
     i_start = NEAR_LINE;
     i_end = FAR_LINE;
     width_max = 0;
-    for (int j = 1; j <= my_road[i_start].white_num; j++)//寻找第一行最宽
+    for (uint8 j = 1; j <= my_road[i_start].white_num; j++)//寻找第一行最宽
     {
         if (my_road[i_start].connected[j].width > width_max)
         {
@@ -899,7 +899,7 @@ void find_my_road(void)
     }
     j_continue[i_start] = j_start;                  //确定最近的赛道
 
-    for (int i = i_start; i > i_end; i--)
+    for (uint8 i = i_start; i > i_end; i--)
     {
         tmy_road = &my_road[i];
         j_continue_ptr = &j_continue[i];
@@ -967,18 +967,18 @@ void zebra_ordinary_two_line(void)
 void two_line(void)
 {
     uint8 i;
-    uint8 j;
+//    uint8 j;
 
     //uint8 a, b,c;
-    uint8* left_line_ptr = NULL;
-    uint8* right_line_ptr = NULL;
+//    uint8* left_line_ptr = NULL;
+//    uint8* right_line_ptr = NULL;
     road* tmy_road = NULL;
-    uint8* j_continue_ptr = NULL;
+//    uint8* j_continue_ptr = NULL;
     uint8* left_ptr = NULL;
     uint8* right_ptr = NULL;
     uint8 i_start;
     uint8 i_end;
-    uint8 j_start = MISS;
+//    uint8 j_start = MISS;
     int width_max;
     i_start = NEAR_LINE;
     i_end = FAR_LINE;
@@ -1011,7 +1011,7 @@ void two_line(void)
 void straight_oridinary_two_line(void)
 {
     uint8 i;
-    uint8 j;
+//    uint8 j;
 
     //uint8 a, b,c;
     uint8* left_line_ptr = NULL;
@@ -1020,7 +1020,7 @@ void straight_oridinary_two_line(void)
     uint8* j_continue_ptr = NULL;
     uint8 i_start;
     uint8 i_end;
-    uint8 j_start = MISS;
+//    uint8 j_start = MISS;
     int width_max;
     i_start = NEAR_LINE;
     i_end = FAR_LINE;
@@ -1162,14 +1162,14 @@ void trident_ordinary_two_line(void)
     uint8* j_continue_ptr = NULL;
     uint8 i_start;
     uint8 i_end;
-    uint8 j_start = MISS;
+    //uint8 j_start = MISS;
     float k_trident = 0, k_straight = 0, k_enter = 0, k_enter_pre = 0, k_makeup = 0, b_makeup = 0;
     uint8 change_line = NEAR_LINE, end_line = NEAR_LINE, enter_line = NEAR_LINE;
     i_start = NEAR_LINE;
     i_end = FAR_LINE;
 
     find_my_road();
-    for (int i = i_start; i > i_end; i--)
+    for (uint8 i = i_start; i > i_end; i--)
     {
         trident_road_ptr = &trident_road[i];
         left_line_ptr = &left_line[i];
@@ -1233,7 +1233,7 @@ void trident_ordinary_two_line(void)
             {
                 ////pintf("三岔补线\n");
                 k_enter_pre = k_enter = (float)(right_line[i_start] - right_line[i_start - 5]) / 5.0;
-                for (int i = i_start; i > i_end; i--)
+                for (uint8 i = i_start; i > i_end; i--)
                 {
                     k_enter_pre = k_enter;
                     k_enter = (float)(right_line[i] - right_line[i - 5]) / 5.0;
@@ -1254,7 +1254,7 @@ void trident_ordinary_two_line(void)
             ////pintf("****************************\n");
             ////pintf("%d, %d, %d, %d, %f, %f\n", enter_line, right_line[enter_line], change_line - 1, right_line[change_line - 1], k_enter, k_makeup);
             ////pintf("****************************\n");
-            for (int i = enter_line; i >= change_line; i--)
+            for (uint8 i = enter_line; i >= change_line; i--)
             {
                 right_line_ptr = &right_line[i];
                 *right_line_ptr = round(k_makeup * (i - b_makeup));
@@ -1273,7 +1273,7 @@ void trident_ordinary_two_line(void)
                 }
                 else
                 {
-                    for (int i = i_start; i > i_end; i--)
+                    for (uint8 i = i_start; i > i_end; i--)
                     {
                         k_enter_pre = k_enter;
                         k_enter = (float)(left_line[i] - left_line[i - 5]) / 5.0;
@@ -1296,7 +1296,7 @@ void trident_ordinary_two_line(void)
             /*////pintf("****************************\n");
             ////pintf("enter line : %d\n", enter_line);
             ////pintf("****************************\n");*/
-            for (int i = enter_line; i >= change_line; i--)
+            for (uint8 i = enter_line; i >= change_line; i--)
             {
                 left_line_ptr = &left_line[i];
                 *left_line_ptr = round(k_makeup * (i - b_makeup));
@@ -1328,17 +1328,17 @@ uint8 judge_sign(float k1, float k2)
 ///////////////////////////////////////////
 void trident_make_up_missed_line(void)
 {
-    uint8* left_line_ptr = NULL;
-    uint8* right_line_ptr = NULL;
-    road* tmy_road = NULL;
-    road* trident_road_ptr = NULL;
-    uint8* j_continue_ptr = NULL;
+//    uint8* left_line_ptr = NULL;
+//    uint8* right_line_ptr = NULL;
+//    road* tmy_road = NULL;
+//    road* trident_road_ptr = NULL;
+//    uint8* j_continue_ptr = NULL;
     uint8 i_start;
     uint8 i_end;
-    uint8 j_start = MISS;
+//    uint8 j_start = MISS;
     i_start = NEAR_LINE;
     i_end = FAR_LINE;
-    int k_trident = 0, k_straight = 0;
+//    int k_trident = 0, k_straight = 0;
     for (int i = i_start; i > i_end; i--)
     {
 
@@ -1617,14 +1617,14 @@ uint8 trident(void)
     uint8 istart = NEAR_LINE;
     uint8 iend = 10;
     int while_range_num = 0, roud_while_range_num = 0;
-    all_range* twhite_range = NULL;
+    //all_range* twhite_range = NULL;
     road* tmy_road = NULL;
     road* ttrident_road = NULL;
     uint8* left_ptr = NULL;
     uint8* right_ptr = NULL;
-    uint8* left_side_ptr = NULL;
-    uint8* right_side_ptr = NULL;
-    uint8 width_max = 0;
+    uint8 const *left_side_ptr = NULL;
+    uint8 const *right_side_ptr = NULL;
+    //uint8 width_max = 0;
     uint8 more_count = 0;
     road_range temp = { 0 };
     uint8 count = 0;
@@ -1770,18 +1770,18 @@ uint8 tell_oblique_cross(void)
     uint8 istart = NEAR_LINE;
     uint8 iend = 10;
     int while_range_num = 0, roud_while_range_num = 0;
-    all_range* twhite_range = NULL;
+    //all_range* twhite_range = NULL;
     road* tmy_road = NULL;
     road* ttrident_road = NULL;
     uint8* left_ptr = NULL;
     uint8* right_ptr = NULL;
-    uint8* left_side_ptr = NULL;
-    uint8* right_side_ptr = NULL;
-    uint8 width_max = 0;
-    road_range temp = { 0 };
-    uint8 count = 0;
+    uint8 const *left_side_ptr = NULL;
+    uint8 const *right_side_ptr = NULL;
+    //uint8 width_max = 0;
+    //road_range temp = { 0 };
+    //uint8 count = 0;
     uint8 two_side_account = 0, left_side_account = 0, right_side_account = 0;
-    float k_left = 0, k_right = 0;
+    //float k_left = 0, k_right = 0;
     //pintf("斜十字判断进行\n");
     if (img_state_pre != img_straight && img_state_pre != img_oblique_cross && img_state_pre != img_far_cross)
     {
@@ -1855,12 +1855,20 @@ void oblique_cross_ordinary_two_line(void)
     uint8* j_continue_ptr = NULL;
     uint8* left_ptr = NULL;
     uint8* right_ptr = NULL;
-    uint8 i_start;
-    uint8 i_end;
-    uint8 j_start = MISS;
-    float k_trident = 0, k_straight = 0, k_enter = 0, k_enter_pre = 0, k_makeup = 0, b_makeup = 0;
-    uint8 change_line = NEAR_LINE, end_line = NEAR_LINE, enter_line = NEAR_LINE;
-    uint8 left_change = NEAR_LINE, right_change = NEAR_LINE;
+    //uint8 i_start;
+    //uint8 i_end;
+    //uint8 j_start = MISS;
+//    float k_trident = 0;
+//    float k_straight = 0;
+//    float k_enter = 0;
+//    float k_enter_pre = 0;
+    float k_makeup = 0;
+    float b_makeup = 0;
+    uint8 change_line = NEAR_LINE;
+//    uint8 end_line = NEAR_LINE;
+    uint8 enter_line = NEAR_LINE;
+    uint8 left_change = NEAR_LINE;
+    uint8 right_change = NEAR_LINE;
     //pintf("斜十字补线进行\n");
     if (square < 3900)
     {
@@ -1903,7 +1911,7 @@ void oblique_cross_ordinary_two_line(void)
 
     //}
     ////pintf("84 %d , 61 %d \n", cosR[84], cosL[61]);
-    for (int i = 95; i > 10; i--)
+    for (uint8 i = 95; i > 10; i--)
     {
         trident_road_ptr = &trident_road[i];
         left_line_ptr = &left_line[i];
@@ -2088,16 +2096,25 @@ void circle_ordinary_two_line(void)
 {
     uint8* left_line_ptr = NULL;
     uint8* right_line_ptr = NULL;
-    road* tmy_road = NULL;
-    road* trident_road_ptr = NULL;
-    uint8* j_continue_ptr = NULL;
-    uint8* left_ptr = NULL;
-    uint8* right_ptr = NULL;
+//    road* tmy_road = NULL;
+//    road* trident_road_ptr = NULL;
+//    uint8* j_continue_ptr = NULL;
+//    uint8* left_ptr = NULL;
+//    uint8* right_ptr = NULL;
     uint8 i_start;
     uint8 i_end;
-    uint8 j_start = MISS;
-    float k_trident = 0, k_straight = 0, k_enter = 0, k_enter_pre = 0, k_makeup = 0, b_makeup = 0;
-    uint8 change_line = NEAR_LINE, end_line = NEAR_LINE, enter_line = NEAR_LINE;
+//    uint8 j_start = MISS;
+//    float k_trident = 0;
+//    float k_straight = 0;
+//    float k_enter = 0;
+//    float k_enter_pre = 0;
+    float k_makeup = 0;
+    float b_makeup = 0;
+//    uint8 change_line = NEAR_LINE;
+//    uint8 end_line = NEAR_LINE;
+//    uint8 enter_line = NEAR_LINE;
+//    uint8 left_change = NEAR_LINE;
+//    uint8 right_change = NEAR_LINE;
     i_start = NEAR_LINE;
     i_end = FAR_LINE;
     //pintf("环岛补线   right_change_down:%d,right_change_up:%d\n", right_change_down, right_change_up);
@@ -2313,16 +2330,25 @@ void enter_circle_ordinary_two_line(void)
 {
     uint8* left_line_ptr = &left_line[0];
     uint8* right_line_ptr = &right_line[0];
-    road* tmy_road = NULL;
-    road* trident_road_ptr = NULL;
-    uint8* j_continue_ptr = NULL;
-    uint8* left_ptr = NULL;
-    uint8* right_ptr = NULL;
+//    road* tmy_road = NULL;
+//    road* trident_road_ptr = NULL;
+//    uint8* j_continue_ptr = NULL;
+//    uint8* left_ptr = NULL;
+//    uint8* right_ptr = NULL;
     uint8 i_start;
     uint8 i_end;
-    uint8 j_start = MISS;
-    float k_trident = 0, k_straight = 0, k_enter = 0, k_enter_pre = 0, k_makeup = 0, b_makeup = 0;
-    uint8 change_line = NEAR_LINE, end_line = NEAR_LINE, enter_line = NEAR_LINE;
+//    uint8 j_start = MISS;
+//    float k_trident = 0;
+//    float k_straight = 0;
+//    float k_enter = 0;
+//    float k_enter_pre = 0;
+    float k_makeup = 0;
+    float b_makeup = 0;
+//    uint8 change_line = NEAR_LINE;
+//    uint8 end_line = NEAR_LINE;
+//    uint8 enter_line = NEAR_LINE;
+//    uint8 left_change = NEAR_LINE;
+//    uint8 right_change = NEAR_LINE;
     i_start = NEAR_LINE;
     i_end = FAR_LINE;
     if (circle == 1)//左
@@ -2375,13 +2401,13 @@ uint8 mid_cross(void)
 {
     uint8 i_start = NEAR_LINE;
     uint8 i_end = FAR_LINE;
-    int while_range_num = 0, roud_while_range_num = 0;
-    all_range* twhite_range = NULL;
-    road* tmy_road = NULL;
-    road* ttrident_road = NULL;
-    uint8 width_max = 0;
-    road_range temp = { 0 };
-    uint8 count = 0;
+//    int while_range_num = 0, roud_while_range_num = 0;
+    //all_range* twhite_range = NULL;
+    //road* tmy_road = NULL;
+   // road* ttrident_road = NULL;
+   // uint8 width_max = 0;
+    //road_range temp = { 0 };
+    //uint8 count = 0;
     float k_left = 0, k_right = 0;
     uint8* left_line_ptr = NULL;
     uint8* right_line_ptr = NULL;
@@ -2390,7 +2416,7 @@ uint8 mid_cross(void)
     left_line_ptr = &left_line[0];
     right_line_ptr = &right_line[0];
     ////pintf("中十字判断进行\n");
-    for (int i = i_start; i > i_end; i--)
+    for (uint8 i = i_start; i > i_end; i--)
     {
         k_left = (float)(*(left_line_ptr + i) - *(left_line_ptr + i - 8)) / 8.0;
         k_right = (float)(*(right_line_ptr + i) - *(right_line_ptr + i - 8)) / 8.0;
@@ -2409,7 +2435,7 @@ uint8 mid_cross(void)
     }
     if (change_line_left_down < change_line_right_down)
     {
-        for (int i = change_line_left_down - 3; i > i_end; i--)
+        for (uint8 i = change_line_left_down - 3; i > i_end; i--)
         {
             k_left = (float)(*(left_line_ptr + i - 1) - *(left_line_ptr + i - 11)) / 10.0;
             k_right = (float)(*(right_line_ptr + i - 1) - *(right_line_ptr + i - 11)) / 10.0;
@@ -2431,7 +2457,7 @@ uint8 mid_cross(void)
     }
     else
     {
-        for (int i = change_line_right_down - 3; i > i_end; i--)
+        for (uint8 i = change_line_right_down - 3; i > i_end; i--)
         {
             k_left = (float)(*(left_line_ptr + i - 1) - *(left_line_ptr + i - 11)) / 10.0;
             k_right = (float)(*(right_line_ptr + i - 1) - *(right_line_ptr + i - 11)) / 10.0;
@@ -2483,10 +2509,12 @@ uint8 tell_mid_cross(void)
     uint8 i_start, i_end;
     i_start = NEAR_LINE;
     i_end = FAR_LINE;
-    uint8 pre_width = 0;
+    //uint8 pre_width = 0;
     uint8* j_continue_ptr = NULL;
-    uint8* left_line_ptr = NULL, * right_line_ptr = NULL;
-    uint8* left_side_ptr = NULL, * right_side_ptr = NULL;
+    uint8* left_line_ptr = NULL;
+    uint8* right_line_ptr = NULL;
+    uint8 const *left_side_ptr = NULL;
+    uint8 const *right_side_ptr = NULL;
     boolean find_flag = FALSE;
     j_continue_ptr = &j_continue[0];
     left_line_ptr = &left_line[0];
@@ -2608,8 +2636,10 @@ void mid_cross_oridinary_two_line(void)
     uint8 l_mark2, r_mark2;
 
     uint8* j_continue_ptr = NULL;
-    uint8* left_line_ptr = NULL, * right_line_ptr = NULL;
-    uint8* left_side_ptr = NULL, * right_side_ptr = NULL;
+    uint8* left_line_ptr = NULL;
+    uint8* right_line_ptr = NULL;
+    uint8 const *left_side_ptr = NULL;
+    uint8 const *right_side_ptr = NULL;
     j_continue_ptr = &j_continue[0];
     left_line_ptr = &left_line[0];
     right_line_ptr = &right_line[0];
@@ -2846,17 +2876,17 @@ void mid_cross_oridinary_two_line(void)
 ///////////////////////////////////////////
 void straight_oridinary_two_line_makeup(void)
 {
-    uint8 i;
-    uint8 j;
+//    uint8 i;
+//    uint8 j;
 
     //uint8 a, b,c;
     uint8* left_line_ptr = NULL;
     uint8* right_line_ptr = NULL;
     road* tmy_road = NULL;
-    uint8* j_continue_ptr = NULL;
+//    uint8* j_continue_ptr = NULL;
     uint8 i_start;
     uint8 i_end;
-    uint8 j_start = MISS;
+//    uint8 j_start = MISS;
     int width_max;
     int left_count = 0;
     int right_count = 0;
@@ -2890,7 +2920,7 @@ void straight_oridinary_two_line_makeup(void)
     //      *right_line_ptr = MISS;
     //  }
     //}
-    for (int i = 100; i > 10; i--)
+    for (uint8 i = 100; i > 10; i--)
     {
         if (cos_L[i] < 300 && cos_L[i] > 0)
         {
@@ -2909,7 +2939,7 @@ void straight_oridinary_two_line_makeup(void)
     {
         ////pintf("进入直线补线\n");
 
-        for (int i = 104; i > 10; i--)
+        for (uint8 i = 104; i > 10; i--)
         {
             if (cos_L[i] >= 0 && cos_L[i] <= 350 && left_change == NEAR_LINE)
             {
@@ -2969,14 +2999,14 @@ void straight_oridinary_two_line_makeup(void)
             //////pintf("****************************\n");
             //////pintf("%d, %d, %d, %d, %f, %f\n", enter_line, right_line[enter_line], change_line - 1, right_line[change_line - 1], k_enter, k_makeup);
             //////pintf("****************************\n");
-            for (int i = enter_line; i >= change_line; i--)
+            for (uint8 i = enter_line; i >= change_line; i--)
             {
                 right_line_ptr = &right_line[i];
                 left_line_ptr = &left_line[i];
                 tmy_road = &my_road[i];
                 *right_line_ptr = round(k_makeup * (i - b_makeup));
             }
-            for (int i = change_line; i > FAR_LINE; i--)
+            for (uint8 i = change_line; i > FAR_LINE; i--)
             {
                 left_line_ptr = &left_line[i];
                 right_line_ptr = &right_line[i];
@@ -2993,12 +3023,12 @@ void straight_oridinary_two_line_makeup(void)
             ////pintf("****************************\n");
             ////pintf("enter line : %d,change line: %d\n", enter_line, change_line);
             ////pintf("****************************\n");
-            for (int i = enter_line; i >= change_line; i--)
+            for (uint8 i = enter_line; i >= change_line; i--)
             {
                 left_line_ptr = &left_line[i];
                 *left_line_ptr = round(k_makeup * (i - b_makeup));
             }
-            for (int i = change_line; i > FAR_LINE; i--)
+            for (uint8 i = change_line; i > FAR_LINE; i--)
             {
                 left_line_ptr = &left_line[i];
                 right_line_ptr = &right_line[i];
@@ -3225,8 +3255,10 @@ uint8 tell_near_cross(void)
     i_start = NEAR_LINE;
     i_end = FAR_LINE;
     uint8* j_continue_ptr = NULL;
-    uint8* left_line_ptr = NULL, *right_line_ptr = NULL;
-    uint8* left_side_ptr = NULL, * right_side_ptr = NULL;
+    uint8* left_line_ptr = NULL;
+    uint8* right_line_ptr = NULL;
+    uint8  const * left_side_ptr = NULL;
+    uint8  const *right_side_ptr = NULL;
     j_continue_ptr = &j_continue[0];
     left_line_ptr = &left_line[0];
     right_line_ptr = &right_line[0];
@@ -3619,7 +3651,7 @@ void near_cross_oridinary_two_line(void)
 
     uint8* j_continue_ptr = NULL;
     uint8* left_line_ptr = NULL, * right_line_ptr = NULL;
-    uint8* left_side_ptr = NULL, * right_side_ptr = NULL;
+    uint8 const *left_side_ptr = NULL, * right_side_ptr = NULL;
     j_continue_ptr = &j_continue[0];
     left_line_ptr = &left_line[0];
     right_line_ptr = &right_line[0];
@@ -3720,7 +3752,7 @@ uint8 tell_far_cross(void)
     i_end = FAR_LINE;
     uint8* j_continue_ptr = NULL;
     uint8* left_line_ptr = NULL, * right_line_ptr = NULL;
-    uint8* left_side_ptr = NULL, * right_side_ptr = NULL;
+    uint8 const *left_side_ptr = NULL, * right_side_ptr = NULL;
     j_continue_ptr = &j_continue[0];
     left_line_ptr = &left_line[0];
     right_line_ptr = &right_line[0];
@@ -3983,7 +4015,7 @@ void far_cross_oridinary_two_line(void)
 
     uint8* j_continue_ptr = NULL;
     uint8* left_line_ptr = NULL, * right_line_ptr = NULL;
-    uint8* left_side_ptr = NULL, * right_side_ptr = NULL;
+    uint8 const *left_side_ptr = NULL, * right_side_ptr = NULL;
     j_continue_ptr = &j_continue[0];
     left_line_ptr = &left_line[0];
     right_line_ptr = &right_line[0];
@@ -3995,7 +4027,7 @@ void far_cross_oridinary_two_line(void)
     //最小二乘法补线
     uint8 detla_x = 0;
     uint8 bxbegin = 105;
-    uint8 bxend = FAR_LINE;//调参
+    //uint8 bxend = FAR_LINE;//调参
     uint8 lstr[CHANGED_H] = { 0 }, rstr[CHANGED_H] = { 0 };
     int tnum = 0;
     float a = 0, b = 0, x_average = 0, y_average = 0, xy_average = 0, x2_average = 0;
@@ -4293,7 +4325,7 @@ uint8 near_circle(void)
     if (left_line_straight == 0 && right_line_straight != 0)//左侧不为直道，右侧为直道,可能是左侧有环岛
     {
         k_right = (float)(right_line[100] - right_line[40]) / 60.0;
-        for (int i = i_start; i > i_end; i--)
+        for (uint8 i = i_start; i > i_end; i--)
         {
             left_line_ptr = &left_line[i];
             right_line_ptr = &right_line[i];
@@ -4303,7 +4335,7 @@ uint8 near_circle(void)
                 break;
             }
         }
-        for (int i = left_change_down; i > 20; i--)
+        for (uint8 i = left_change_down; i > 20; i--)
         {
             left_line_ptr = &left_line[i];
             right_line_ptr = &right_line[i];
@@ -4332,7 +4364,7 @@ uint8 near_circle(void)
     else if (left_line_straight != 0 && right_line_straight == 0)//左侧为直道，右侧不为直道,可能是右侧有环岛
     {
         k_left = (float)(left_line[100] - left_line[40]) / 60.0;
-        for (int i = i_start; i > 30; i--)
+        for (uint8 i = i_start; i > 30; i--)
         {
             left_line_ptr = &left_line[i];
             right_line_ptr = &right_line[i];
@@ -4342,7 +4374,7 @@ uint8 near_circle(void)
                 break;
             }
         }
-        for (int i = right_change_down; i > i_end; i--)
+        for (uint8 i = right_change_down; i > i_end; i--)
         {
             left_line_ptr = &left_line[i];
             right_line_ptr = &right_line[i];
@@ -4383,7 +4415,7 @@ uint8 enter_circle(void)
     uint8 i_start = NEAR_LINE - 1;
     uint8 i_end = FAR_LINE;
     //uint8 left_change_down = NEAR_LINE, left_change_up = NEAR_LINE, right_change_down = NEAR_LINE, right_change_up = NEAR_LINE;
-    float k_left = 0, k_right = 0;
+    //float k_left = 0, k_right = 0;
     uint8* left_line_ptr = &left_line[0];
     uint8* right_line_ptr = &right_line[0];
     left_change_up = NEAR_LINE;
@@ -4397,7 +4429,7 @@ uint8 enter_circle(void)
     //pintf("circle %d\n", circle);
     if (circle == 1)
     {
-        for (int i = i_start; i > i_end; i--)
+        for (uint8 i = i_start; i > i_end; i--)
         {
             if (*(left_line_ptr + i) - *(left_line_ptr + i + 1) >= 10 && *(left_line_ptr + i) != MISS)
             {
@@ -4408,7 +4440,7 @@ uint8 enter_circle(void)
     }
     else if (circle == 2)
     {
-        for (int i = i_start; i > i_end; i--)
+        for (uint8 i = i_start; i > i_end; i--)
         {
             if (*(right_line_ptr + i + 1) - *(right_line_ptr + i) >= 10 && *(right_line_ptr + i) != MISS)
             {
@@ -4573,14 +4605,14 @@ uint8 tell_zebra(void)
 ///////////////////////////////////////////
 uint8 roof(void)
 {
-    uint8 i, i_start, i_end;
-    uint8 my_roof = MISS, Ldir = 0, Rdir = 0;
-    uint8 max_width = 0, max_width_num = 0;
+//    uint8 i, i_start, i_end;
+//    uint8 my_roof = MISS, Ldir = 0, Rdir = 0;
+//    uint8 max_width = 0, max_width_num = 0;
     uint8 roof_line = 1;
-
+    uint8 i;
     uint8* j_continue_ptr = NULL;
     uint8* left_line_ptr = NULL, * right_line_ptr = NULL;
-    uint8* left_side_ptr = NULL, * right_side_ptr = NULL;
+    uint8 const *left_side_ptr = NULL, * right_side_ptr = NULL;
     uint8* left_smooth_ptr = NULL, * right_smooth_ptr = NULL;
     j_continue_ptr = &j_continue[0];
     left_line_ptr = &left_line[0];
@@ -4612,7 +4644,7 @@ uint8 roof(void)
     ////pintf("roof line:%d\n", roof_line);
     uint8 left_min = 255, left_min_line=0;
     uint8 right_min = 255, right_min_line=0;
-    uint8 flag = 1;
+//    uint8 flag = 1;
 
     for (i = roof_line; i <= 80; i++)
     {
@@ -5102,7 +5134,7 @@ uint8 define_my_way(uint8 line)
 {
     road* tmy_road = NULL;
     uint8  my_way_num;
-    uint8 distance = 188;
+//    uint8 distance = 188;
     my_way_num = 0;
     tmy_road = &my_road[line];
     uint8 max_way = 0, max_way_num = 0;
@@ -5161,13 +5193,13 @@ void find_mid(void)
 {
     uint8 i_left;
     uint8 i_right;
-    int k;
+    uint8 k;
     int dis_l2;//如果延长左侧的距离平方
     int dis_r2;//如果延长右侧的距离平方
-    int k_x = 1;//量纲系数
-    int k_y = 1;//量纲系数？？？4.23  5改1
-    int x;
-    int y;
+    uint8 k_x = 1;//量纲系数
+    uint8 k_y = 1;//量纲系数？？？4.23  5改1
+    uint8 x;
+    uint8 y;
     uint8 i_fore = 3;
     uint8 break_flag = 0;//断线的方向,0为左，1为右
     uint8 break_num = 0;//断线的数量，最多为2
@@ -5369,10 +5401,11 @@ void find_mid(void)
 /////////////////////////////////////////////
 float define_PROSPECT(uint8 PROSPECT)
 {
-    uint8 i_start = NEAR_LINE, i_end = FAR_LINE;
+//    uint8 i_start = NEAR_LINE, i_end = FAR_LINE;
     int mid, R2;
     int detle_x, detle_y;
     float tanangle, arctanangle;
+    uint8* IMG_ptr = &IMG[0][0];
     for (uint8 j = 10; j < 177; j++)
     {
         for (uint8 i = 110; i > 1; i--)
@@ -5380,12 +5413,12 @@ float define_PROSPECT(uint8 PROSPECT)
             R2 = (j - 93) * (j - 93) + (i - 119) * (i - 119);
             if (R2 >= PROSPECT * PROSPECT)
             {
-                IMG[i][j] = 0;
+                *(IMG_ptr + i*120 + j) = 0;
                 break;
             }
         }
     }
-    for (uint8 i = 106; i >= i_end; i--)
+    for (uint8 i = 106; i >= 1; i--)
     {
         mid = last_mid_line[i];
         R2 = (mid - 93) * (mid - 93) + (i - 119) * (i - 119);
@@ -5486,7 +5519,7 @@ void image_main()
     i_end = FAR_LINE;
     uint8* j_continue_ptr = NULL;
     uint8* left_line_ptr = NULL, * right_line_ptr = NULL;
-    uint8* left_side_ptr = NULL, * right_side_ptr = NULL;
+    uint8 const *left_side_ptr = NULL, * right_side_ptr = NULL;
     j_continue_ptr = &j_continue[0];
     left_line_ptr = &left_line[0];
     right_line_ptr = &right_line[0];
@@ -5497,26 +5530,29 @@ void image_main()
     int x1 = 0;
     int x2 = 0;
     int y2 = 0;
+    int *cosL_ptr = &cos_L[0];
+    int *cosR_ptr = &cos_R[0];
     i_start = 110; //防止镜头畸变影响
     i_end = 10;
-
     y2 = gap * gap;
+
+
     for (uint8 i = i_start; i >= i_end; i--)
     {
         //计算左侧余弦值平方
         x1 = (int)*(left_line_ptr + i - gap) - (int)*(left_line_ptr + i);
         x2 = (int)*(left_line_ptr + i) - (int)*(left_line_ptr + i + gap);
-        cos_L[i] = x1 * x2 + y2;
-        cos_L[i] *= cos_L[i];
-        cos_L[i] = cos_L[i] * 1000 / ((x1 * x1 + y2) * (x2 * x2 + y2));
+        *(cosL_ptr + i) = x1 * x2 + y2;
+        *(cosL_ptr + i) *= *(cosL_ptr + i);
+        *(cosL_ptr + i) = *(cosL_ptr + i) * 1000 / ((x1 * x1 + y2) * (x2 * x2 + y2));
 
 
         //计算右侧余弦值平方
         x1 = (int)*(right_line_ptr + i - gap) - (int)*(right_line_ptr + i);
         x2 = (int)*(right_line_ptr + i) - (int)*(right_line_ptr + i + gap);
-        cos_R[i] = x1 * x2 + y2;
-        cos_R[i] *= cos_R[i];
-        cos_R[i] = cos_R[i] * 1000 / ((x1 * x1 + y2) * (x2 * x2 + y2));
+        *(cosR_ptr + i) = x1 * x2 + y2;
+        *(cosR_ptr + i) *= *(cosR_ptr + i);
+        *(cosR_ptr + i) = *(cosR_ptr + i) * 1000 / ((x1 * x1 + y2) * (x2 * x2 + y2));
 
         //////pintf("行数：%d 左余弦：%d 右余弦：%d\n",i, cos_L[i], cos_R[i]);
     }
@@ -5675,13 +5711,13 @@ void image_main()
     uint8 break_mid = MISS;
     for (uint8 k = 1; k <= 199; k++)
     {
-        if ((int)mid_line_float[k].i == MISS)
+        if ((int)(mid_line_float_ptr + k)->i == MISS)
         {
             i = (int)(mid_line_float_ptr + k - 1)->i;
             break_mid = (int)(mid_line_float_ptr + k - 1)->j;
             break;
         }
-        last_mid_line[(int)(mid_line_float_ptr + k)->i] = (int)(mid_line_float_ptr + k)->j;
+        *(last_mid_line_ptr + (int)(mid_line_float_ptr + k)->i) = (int)(mid_line_float_ptr + k)->j;
         //////pintf("i:%d  mid:%d\n", (int)mid_float[k].i, (int)mid_float[k].j);
     }
 
@@ -5692,7 +5728,7 @@ void image_main()
 
     for (i = 113; i >= 1; i--)
     {
-        if (last_mid_line[i] != 0)
+        if (*(last_mid_line_ptr + i) != 0)
         {
             last_mid = *(last_mid_line_ptr + i);
             break;
