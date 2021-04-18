@@ -128,7 +128,7 @@ void callback_temp(void)
     if(car_stop == car_state)
     {
         speed_dream = 0;
-        return;
+//        return;
     }
     map();//ÄæÍ¸ÊÓ
     image_main();
