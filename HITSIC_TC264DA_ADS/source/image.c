@@ -5335,5 +5335,3 @@ void image_main()
 
     img_angle = define_PROSPECT(prospect);
 }
-
-

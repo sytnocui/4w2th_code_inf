@@ -31,8 +31,11 @@ extern float motor_output;
 
 /*舵机PID参数*/
 extern float servo_kp ;    //内环p
-extern float servo_ki;     //内环i
-extern float servo_kd ;    //内环d
+extern float servo_kd;     //内环i
+extern float servo_kp_str;      //位置环p
+extern float servo_kd_str;      //位置环i
+extern float servo_kp_turn;      //位置环p
+extern float servo_kd_turn;      //位置环i
 extern float servo_err ;
 extern float servo_output ;
 extern float servo_pid_output;

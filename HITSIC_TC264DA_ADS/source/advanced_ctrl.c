@@ -41,13 +41,19 @@ void Ctrl_Update()
     if(car_stop==car_state)
     {
         speed_dream = 0;
+        servo_kp = servo_kp_turn;
+        servo_kd = servo_kd_turn;
     }
     else if(car_garage == car_state)
     {
         speed_dream = speed_dream_turn;
+        servo_kp = servo_kp_turn;
+        servo_kd = servo_kd_turn;
     }
     else if(car_circle_in == car_state)//环岛更新
     {
+        servo_kp = servo_kp_turn;
+        servo_kd = servo_kd_turn;
         if(circle_time >= 5)
         {
             circle_in_ctrl();
@@ -61,22 +67,32 @@ void Ctrl_Update()
     else if(car_rightTurn==car_state || car_leftTurn==car_state)
     {
         speed_dream = speed_dream_turn;
+        servo_kp = servo_kp_turn;
+        servo_kd = servo_kd_turn;
     }
     else if(car_straight==car_state)
     {
         speed_dream = speed_dream_str;
+        servo_kp = servo_kp_str;
+        servo_kd = servo_kd_str;
     }
     else if(car_cross == car_state)
     {
         speed_dream = speed_dream_turn;
+        servo_kp = servo_kp_turn;
+        servo_kd = servo_kd_turn;
     }
     else if(car_branch == car_state)
     {
         speed_dream = speed_dream_turn;
+        servo_kp = servo_kp_turn;
+        servo_kd = servo_kd_turn;
     }
     else if(car_zebra == car_state)
     {
         car_branch_direction = 2;
+        servo_kp = servo_kp_turn;
+        servo_kd = servo_kd_turn;
         if(history_done[car_zebra]>=2)
         {
             Garage_Enter();
@@ -97,7 +113,7 @@ void State_Update(void)
     //赛道元素判断
     else if(car_circle_out ==car_state)//如果在出环岛，而且陀螺仪没计满，就直接跳出，计满了就换成直道
     {
-        if(imu_angle_z >=300 ||imu_angle_z <=-300)
+        if(imu_angle_z >=280 ||imu_angle_z <=-280)
         {
             beep_close();
             in_circle_flag = 0;
@@ -113,7 +129,7 @@ void State_Update(void)
         }
     }
     else if(img_enter_circle == img_state
-            &&circle_time >=5)//进环岛判断
+            &&circle_time >=3)//进环岛判断
     {
         car_state = car_circle_in;
     }
@@ -133,23 +149,20 @@ void State_Update(void)
         car_state=car_zebra;
     }
     //一般赛道判断
-    else
+    else if(img_angle > 15)
+    {
+        car_state=car_rightTurn;
+    }
+    else if(img_angle <-15)
+    {
+        car_state=car_leftTurn;
+    }
+    else if(img_angle >-15 && img_angle < 15)
     {
         car_state=car_straight;
     }
     History_Update();
-//    else if(k_mid > k_str && k_mid<2.5)
-//    {
-//        car_state=rightTurn;
-//    }
-//    else if(k_mid <-k_str && k_mid>-2.5)
-//    {
-//        car_state=leftTurn;
-//    }
-//    else if(k_mid >-k_str && k_mid < k_str)
-//    {
-//        car_state=straight;
-//    }
+
 }
 
 //计时    用于history更新，保证要素判断不重复
